@@ -1,0 +1,116 @@
+#N canvas 236 52 444 472 10;
+#N canvas 0 0 426 446 license 0;
+#X text 8 47 All rights reserved.;
+#X text 8 227 The names of its contributors may not be used to endorse
+or promote products derived from this software without specific prior
+written permission.;
+#X text 8 87 Redistribution and use in source and binary forms \, with
+or without modification \, are permitted provided that the following
+conditions are met:;
+#X text 8 127 Redistributions of source code must retain the above
+copyright notice \, this list of conditions and the following disclaimer.
+;
+#X text 8 297 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES \, INCLUDING
+\, BUT NOT LIMITED TO \, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT \, INDIRECT
+\, INCIDENTAL \, SPECIAL \, EXEMPLARY \, OR CONSEQUENTIAL DAMAGES (INCLUDING
+\, BUT NOT LIMITED TO \, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+;
+#X text 8 167 Redistributions in binary form must reproduce the above
+copyright notice \, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.
+;
+#X text 8 27 jmmmpais@gmail.com;
+#X text 8 7 Copyright 2019 \, João Pais;
+#X restore 12 438 pd license;
+#X text 9 418 (C) 2019 João Pais - jmmmpais@gmail.com;
+#X text 242 98 Inlet;
+#X text 242 168 Outlet;
+#X text 242 188 - serialized list;
+#X obj 157 198 inlet;
+#X text 242 118 - symbol to split;
+#X text 242 138 - separator (symbol or other);
+#X obj 209 258 list fromsymbol;
+#X obj 157 218 route float symbol;
+#X obj 262 238 symbol;
+#N canvas 574 67 384 203 float-conv 0;
+#X obj 15 35 inlet;
+#X obj 15 55 fudiformat -u;
+#X obj 15 75 list split 6;
+#X obj 49 95 outlet;
+#X text 16 15 converts float to ascii value;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 1 3 0;
+#X restore 157 238 pd float-conv;
+#X text 11 8 [jp.split-symb-first] - splits a symbol \, using a character
+as separator.;
+#X text 11 38 The separator can be a single-letter symbol or a single-digit
+float. In case the separator element is used more than once in the
+symbol \, the first one is relevant.;
+#X obj 33 158 list split 1;
+#X obj 60 218 route 1 2;
+#X obj 162 308 list prepend;
+#X obj 162 328 t l;
+#X obj 75 308 list prepend;
+#X obj 75 328 t l;
+#X obj 16 348 list;
+#X obj 81 350 list;
+#X obj 16 308 t b b;
+#X obj 144 278 t b b;
+#X obj 16 368 fudiparse;
+#X obj 81 370 fudiparse;
+#X obj 13 198 list;
+#X obj 33 178 t b l;
+#X obj 129 178 1;
+#X obj 60 278 2;
+#X obj 60 198 list prepend;
+#X obj 16 98 inlet;
+#X obj 16 388 outlet;
+#X obj 81 390 outlet;
+#X obj 60 258 sel;
+#X obj 16 118 list fromsymbol;
+#X obj 16 138 t b l b b b;
+#X connect 5 0 9 0;
+#X connect 8 0 34 1;
+#X connect 9 0 11 0;
+#X connect 9 1 8 0;
+#X connect 9 2 10 0;
+#X connect 10 0 8 0;
+#X connect 11 0 34 1;
+#X connect 14 0 27 0;
+#X connect 14 1 26 1;
+#X connect 15 0 34 0;
+#X connect 15 1 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 16 1;
+#X connect 17 0 21 1;
+#X connect 18 0 19 0;
+#X connect 19 0 18 1;
+#X connect 19 0 20 1;
+#X connect 20 0 24 0;
+#X connect 21 0 25 0;
+#X connect 22 0 20 0;
+#X connect 22 1 21 0;
+#X connect 23 0 18 1;
+#X connect 23 1 16 1;
+#X connect 24 0 32 0;
+#X connect 25 0 33 0;
+#X connect 26 0 14 0;
+#X connect 27 0 26 0;
+#X connect 27 1 30 0;
+#X connect 28 0 30 1;
+#X connect 29 0 30 1;
+#X connect 30 0 15 0;
+#X connect 31 0 35 0;
+#X connect 34 0 29 0;
+#X connect 34 1 18 0;
+#X connect 35 0 36 0;
+#X connect 36 0 22 0;
+#X connect 36 1 14 0;
+#X connect 36 2 28 0;
+#X connect 36 3 23 0;
+#X connect 36 4 21 1;
+#X connect 36 4 20 1;

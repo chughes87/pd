@@ -1,0 +1,104 @@
+#N canvas 124 150 711 458 10;
+#N canvas 0 0 426 446 license 0;
+#X text 8 47 All rights reserved.;
+#X text 8 227 The names of its contributors may not be used to endorse
+or promote products derived from this software without specific prior
+written permission.;
+#X text 8 87 Redistribution and use in source and binary forms \, with
+or without modification \, are permitted provided that the following
+conditions are met:;
+#X text 8 127 Redistributions of source code must retain the above
+copyright notice \, this list of conditions and the following disclaimer.
+;
+#X text 8 297 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES \, INCLUDING
+\, BUT NOT LIMITED TO \, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT \, INDIRECT
+\, INCIDENTAL \, SPECIAL \, EXEMPLARY \, OR CONSEQUENTIAL DAMAGES (INCLUDING
+\, BUT NOT LIMITED TO \, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+;
+#X text 8 167 Redistributions in binary form must reproduce the above
+copyright notice \, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.
+;
+#X text 8 27 jmmmpais@gmail.com;
+#X text 8 7 Copyright 2020 \, João Pais;
+#X restore 12 418 pd license;
+#X text 9 398 (C) 2020 João Pais - jmmmpais@gmail.com;
+#X text 319 221 ARGUMENTS;
+#X text 319 41 INLETS;
+#X text 319 131 OUTLETS;
+#X obj 16 88 inlet;
+#X obj 166 88 inlet;
+#X obj 222 178 until;
+#X obj 222 198 f+;
+#X obj 222 218 list prepend;
+#X obj 222 238 t l;
+#X obj 98 258 list;
+#X obj 166 108 moses 1;
+#X obj 16 108 route seed clear bang;
+#X obj 98 178 random;
+#X obj 98 278 list split;
+#X obj 205 158 t f f b b;
+#X obj 98 238 t b f;
+#X obj 183 318 list split 1;
+#X obj 131 158 - 1;
+#X obj 183 348 outlet;
+#X obj 98 348 list append;
+#X obj 48 368 list length;
+#X msg 16 138 seed \$1;
+#X obj 205 138 f;
+#X obj 228 48 loadbang;
+#X msg 228 68 args 0;
+#X obj 228 88 pdcontrol;
+#X obj 228 108 route bang;
+#X obj 233 348 outlet;
+#X text 341 81 clear - clears the memory (the list of already generated
+numbers);
+#X text 320 61 0) bang - generates unrepeated random number;
+#X text 341 110 seed <float> - reseeds the random number generator
+;
+#X text 320 151 0) float - unrepeated random number output - when receiving
+a bang (if not all have been generated yet);
+#X text 320 181 1) bang - if all random numbers have already been generated
+- when receiving a bang;
+#X text 320 241 1) float - sets size;
+#X obj 126 298 route bang;
+#X text 11 8 [jp.urn] - unrepeated random numbers. As in the cyclone
+object but in vanilla.;
+#X connect 5 0 13 0;
+#X connect 6 0 12 0;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 10 0;
+#X connect 10 0 9 1;
+#X connect 10 0 11 1;
+#X connect 11 0 15 0;
+#X connect 12 1 24 0;
+#X connect 13 0 23 0;
+#X connect 13 1 24 0;
+#X connect 13 2 14 0;
+#X connect 14 0 17 0;
+#X connect 15 0 21 0;
+#X connect 15 1 36 0;
+#X connect 16 0 19 0;
+#X connect 16 1 7 0;
+#X connect 16 2 8 1;
+#X connect 16 3 9 1;
+#X connect 17 0 11 0;
+#X connect 17 1 15 1;
+#X connect 18 0 20 0;
+#X connect 18 1 21 1;
+#X connect 19 0 14 1;
+#X connect 21 0 11 1;
+#X connect 21 0 22 0;
+#X connect 22 0 19 0;
+#X connect 23 0 14 0;
+#X connect 24 0 16 0;
+#X connect 25 0 26 0;
+#X connect 26 0 27 0;
+#X connect 27 0 28 0;
+#X connect 28 1 24 0;
+#X connect 36 0 29 0;
+#X connect 36 1 18 0;

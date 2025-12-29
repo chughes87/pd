@@ -1,0 +1,116 @@
+#N canvas 192 102 698 522 10;
+#N canvas 0 0 426 446 license 0;
+#X text 8 47 All rights reserved.;
+#X text 8 227 The names of its contributors may not be used to endorse
+or promote products derived from this software without specific prior
+written permission.;
+#X text 8 87 Redistribution and use in source and binary forms \, with
+or without modification \, are permitted provided that the following
+conditions are met:;
+#X text 8 127 Redistributions of source code must retain the above
+copyright notice \, this list of conditions and the following disclaimer.
+;
+#X text 8 297 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES \, INCLUDING
+\, BUT NOT LIMITED TO \, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT \, INDIRECT
+\, INCIDENTAL \, SPECIAL \, EXEMPLARY \, OR CONSEQUENTIAL DAMAGES (INCLUDING
+\, BUT NOT LIMITED TO \, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+;
+#X text 8 167 Redistributions in binary form must reproduce the above
+copyright notice \, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.
+;
+#X text 8 27 jmmmpais@gmail.com;
+#X text 8 7 Copyright 2020 \, João Pais;
+#X restore 12 488 pd license;
+#X text 9 468 (C) 2020 João Pais - jmmmpais@gmail.com;
+#X obj 16 38 inlet;
+#X obj 97 98 list fromsymbol;
+#X obj 97 78 t s s;
+#X obj 83 328 list split 1;
+#X obj 173 288 list;
+#X obj 83 288 list;
+#X obj 116 258 t b b;
+#X obj 83 379 ==;
+#X obj 96 348 list;
+#X obj 123 308 t b b;
+#X obj 173 328 list split 1;
+#X obj 186 348 list;
+#X obj 83 419 symbol;
+#X obj 83 439 outlet;
+#X obj 194 268 list fromsymbol;
+#X obj 83 399 sel 0 1;
+#X obj 194 218 pdcontrol;
+#X msg 194 198 args 0;
+#X obj 194 178 loadbang;
+#X obj 194 238 route bang;
+#X obj 16 58 route set bang;
+#X obj 16 78 list;
+#X text 309 181 ARGUMENTS;
+#X text 309 41 INLETS;
+#X text 309 131 OUTLETS;
+#X text 331 81 bang - output current value;
+#X text 310 61 0) symbol - outputs symbol if different than previous
+one;
+#X text 310 201 1) symbol - creation argument initializes first value
+;
+#X text 310 151 symbol - the scaled values according to output range
+;
+#X text 331 101 set \$1 - set the stored value;
+#X text 11 8 [change-symbol] - like vanilla's change \, but for symbols
+;
+#X obj 112 138 list length;
+#X obj 97 158 list length;
+#X obj 97 178 ==;
+#X obj 97 238 t l b l;
+#X obj 97 198 sel 1 0;
+#X obj 97 118 t l l;
+#X obj 97 218 list;
+#X text 310 241 First checks for symbol length. If it's the same \,
+then checks for individual ascii values inside the symbol.;
+#X connect 2 0 22 0;
+#X connect 3 0 38 0;
+#X connect 4 0 3 0;
+#X connect 4 1 14 1;
+#X connect 5 0 9 0;
+#X connect 5 1 10 1;
+#X connect 6 0 12 0;
+#X connect 7 0 5 0;
+#X connect 8 0 7 0;
+#X connect 8 1 6 0;
+#X connect 9 0 17 0;
+#X connect 10 0 5 0;
+#X connect 11 0 10 0;
+#X connect 11 1 13 0;
+#X connect 12 0 9 1;
+#X connect 12 1 13 1;
+#X connect 13 0 12 0;
+#X connect 14 0 15 0;
+#X connect 14 0 16 0;
+#X connect 16 0 6 1;
+#X connect 16 0 33 0;
+#X connect 17 0 14 0;
+#X connect 17 1 11 0;
+#X connect 18 0 21 0;
+#X connect 19 0 18 0;
+#X connect 20 0 19 0;
+#X connect 21 1 16 0;
+#X connect 21 1 14 1;
+#X connect 22 0 23 0;
+#X connect 22 1 14 0;
+#X connect 22 2 4 0;
+#X connect 23 0 16 0;
+#X connect 23 0 14 1;
+#X connect 33 0 35 1;
+#X connect 34 0 35 0;
+#X connect 35 0 37 0;
+#X connect 36 0 6 1;
+#X connect 36 1 8 0;
+#X connect 36 2 7 1;
+#X connect 37 0 39 0;
+#X connect 37 1 14 0;
+#X connect 38 0 34 0;
+#X connect 38 1 39 1;
+#X connect 39 0 36 0;

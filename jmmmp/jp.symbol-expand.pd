@@ -1,0 +1,57 @@
+#N canvas 73 68 348 314 10;
+#N canvas 0 0 426 446 license 0;
+#X text 8 47 All rights reserved.;
+#X text 8 227 The names of its contributors may not be used to endorse
+or promote products derived from this software without specific prior
+written permission.;
+#X text 8 87 Redistribution and use in source and binary forms \, with
+or without modification \, are permitted provided that the following
+conditions are met:;
+#X text 8 127 Redistributions of source code must retain the above
+copyright notice \, this list of conditions and the following disclaimer.
+;
+#X text 8 297 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES \, INCLUDING
+\, BUT NOT LIMITED TO \, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT \, INDIRECT
+\, INCIDENTAL \, SPECIAL \, EXEMPLARY \, OR CONSEQUENTIAL DAMAGES (INCLUDING
+\, BUT NOT LIMITED TO \, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+;
+#X text 8 167 Redistributions in binary form must reproduce the above
+copyright notice \, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.
+;
+#X text 8 27 jmmmpais@gmail.com;
+#X text 8 7 Copyright 2019 \, João Pais;
+#X restore 12 278 pd license;
+#X text 9 258 (C) 2019 João Pais - jmmmpais@gmail.com;
+#X text 192 58 Inlet;
+#X text 192 108 Outlet;
+#X obj 35 108 list split 1;
+#X obj 69 128 t l;
+#X obj 35 188 t l;
+#X obj 35 168 list;
+#X obj 16 208 list;
+#X obj 16 88 t b l b;
+#X obj 35 148 list tosymbol;
+#X obj 16 228 outlet;
+#X obj 16 48 inlet;
+#X obj 16 68 list fromsymbol;
+#X text 192 78 - symbol;
+#X text 192 128 - split list;
+#X text 11 8 [jp.symbol-expand] - split a symbol into a list with individual
+elements separated by spaces;
+#X connect 4 0 10 0;
+#X connect 4 1 5 0;
+#X connect 5 0 4 0;
+#X connect 6 0 7 1;
+#X connect 6 0 8 1;
+#X connect 7 0 6 0;
+#X connect 8 0 11 0;
+#X connect 9 0 8 0;
+#X connect 9 1 4 0;
+#X connect 9 2 7 1;
+#X connect 10 0 7 0;
+#X connect 12 0 13 0;
+#X connect 13 0 9 0;

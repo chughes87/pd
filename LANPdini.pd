@@ -1,0 +1,2526 @@
+#N struct 1015-userlist-gui float x float y text user;
+#N canvas 591 60 365 506 10;
+#X declare -lib ceammc -path jmmmp;
+#N canvas 864 75 391 319 patch 0;
+#N canvas 499 311 325 361 init 0;
+#X obj 26 42 loadbang;
+#X obj 26 302 s \$0-INIT;
+#X obj 64 222 text define \$0-IP;
+#X msg 64 202 read -c ip.txt;
+#X obj 45 262 text get \$0-IP;
+#X obj 45 242 0;
+#N canvas 781 52 402 186 get-ip 0;
+#X text 17 12 Use scripts to get the ip of the current machine. Not
+completely safe.;
+#X obj 17 72 else/dir;
+#X msg 17 52 reset \, dir;
+#X obj 32 92 makefilename %s/get-ip.bat;
+#X msg 32 112 open \$1;
+#X obj 32 132 else/openfile;
+#X text 86 52 nao funciona: bat é executado na pasta errada;
+#X connect 1 1 3 0;
+#X connect 2 0 1 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X restore 180 216 pd get-ip;
+#X obj 24 181 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 146 242 system.hostname;
+#X obj 45 182 t b b b b;
+#X obj 65 82 \$0;
+#X text 115 182 Get IP (through dirty hack);
+#X obj 146 262 s \$0-username-i;
+#X obj 94 83 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 26 12 declare -lib ceammc -path jmmmp;
+#X msg 65 102 \; \$1-port-i 57120 \; \$1-port-lr-i 50506 \; \$1-port-ls-i
+50505 \; \$1-user-ping-d-i 1000;
+#X obj 26 62 t b b b;
+#X connect 0 0 16 0;
+#X connect 3 0 2 0;
+#X connect 5 0 4 0;
+#X connect 7 0 9 0;
+#X connect 8 0 12 0;
+#X connect 9 3 8 0;
+#X connect 10 0 15 0;
+#X connect 13 0 10 0;
+#X connect 16 0 1 0;
+#X connect 16 1 9 0;
+#X connect 16 2 10 0;
+#X restore 13 17 pd init;
+#N canvas 617 267 405 419 ping-users 0;
+#X obj 12 70 metro 1000;
+#X obj 33 170 pack s s f;
+#X obj 33 150 symbol;
+#X obj 130 150 r \$0-port;
+#X obj 103 80 r \$0-ip;
+#X obj 202 150 jp.split-symb-last .;
+#X obj 202 190 makefilename %s.255;
+#X msg 319 130 symbol .;
+#X obj 319 110 r \$0-INIT;
+#X msg 59 360 disconnect;
+#X obj 32 280 t s b;
+#X obj 32 320 list prepend connect;
+#X obj 32 340 list trim;
+#X obj 12 230 oscformat landini member broadcast;
+#X obj 202 170 symbol;
+#X obj 12 30 r \$0-connect-st;
+#X text 13 10 Creates connect and broadcasts admission to other users
+;
+#X obj 33 190 t l l;
+#X obj 69 50 r \$0-user-ping-d;
+#X obj 12 210 list;
+#X obj 103 100 t b s s;
+#X obj 32 300 list append 57120;
+#X obj 60 210 s \$0-userlist-reset;
+#X obj 12 250 s \$0-netsend-osc;
+#X obj 192 300 r \$0-connect-st;
+#X obj 192 320 sel 0;
+#X obj 192 360 oscformat landini member remove;
+#X obj 192 340 symbol;
+#X obj 235 320 r \$0-ip;
+#X obj 192 380 s \$0-netsend-osc;
+#X text 193 280 Removes itself on switch off;
+#X obj 32 380 s \$0-netsend-01;
+#X obj 66 130 r \$0-username;
+#X connect 0 0 19 0;
+#X connect 1 0 17 0;
+#X connect 2 0 1 0;
+#X connect 3 0 1 2;
+#X connect 3 0 21 1;
+#X connect 4 0 20 0;
+#X connect 5 0 14 0;
+#X connect 6 0 10 0;
+#X connect 7 0 5 1;
+#X connect 8 0 7 0;
+#X connect 9 0 31 0;
+#X connect 10 0 21 0;
+#X connect 10 1 9 0;
+#X connect 11 0 12 0;
+#X connect 12 0 31 0;
+#X connect 13 0 23 0;
+#X connect 14 0 6 0;
+#X connect 15 0 0 0;
+#X connect 17 0 19 1;
+#X connect 17 1 22 0;
+#X connect 18 0 0 1;
+#X connect 19 0 13 0;
+#X connect 20 0 2 0;
+#X connect 20 1 1 1;
+#X connect 20 2 5 0;
+#X connect 21 0 11 0;
+#X connect 24 0 25 0;
+#X connect 25 0 27 0;
+#X connect 26 0 29 0;
+#X connect 27 0 26 0;
+#X connect 28 0 27 1;
+#X connect 32 0 2 1;
+#X restore 13 87 pd ping-users;
+#N canvas 340 281 367 151 settings 0;
+#X floatatom 12 43 6 0 0 0 - #0-user-ping-d-i #0-user-ping-d;
+#X text 12 23 SETTINGS;
+#X text 54 43 User ping interval (ms);
+#X restore 113 17 pd settings;
+#N canvas 65 202 300 267 user-list 0;
+#X obj 43 87 text define \$0-userlist;
+#X obj 16 47 t l b;
+#X msg 43 67 clear;
+#X text 17 7 Stores user list;
+#X text 87 67 clears list on new connection;
+#X obj 16 27 r \$0-userlist-reset;
+#X obj 43 207 text set \$0-userlist 100000;
+#X obj 16 167 r \$0-userlist-add;
+#X obj 16 187 t b l;
+#X text 16 147 Adds user to list;
+#X obj 16 227 s \$0-userlist-gui-refresh;
+#X obj 16 107 s \$0-userlist-add;
+#X connect 1 0 11 0;
+#X connect 1 1 2 0;
+#X connect 2 0 0 0;
+#X connect 5 0 1 0;
+#X connect 7 0 8 0;
+#X connect 8 0 10 0;
+#X connect 8 1 6 0;
+#X restore 13 107 pd user-list;
+#N canvas 508 265 389 371 in+out 0;
+#X obj 15 120 netsend -u -b;
+#X obj 15 140 s \$0-connect-st-i;
+#X obj 175 160 oscparse;
+#X obj 175 130 netreceive -u -b;
+#X obj 175 180 list trim;
+#X obj 190 70 r \$0-port;
+#X text 176 10 Receive data;
+#X obj 15 50 list prepend send;
+#X obj 15 70 list trim;
+#X obj 15 30 r \$0-netsend-osc;
+#N canvas 762 181 435 271 member 0;
+#X obj 18 129 unpack s s f;
+#X obj 24 159 text search \$0-userlist 1;
+#X obj 24 199 list;
+#X obj 24 179 sel -1;
+#X obj 83 29 inlet;
+#X text 83 9 Processes "member" messages;
+#X text 18 79 Check if member exists \; If not \, add it to the list.
+;
+#X obj 18 109 t a a;
+#X obj 24 219 s \$0-userlist-add;
+#X obj 83 49 route broadcast remove;
+#X obj 207 129 text search \$0-userlist 1;
+#X obj 207 149 sel -1;
+#X obj 207 109 symbol;
+#X text 208 89 Remove member from list;
+#X obj 267 189 text delete \$0-userlist;
+#X obj 240 169 t b f;
+#X obj 240 209 s \$0-userlist-gui-refresh;
+#X connect 0 1 1 0;
+#X connect 1 0 3 0;
+#X connect 2 0 8 0;
+#X connect 3 0 2 0;
+#X connect 4 0 9 0;
+#X connect 7 0 0 0;
+#X connect 7 1 2 1;
+#X connect 9 0 7 0;
+#X connect 9 1 12 0;
+#X connect 10 0 11 0;
+#X connect 11 1 15 0;
+#X connect 12 0 10 0;
+#X connect 15 0 16 0;
+#X connect 15 1 14 0;
+#X restore 175 310 pd member;
+#X obj 185 240 print netreceive;
+#X obj 185 220 spigot;
+#X obj 268 310 s \$0-osc-local;
+#X text 16 10 Send data to broadcast;
+#X obj 175 270 route landini;
+#X obj 175 290 route member msg;
+#N canvas 808 39 319 184 msg 0;
+#X obj 24 29 inlet;
+#X text 24 9 Processes "msg" messages;
+#X obj 69 109 s \$0-OGD-users-send;
+#X obj 24 129 s \$0-OGD-users-receive;
+#X obj 115 89 s \$0-GD-users-receive;
+#X obj 24 49 route OGD OGD-reply GD GD-reply;
+#X obj 161 69 s \$0-GD-users-send;
+#X connect 0 0 5 0;
+#X connect 5 0 3 0;
+#X connect 5 1 2 0;
+#X connect 5 2 4 0;
+#X connect 5 3 6 0;
+#X restore 221 330 pd msg;
+#X obj 175 30 r \$0-connect-st;
+#X obj 175 50 sel 1;
+#X msg 175 110 listen \$1;
+#X obj 175 90 f;
+#X obj 25 100 r \$0-netsend-01;
+#X obj 198 200 r \$0-print-netreceive;
+#X obj 24 233 spigot;
+#X obj 24 293 print netsend;
+#X obj 37 213 r \$0-print-netsend;
+#X obj 24 253 oscparse;
+#X obj 24 273 list trim;
+#X connect 0 0 1 0;
+#X connect 2 0 4 0;
+#X connect 3 0 2 0;
+#X connect 4 0 12 0;
+#X connect 4 0 15 0;
+#X connect 5 0 21 1;
+#X connect 7 0 8 0;
+#X connect 8 0 0 0;
+#X connect 9 0 7 0;
+#X connect 9 0 24 0;
+#X connect 12 0 11 0;
+#X connect 15 0 16 0;
+#X connect 16 0 10 0;
+#X connect 16 1 17 0;
+#X connect 16 2 13 0;
+#X connect 18 0 19 0;
+#X connect 19 0 21 0;
+#X connect 19 1 20 0;
+#X connect 20 0 3 0;
+#X connect 21 0 20 0;
+#X connect 22 0 0 0;
+#X connect 23 0 12 1;
+#X connect 24 0 27 0;
+#X connect 26 0 24 1;
+#X connect 27 0 28 0;
+#X connect 28 0 25 0;
+#X restore 13 37 pd in+out;
+#N canvas 0 50 334 239 GUI 0;
+#X obj 31 48 sel 0 1;
+#X obj 31 128 s \$0-connect-st-i;
+#X obj 31 28 r \$0-connect-st;
+#X msg 50 68 label ON \, color 16 16 22;
+#X msg 31 108 label OFF \, color 13 13 22;
+#X obj 11 88 r \$0-INIT;
+#X text 32 8 Connection switch;
+#X text 31 168 User list GUI;
+#N canvas 94 294 370 342 content 0;
+#X obj 12 31 struct \$0-userlist-gui float x float y text user;
+#X text 12 11 Data structures for GUI display of user list;
+#X obj 12 51 drawtext user 0 0 0;
+#X obj 272 211 pointer;
+#X msg 152 181 traverse pd-user-list-GUI \, bang;
+#X obj 119 231 append \$0-userlist-gui x y;
+#X obj 182 131 s pd-user-list-GUI;
+#X msg 182 111 clear;
+#X obj 12 301 text set -s \$0-userlist-gui user;
+#X obj 12 261 text get \$0-userlist;
+#X obj 182 91 r \$0-INIT;
+#X obj 12 171 until;
+#X obj 12 191 f+;
+#X obj 12 211 t f f;
+#X obj 12 111 t b b b b;
+#X obj 12 131 text size \$0-userlist;
+#X obj 129 281 sel 2;
+#X obj 119 161 t b b;
+#X obj 12 91 r \$0-userlist-gui-refresh;
+#N canvas 0 50 323 155 GOP 0;
+#X obj 19 31 inlet;
+#X text 19 11 Scales GOP window;
+#X obj 46 111 s pd-user-list-GUI;
+#X obj 19 51 sel 0;
+#X obj 46 71 * 11;
+#X msg 46 91 coords 0 0 300 -1 300 \$1 2 25 8;
+#X connect 0 0 3 0;
+#X connect 3 1 4 0;
+#X connect 4 0 5 0;
+#X connect 5 0 2 0;
+#X restore 22 151 pd GOP;
+#X msg 119 211 3 0;
+#X connect 3 0 5 2;
+#X connect 4 0 3 0;
+#X connect 5 0 8 3;
+#X connect 7 0 6 0;
+#X connect 9 0 8 0;
+#X connect 9 1 16 0;
+#X connect 10 0 7 0;
+#X connect 11 0 12 0;
+#X connect 12 0 13 0;
+#X connect 13 0 9 0;
+#X connect 13 1 8 1;
+#X connect 14 0 15 0;
+#X connect 14 1 12 1;
+#X connect 14 2 17 0;
+#X connect 14 3 7 0;
+#X connect 15 0 11 0;
+#X connect 15 0 19 0;
+#X connect 16 0 11 1;
+#X connect 17 0 20 0;
+#X connect 17 1 4 0;
+#X connect 18 0 14 0;
+#X connect 20 0 5 0;
+#X restore 31 188 pd content;
+#X connect 0 0 4 0;
+#X connect 0 1 3 0;
+#X connect 2 0 0 0;
+#X connect 3 0 1 0;
+#X connect 4 0 1 0;
+#X connect 5 0 4 0;
+#X restore 13 137 pd GUI;
+#N canvas 644 159 614 479 in+out-local 0;
+#X obj 15 180 netsend -u -b;
+#X msg 255 50 listen \$1;
+#X obj 255 100 oscparse;
+#X obj 255 70 netreceive -u -b;
+#X obj 255 120 list trim;
+#X text 16 10 Send data;
+#X obj 15 90 list prepend send;
+#X obj 15 110 list trim;
+#X obj 255 30 r \$0-port-lr;
+#X obj 25 140 r \$0-port-ls;
+#X msg 25 160 disconnect \, connect localhost \$1;
+#X obj 15 30 r \$0-osc-local;
+#X obj 15 70 oscformat local;
+#X obj 15 50 list;
+#X text 246 10 Receive data to network;
+#X obj 255 360 route all allButMe;
+#X obj 255 440 s \$0-netsend-osc;
+#X obj 255 420 oscformat landini;
+#X text 365 420 Broadcast;
+#N canvas 458 236 303 419 send.to.user 0;
+#X obj 18 90 text search \$0-userlist;
+#X obj 51 200 text get \$0-userlist 1;
+#X obj 51 370 netsend -u -b;
+#X obj 51 280 list prepend send;
+#X obj 51 300 list trim;
+#X msg 91 350 disconnect \, connect \$1 \$2;
+#X obj 91 330 pack s f;
+#X obj 136 310 r \$0-port;
+#X obj 51 260 oscformat landini;
+#X obj 18 70 list split 1;
+#X obj 51 240 list;
+#X obj 51 220 t b s;
+#X text 19 10 Send to user;
+#X obj 18 30 inlet;
+#X obj 91 240 change-symbol;
+#X obj 18 110 sel -1;
+#X obj 18 130 list;
+#X obj 18 150 list split 1;
+#X obj 18 170 text search \$0-userlist 1;
+#X obj 18 50 t a a;
+#X connect 0 0 15 0;
+#X connect 1 0 11 0;
+#X connect 3 0 4 0;
+#X connect 4 0 2 0;
+#X connect 5 0 2 0;
+#X connect 6 0 5 0;
+#X connect 7 0 6 1;
+#X connect 8 0 3 0;
+#X connect 9 0 0 0;
+#X connect 9 1 10 1;
+#X connect 10 0 8 0;
+#X connect 11 0 10 0;
+#X connect 11 1 14 0;
+#X connect 13 0 19 0;
+#X connect 14 0 6 0;
+#X connect 15 0 16 0;
+#X connect 15 1 1 0;
+#X connect 16 0 17 0;
+#X connect 17 0 18 0;
+#X connect 18 0 1 0;
+#X connect 19 0 9 0;
+#X connect 19 1 16 1;
+#X restore 360 380 pd send.to.user;
+#N canvas 0 50 291 453 send.to.allButMe 0;
+#X obj 53 410 netsend -u -b;
+#X obj 53 320 list prepend send;
+#X obj 53 340 list trim;
+#X msg 93 390 disconnect \, connect \$1 \$2;
+#X obj 93 370 pack s f;
+#X obj 138 350 r \$0-port;
+#X obj 53 300 oscformat landini;
+#X obj 53 280 list;
+#X obj 53 260 t b s;
+#X obj 18 30 inlet;
+#X obj 93 280 change-symbol;
+#X obj 18 80 symbol;
+#X obj 61 60 r \$0-ip;
+#X obj 18 50 t b l;
+#X obj 18 100 text search \$0-userlist 1;
+#X obj 18 160 until;
+#X obj 18 180 f+;
+#X obj 53 220 t f f;
+#X obj 18 140 text size \$0-userlist;
+#X obj 182 260 sel 2;
+#X obj 38 200 sel;
+#X obj 18 120 t b b f b;
+#X obj 53 240 text get \$0-userlist 1;
+#X text 19 10 Send to all users but me;
+#X text 66 80 Filters out list with sender;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;
+#X connect 4 0 3 0;
+#X connect 5 0 4 1;
+#X connect 6 0 1 0;
+#X connect 7 0 6 0;
+#X connect 8 0 7 0;
+#X connect 8 1 10 0;
+#X connect 9 0 13 0;
+#X connect 10 0 4 0;
+#X connect 11 0 14 0;
+#X connect 12 0 11 1;
+#X connect 13 0 11 0;
+#X connect 13 1 7 1;
+#X connect 14 0 21 0;
+#X connect 15 0 16 0;
+#X connect 16 0 20 0;
+#X connect 17 0 22 0;
+#X connect 18 0 15 0;
+#X connect 19 0 15 1;
+#X connect 20 1 17 0;
+#X connect 21 0 18 0;
+#X connect 21 1 16 1;
+#X connect 21 2 20 1;
+#X connect 22 0 8 0;
+#X connect 22 1 19 0;
+#X restore 307 400 pd send.to.allButMe;
+#X obj 308 270 route all allButMe;
+#X obj 255 160 route send send-OGD send-GD;
+#N canvas 784 219 293 450 OGD-management 0;
+#X obj 19 72 r \$0-userlist-add;
+#X obj 19 382 text set \$0-OGD-users 100000;
+#X obj 19 412 text define \$0-OGD-users;
+#X obj 19 92 list split 1;
+#X obj 19 212 sel -1;
+#X obj 19 232 list;
+#X obj 19 172 t l l;
+#X obj 19 192 text search \$0-OGD-users;
+#X obj 19 152 list;
+#X text 19 12 Management of OGD connections;
+#X text 19 42 New username + ip are added to list (or reset on reconnection)
+, f 36;
+#N canvas 806 98 404 419 dyn-patching 0;
+#X obj 14 28 inlet;
+#X obj 14 48 t b l;
+#X obj 24 298 r \$0-INIT;
+#X obj 14 108 t f f;
+#X text 15 8 Creates dynamic patches for user management;
+#X obj 14 88 f+ 1 1;
+#X obj 14 378 s pd-\$0-OGD-users-send;
+#X obj 41 68 unpack s s f;
+#X obj 24 318 \$0;
+#X obj 127 218 r \$0-username;
+#X obj 14 128 moses 2;
+#X obj 14 238 pack f s f f \$0 s f s f 0;
+#X obj 124 158 expr ($f1+1)*30 \; $f1 + 1 \; $f1 \; 1;
+#X obj 14 158 expr ($f1+1)*30 \; $f1 + 1 \; $f1 - 1 \; 0;
+#X msg 14 258 obj 20 \$1 lpd-ogd \$2 \$6 \$7 \$8 \$5 \, connect \$9
+0 \$3 0 \, connect \$4 \$10 \$3 1;
+#X msg 24 338 clear \, obj 20 20 r \$1-OGD-users-send \, obj 200 20
+r \$1-OGD-users-receive;
+#X connect 0 0 1 0;
+#X connect 1 0 5 0;
+#X connect 1 1 7 0;
+#X connect 2 0 8 0;
+#X connect 3 0 10 0;
+#X connect 3 1 11 3;
+#X connect 5 0 3 0;
+#X connect 7 0 11 1;
+#X connect 7 1 11 5;
+#X connect 7 2 11 6;
+#X connect 8 0 15 0;
+#X connect 9 0 11 7;
+#X connect 10 0 13 0;
+#X connect 10 1 12 0;
+#X connect 11 0 14 0;
+#X connect 12 0 11 0;
+#X connect 12 1 11 2;
+#X connect 12 2 11 8;
+#X connect 12 3 11 9;
+#X connect 13 0 11 0;
+#X connect 13 1 11 2;
+#X connect 13 2 11 8;
+#X connect 13 3 11 9;
+#X connect 14 0 6 0;
+#X connect 15 0 6 0;
+#X restore 58 292 pd dyn-patching;
+#N canvas 541 86 450 300 \$0-OGD-users-send 0;
+#X obj 20 20 r 1015-OGD-users-send;
+#X obj 200 20 r 1015-OGD-users-receive;
+#X obj 20 60 lpd-ogd JMMMP-X230 192.178.168.11 57120 JMMMP-X230 1015
+;
+#X connect 0 0 2 0;
+#X connect 1 0 2 1;
+#X restore 38 352 pd \$0-OGD-users-send;
+#X obj 19 252 list;
+#X msg 38 312 init;
+#X obj 19 272 t l b l;
+#X obj 38 332 s \$0-OGD-users-send;
+#X obj 53 112 t l l;
+#X obj 53 132 list split 1;
+#X connect 0 0 3 0;
+#X connect 3 0 8 0;
+#X connect 3 1 17 0;
+#X connect 4 0 5 0;
+#X connect 5 0 13 0;
+#X connect 6 0 7 0;
+#X connect 6 1 5 1;
+#X connect 7 0 4 0;
+#X connect 8 0 6 0;
+#X connect 13 0 15 0;
+#X connect 14 0 16 0;
+#X connect 15 0 1 0;
+#X connect 15 1 14 0;
+#X connect 15 2 11 0;
+#X connect 17 0 18 0;
+#X connect 17 1 13 1;
+#X restore 425 270 pd OGD-management;
+#X obj 255 400 list;
+#X obj 413 290 s \$0-OGD-users-send;
+#N canvas 1046 174 291 321 send.to.allButMe 0;
+#X obj 53 240 list;
+#X obj 18 30 inlet;
+#X obj 18 80 symbol;
+#X obj 61 60 r \$0-ip;
+#X obj 18 100 text search \$0-userlist 1;
+#X obj 18 160 until;
+#X obj 18 180 f+;
+#X obj 18 140 text size \$0-userlist;
+#X obj 182 240 sel 2;
+#X obj 38 200 sel;
+#X text 19 10 Send to all users but me;
+#X text 66 80 Filters out list with sender;
+#X obj 18 120 t b b f;
+#X obj 53 220 text get \$0-userlist 0;
+#X obj 53 280 s \$0-OGD-users-send;
+#X obj 53 260 list trim;
+#X obj 18 50 t b a;
+#X connect 0 0 15 0;
+#X connect 1 0 16 0;
+#X connect 2 0 4 0;
+#X connect 3 0 2 1;
+#X connect 4 0 12 0;
+#X connect 5 0 6 0;
+#X connect 6 0 9 0;
+#X connect 7 0 5 0;
+#X connect 8 0 5 1;
+#X connect 9 1 13 0;
+#X connect 12 0 7 0;
+#X connect 12 1 6 1;
+#X connect 12 2 9 1;
+#X connect 13 0 0 0;
+#X connect 13 1 8 0;
+#X connect 15 0 14 0;
+#X connect 16 0 2 0;
+#X connect 16 1 0 1;
+#X restore 360 310 pd send.to.allButMe;
+#N canvas 977 168 291 251 send.to.all 0;
+#X obj 38 170 list;
+#X obj 18 30 inlet;
+#X obj 18 110 until;
+#X obj 38 130 f+;
+#X obj 18 90 text size \$0-userlist;
+#X obj 167 170 sel 2;
+#X text 19 10 Send to all users but me;
+#X obj 38 150 text get \$0-userlist 0;
+#X obj 18 70 t b b;
+#X obj 38 210 s \$0-OGD-users-send;
+#X obj 38 190 list trim;
+#X obj 18 50 t b a;
+#X connect 0 0 10 0;
+#X connect 1 0 11 0;
+#X connect 2 0 3 0;
+#X connect 3 0 7 0;
+#X connect 4 0 2 0;
+#X connect 5 0 2 1;
+#X connect 7 0 0 0;
+#X connect 7 1 5 0;
+#X connect 8 0 4 0;
+#X connect 8 1 3 1;
+#X connect 10 0 9 0;
+#X connect 11 0 8 0;
+#X connect 11 1 0 1;
+#X restore 308 330 pd send.to.all;
+#X obj 361 180 route all allButMe;
+#N canvas 1046 174 291 321 send.to.allButMe 0;
+#X obj 53 240 list;
+#X obj 18 30 inlet;
+#X obj 18 80 symbol;
+#X obj 61 60 r \$0-ip;
+#X obj 18 50 t b l;
+#X obj 18 100 text search \$0-userlist 1;
+#X obj 18 160 until;
+#X obj 18 180 f+;
+#X obj 18 140 text size \$0-userlist;
+#X obj 182 240 sel 2;
+#X obj 38 200 sel;
+#X text 19 10 Send to all users but me;
+#X text 66 80 Filters out list with sender;
+#X obj 18 120 t b b f;
+#X obj 53 220 text get \$0-userlist 0;
+#X obj 53 260 list trim;
+#X obj 53 280 s \$0-GD-users-send;
+#X connect 0 0 15 0;
+#X connect 1 0 4 0;
+#X connect 2 0 5 0;
+#X connect 3 0 2 1;
+#X connect 4 0 2 0;
+#X connect 4 1 0 1;
+#X connect 5 0 13 0;
+#X connect 6 0 7 0;
+#X connect 7 0 10 0;
+#X connect 8 0 6 0;
+#X connect 9 0 6 1;
+#X connect 10 1 14 0;
+#X connect 13 0 8 0;
+#X connect 13 1 7 1;
+#X connect 13 2 10 1;
+#X connect 14 0 0 0;
+#X connect 14 1 9 0;
+#X connect 15 0 16 0;
+#X restore 413 220 pd send.to.allButMe;
+#N canvas 977 168 291 251 send.to.all 0;
+#X obj 38 170 list;
+#X obj 18 30 inlet;
+#X obj 18 110 until;
+#X obj 38 130 f+;
+#X obj 18 90 text size \$0-userlist;
+#X obj 167 170 sel 2;
+#X text 19 10 Send to all users but me;
+#X obj 38 150 text get \$0-userlist 0;
+#X obj 18 70 t b b;
+#X obj 38 190 list trim;
+#X obj 38 210 s \$0-GD-users-send;
+#X obj 18 50 t b a;
+#X connect 0 0 9 0;
+#X connect 1 0 11 0;
+#X connect 2 0 3 0;
+#X connect 3 0 7 0;
+#X connect 4 0 2 0;
+#X connect 5 0 2 1;
+#X connect 7 0 0 0;
+#X connect 7 1 5 0;
+#X connect 8 0 4 0;
+#X connect 8 1 3 1;
+#X connect 9 0 10 0;
+#X connect 11 0 8 0;
+#X connect 11 1 0 1;
+#X restore 361 240 pd send.to.all;
+#N canvas 784 219 293 452 GD-management 0;
+#X obj 19 72 r \$0-userlist-add;
+#X obj 19 92 list split 1;
+#X obj 19 212 sel -1;
+#X obj 19 232 list;
+#X obj 19 172 t l l;
+#X obj 19 152 list;
+#X text 19 42 New username + ip are added to list (or reset on reconnection)
+, f 36;
+#N canvas 806 98 404 419 dyn-patching 0;
+#X obj 14 28 inlet;
+#X obj 14 48 t b l;
+#X obj 24 298 r \$0-INIT;
+#X obj 14 108 t f f;
+#X text 15 8 Creates dynamic patches for user management;
+#X obj 14 88 f+ 1 1;
+#X obj 41 68 unpack s s f;
+#X obj 24 318 \$0;
+#X obj 127 218 r \$0-username;
+#X obj 14 128 moses 2;
+#X obj 14 238 pack f s f f \$0 s f s f 0;
+#X obj 124 158 expr ($f1+1)*30 \; $f1 + 1 \; $f1 \; 1;
+#X obj 14 158 expr ($f1+1)*30 \; $f1 + 1 \; $f1 - 1 \; 0;
+#X obj 14 378 s pd-\$0-GD-users-send;
+#X msg 24 338 clear \, obj 20 20 r \$1-GD-users-send \, obj 200 20
+r \$1-GD-users-receive;
+#X msg 14 258 obj 20 \$1 lpd-gd \$2 \$6 \$7 \$8 \$5 \, connect \$9
+0 \$3 0 \, connect \$4 \$10 \$3 1;
+#X connect 0 0 1 0;
+#X connect 1 0 5 0;
+#X connect 1 1 6 0;
+#X connect 2 0 7 0;
+#X connect 3 0 9 0;
+#X connect 3 1 10 3;
+#X connect 5 0 3 0;
+#X connect 6 0 10 1;
+#X connect 6 1 10 5;
+#X connect 6 2 10 6;
+#X connect 7 0 14 0;
+#X connect 8 0 10 7;
+#X connect 9 0 12 0;
+#X connect 9 1 11 0;
+#X connect 10 0 15 0;
+#X connect 11 0 10 0;
+#X connect 11 1 10 2;
+#X connect 11 2 10 8;
+#X connect 11 3 10 9;
+#X connect 12 0 10 0;
+#X connect 12 1 10 2;
+#X connect 12 2 10 8;
+#X connect 12 3 10 9;
+#X connect 14 0 13 0;
+#X connect 15 0 13 0;
+#X restore 58 292 pd dyn-patching;
+#X obj 19 252 list;
+#X msg 38 312 init;
+#X obj 19 272 t l b l;
+#X obj 53 112 t l l;
+#X obj 53 132 list split 1;
+#X text 19 12 Management of GD connections;
+#X obj 19 192 text search \$0-GD-users;
+#X obj 38 332 s \$0-GD-users-send;
+#X obj 19 382 text set \$0-GD-users 100000;
+#X obj 19 412 text define \$0-GD-users;
+#N canvas 649 151 450 300 \$0-GD-users-send 0;
+#X obj 20 20 r 1015-GD-users-send;
+#X obj 200 20 r 1015-GD-users-receive;
+#X obj 20 60 lpd-gd JMMMP-X230 192.178.168.11 57120 JMMMP-X230 1015
+;
+#X connect 0 0 2 0;
+#X connect 1 0 2 1;
+#X restore 38 352 pd \$0-GD-users-send;
+#X connect 0 0 1 0;
+#X connect 1 0 5 0;
+#X connect 1 1 11 0;
+#X connect 2 0 3 0;
+#X connect 3 0 8 0;
+#X connect 4 0 14 0;
+#X connect 4 1 3 1;
+#X connect 5 0 4 0;
+#X connect 8 0 10 0;
+#X connect 9 0 15 0;
+#X connect 10 0 16 0;
+#X connect 10 1 9 0;
+#X connect 10 2 7 0;
+#X connect 11 0 12 0;
+#X connect 11 1 8 1;
+#X connect 14 0 2 0;
+#X restore 478 180 pd GD-management;
+#X obj 466 200 s \$0-GD-users-send;
+#X text 265 140 Processing of sending parameters - Filter by send mode
+;
+#X connect 1 0 3 0;
+#X connect 2 0 4 0;
+#X connect 3 0 2 0;
+#X connect 4 0 22 0;
+#X connect 6 0 7 0;
+#X connect 7 0 0 0;
+#X connect 8 0 1 0;
+#X connect 9 0 10 0;
+#X connect 10 0 0 0;
+#X connect 11 0 13 0;
+#X connect 12 0 6 0;
+#X connect 13 0 12 0;
+#X connect 15 0 24 0;
+#X connect 15 1 20 0;
+#X connect 15 2 19 0;
+#X connect 17 0 16 0;
+#X connect 21 0 27 0;
+#X connect 21 1 26 0;
+#X connect 21 2 25 0;
+#X connect 22 0 15 0;
+#X connect 22 1 21 0;
+#X connect 22 2 28 0;
+#X connect 24 0 17 0;
+#X connect 28 0 30 0;
+#X connect 28 1 29 0;
+#X connect 28 2 32 0;
+#X restore 13 57 pd in+out-local;
+#N canvas 296 104 403 427 zu-tun 0;
+#X text 8 201 (substituir osc-coisos por mrpeach \, para usarem /.
+também send-GD \, etc. mantém compatibilidade com outros patches.)
+;
+#X text 12 45 GD - ping regular vê se há mensagens nao apagadas menores
+que id actual \, e re-envia-as.;
+#X text 12 74 OGD - erros na recepcao nao sao corrigidos até que o
+receptor envie algo? testar situacoes de erro - também em GD;
+#X text 9 239 INIT \; - por enquanto \, os utilizadores têm que escrever
+o IP. preparar scripts para cada OS para que isso seja feito "automático".
+ver mais em init;
+#X restore 126 91 pd zu-tun;
+#X obj 212 154 bng 15 250 50 0 \$0-gd-reset \$0-gd-reset-i GD-Reset
+19 8 0 10 -262144 -1 -1;
+#X obj 212 174 bng 15 250 50 0 \$0-ogd-reset \$0-ogd-reset-i OGD-Reset
+19 8 0 10 -262144 -1 -1;
+#X msg 217 219 symbol 192.168.178.51;
+#X obj 217 279 s \$0-ip-i;
+#X msg 227 239 symbol 192.168.178.70;
+#X text 218 200 thinkpads;
+#X msg 237 259 symbol 192.168.178.33;
+#X obj 209 63 s \$0-userlist;
+#X msg 209 43 click;
+#X obj 213 109 tgl 15 0 \$0-print-netreceive empty netreceive 20 7
+0 10 -262144 -1 -1 0 1;
+#X text 212 88 Print debug;
+#X obj 213 129 tgl 15 0 \$0-print-netsend empty netsend 20 7 0 10 -262144
+-1 -1 0 1;
+#X text 208 19 DEBUG;
+#X connect 10 0 11 0;
+#X connect 12 0 11 0;
+#X connect 14 0 11 0;
+#X connect 16 0 15 0;
+#X restore 166 465 pd patch;
+#X obj 12 52 cnv 15 290 21 empty \$0-gui-field Connected 6 11 0 11
+-228856 -1 0;
+#X symbolatom 109 55 16 0 0 0 - #0-ip-i #0-ip;
+#X obj 82 52 cnv 15 15 20 empty \$0-gui-field on 6 11 0 11 -228856
+-1 0;
+#X obj 208 52 cnv 15 15 20 empty \$0-gui-field port 6 11 0 11 -228856
+-1 0;
+#X floatatom 247 55 7 0 100000 0 - #0-port-i #0-port;
+#X obj 12 152 cnv 15 190 21 empty \$0-gui-field Local 6 11 0 11 -228856
+-1 0;
+#X obj 54 152 cnv 15 15 20 empty \$0-gui-field receive 6 11 0 11 -228856
+-1 0;
+#X floatatom 151 155 7 0 100000 0 - #0-port-lr-i #0-port-lr;
+#X obj 110 152 cnv 15 15 20 empty \$0-gui-field port 6 11 0 11 -228856
+-1 0;
+#X obj 12 182 cnv 15 190 21 empty \$0-gui-field Local 6 11 0 11 -228856
+-1 0;
+#X obj 54 182 cnv 15 15 20 empty \$0-gui-field send 6 11 0 11 -228856
+-1 0;
+#X floatatom 151 185 7 0 100000 0 - #0-port-ls-i #0-port-ls;
+#X obj 90 182 cnv 15 15 20 empty \$0-gui-field port 6 11 0 11 -228856
+-1 0;
+#N canvas 0 50 399 531 documentation 0;
+#X text 13 169 INSTRUCTIONS;
+#N canvas 0 50 399 222 differences.to.LANdini 0;
+#X text 13 119 Features not implemented;
+#X text 13 159 - /networkTime;
+#X text 13 179 - /stageMap;
+#X text 13 19 Different features;
+#X text 13 69 - most likely some functions not thoroughly described
+in the paper are implemented in a different way.;
+#X text 13 139 - in vanilla objects the osc-syntax doesn't use "/"
+;
+#X text 13 39 - no "member reply" message for all protocols. Instead
+\, a member removes itself when switches the connection off.;
+#X restore 13 489 pd differences.to.LANdini;
+#X text 13 469 Comparison with LANdini;
+#X text 13 189 To connect \, follow these steps:;
+#X text 13 309 Click on the on/off button to connect/disconnect from
+the network. You also need to reconnected if you wish to change your
+username or port.;
+#X text 13 409 For more information \, see:;
+#X text 13 429 - LANdini website http://jaschanarveson.com/pages/code.html
+;
+#X text 13 209 1 - The username is your computer name \, you can change
+it if necessary. Usernames can't repeat. Don't change the port unless
+everyone in your network is using the same one.;
+#X text 13 279 3 - Other users in your network should do the same.
+See the user list being updated.;
+#X text 13 349 4 - Change your local ports if necessary. The accompanying
+patch "local-network" has a model on how to manage local connections
+to the LAN.Pdini patch.;
+#X text 13 109 DEPENDENCIES;
+#X text 13 129 You'll need the external libraries jmmmp and ceammc.
+;
+#X text 13 49 This version isn't 100% compatible with Supercollider's
+LANdini. If you're interested in compatibility and you're a SC user
+\, contact me so that we can work on it.;
+#X text 13 249 2 - Input your local IP. This will activate the connection.
+(for now \, it's not possible for Pd to determine your IP);
+#X text 13 9 LANPdini is an attempt to port J. Narveson's LANdini to
+Pd. Some features weren't yet implemented \, others funcion differently.
+It works only with local networks.;
+#X restore 243 15 pd documentation;
+#X obj 112 12 cnv 15 100 21 empty \$0-gui-field LANPdini 17 11 0 13
+-228856 -1 0;
+#X obj 12 82 cnv 15 195 21 empty \$0-gui-field Username 6 11 0 11 -228856
+-1 0;
+#X symbolatom 79 85 20 0 0 0 - #0-username-i #0-username;
+#X obj 12 112 cnv 15 130 21 empty \$0-gui-field Connection 6 11 0 11
+-228856 -1 0;
+#X obj 95 115 tgl 15 0 \$0-connect-st \$0-connect-st-i ON 19 8 0 14
+-24198 -24198 -1 1 1;
+#N canvas 748 342 450 300 user-list-GUI 0;
+#X scalar 1015-userlist-gui 3 0 \; JMMMP-X230 192.178.168.11 57120
+\\\; \;;
+#X coords 0 0 300 -1 300 11 2 25 8;
+#X restore 12 242 pd user-list-GUI;
+#X text 17 222 User list - Username \, IP \, Port;
+#N canvas 0 50 396 439 license 0;
+#X text 8 47 All rights reserved.;
+#X text 8 227 The names of its contributors may not be used to endorse
+or promote products derived from this software without specific prior
+written permission.;
+#X text 8 87 Redistribution and use in source and binary forms \, with
+or without modification \, are permitted provided that the following
+conditions are met:;
+#X text 8 127 Redistributions of source code must retain the above
+copyright notice \, this list of conditions and the following disclaimer.
+;
+#X text 8 297 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES \, INCLUDING
+\, BUT NOT LIMITED TO \, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT \, INDIRECT
+\, INCIDENTAL \, SPECIAL \, EXEMPLARY \, OR CONSEQUENTIAL DAMAGES (INCLUDING
+\, BUT NOT LIMITED TO \, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+;
+#X text 8 167 Redistributions in binary form must reproduce the above
+copyright notice \, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.
+;
+#X text 8 27 jmmmpais@gmail.com;
+#N canvas 0 50 450 300 paypal 0;
+#X obj 12 51 pdcontrol;
+#X msg 12 31 browse https://www.paypal.me/jmmmp;
+#X obj 12 11 r \$0-paypal;
+#X connect 1 0 0 0;
+#X connect 2 0 1 0;
+#X restore 9 398 pd paypal;
+#X text 8 7 Copyright 2021 \, Jo�o Pais;
+#X restore 10 465 pd license;
+#N canvas 139 65 384 182 META 0;
+#X text 12 55 AUTHOR Jo�o Pais <jmmmpais@gmail.com>;
+#X text 12 95 LICENSE BSD;
+#X text 12 75 LIBRARY jmmmp;
+#X text 13 115 WEBSITE http://puredata.info/Members/jmmmp;
+#X text 12 135 VERSION 0.6;
+#X text 12 6 DESCRIPTION Attempt to port J. Narveson's LANdini to Pd
+;
+#X text 12 36 KEYWORDS messages network OSC;
+#X restore 90 465 pd META;
+#X obj 294 404 hradio 15 1 0 3 \$0-paypal empty empty 0 -8 0 10 -262144
+-1 -1 0;
+#X obj 294 419 cnv 1 1 1 24x37 24x37-i empty 0 0 0 10 -41475 -1 0;
+#X obj 295 419 cnv 1 1 1 25x37 25x37-i empty 0 0 0 10 -116039 -1 0
+;
+#X obj 296 419 cnv 1 1 1 26x37 26x37-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 298 419 cnv 1 1 1 31x37 31x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 299 419 cnv 1 1 1 32x37 32x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 300 419 cnv 1 1 1 33x37 33x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 301 419 cnv 1 1 1 34x37 34x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 302 419 cnv 1 1 1 35x37 35x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 303 419 cnv 1 1 1 36x37 36x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 304 419 cnv 1 1 1 37x37 37x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 305 419 cnv 1 1 1 38x37 38x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 306 419 cnv 1 1 1 39x37 39x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 307 419 cnv 1 1 1 40x37 40x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 308 419 cnv 1 1 1 41x37 41x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 309 419 cnv 1 1 1 42x37 42x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 310 419 cnv 1 1 1 43x37 43x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 311 419 cnv 1 1 1 44x37 44x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 312 419 cnv 1 1 1 45x37 45x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 313 419 cnv 1 1 1 46x37 46x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 314 419 cnv 1 1 1 47x37 47x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 315 419 cnv 1 1 1 48x37 48x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 316 419 cnv 1 1 1 49x37 49x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 317 419 cnv 1 1 1 50x37 50x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 318 419 cnv 1 1 1 51x37 51x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 319 419 cnv 1 1 1 52x37 52x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 320 419 cnv 1 1 1 53x37 53x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 321 419 cnv 1 1 1 54x37 54x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 322 419 cnv 1 1 1 55x37 55x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 323 419 cnv 1 1 1 56x37 56x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 324 419 cnv 1 1 1 57x37 57x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 325 419 cnv 1 1 1 58x37 58x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 326 419 cnv 1 1 1 59x37 59x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 327 419 cnv 1 1 1 60x37 60x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 328 419 cnv 1 1 1 61x37 61x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 329 419 cnv 1 1 1 62x37 62x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 330 419 cnv 1 1 1 63x37 63x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 331 419 cnv 1 1 1 64x37 64x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 332 419 cnv 1 1 1 65x37 65x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 333 419 cnv 1 1 1 66x37 66x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 334 419 cnv 1 1 1 67x37 67x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 335 419 cnv 1 1 1 71x37 71x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 336 419 cnv 1 1 1 72x37 72x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 337 419 cnv 1 1 1 73x37 73x37-i empty 0 0 0 10 -120199 -1 0
+;
+#X obj 338 419 cnv 1 1 1 74x37 74x37-i empty 0 0 0 10 -41475 -1 0;
+#X obj 293 418 cnv 1 1 1 23x36 23x36-i empty 0 0 0 10 -70468 -1 0;
+#X obj 294 418 cnv 1 1 1 24x36 24x36-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 295 418 cnv 1 1 1 25x36 25x36-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 296 418 cnv 1 1 1 26x36 26x36-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 298 418 cnv 1 1 1 31x36 31x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 418 cnv 1 1 1 32x36 32x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 418 cnv 1 1 1 33x36 33x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 418 cnv 1 1 1 34x36 34x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 418 cnv 1 1 1 35x36 35x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 418 cnv 1 1 1 36x36 36x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 418 cnv 1 1 1 37x36 37x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 418 cnv 1 1 1 38x36 38x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 418 cnv 1 1 1 39x36 39x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 418 cnv 1 1 1 40x36 40x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 418 cnv 1 1 1 41x36 41x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 418 cnv 1 1 1 42x36 42x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 418 cnv 1 1 1 43x36 43x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 418 cnv 1 1 1 44x36 44x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 418 cnv 1 1 1 45x36 45x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 418 cnv 1 1 1 46x36 46x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 418 cnv 1 1 1 47x36 47x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 418 cnv 1 1 1 48x36 48x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 418 cnv 1 1 1 49x36 49x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 418 cnv 1 1 1 50x36 50x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 418 cnv 1 1 1 51x36 51x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 418 cnv 1 1 1 52x36 52x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 418 cnv 1 1 1 53x36 53x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 418 cnv 1 1 1 54x36 54x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 418 cnv 1 1 1 55x36 55x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 418 cnv 1 1 1 56x36 56x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 418 cnv 1 1 1 57x36 57x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 418 cnv 1 1 1 58x36 58x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 418 cnv 1 1 1 59x36 59x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 418 cnv 1 1 1 60x36 60x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 418 cnv 1 1 1 61x36 61x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 418 cnv 1 1 1 62x36 62x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 418 cnv 1 1 1 63x36 63x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 418 cnv 1 1 1 64x36 64x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 418 cnv 1 1 1 65x36 65x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 418 cnv 1 1 1 66x36 66x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 418 cnv 1 1 1 67x36 67x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 418 cnv 1 1 1 71x36 71x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 418 cnv 1 1 1 72x36 72x36-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 337 418 cnv 1 1 1 73x36 73x36-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 338 418 cnv 1 1 1 74x36 74x36-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 292 417 cnv 1 1 1 22x35 22x35-i empty 0 0 0 10 -82885 -1 0;
+#X obj 293 417 cnv 1 1 1 23x35 23x35-i empty 0 0 0 10 -223821 -1 0
+;
+#X obj 294 417 cnv 1 1 1 24x35 24x35-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 295 417 cnv 1 1 1 25x35 25x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 417 cnv 1 1 1 26x35 26x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 417 cnv 1 1 1 31x35 31x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 417 cnv 1 1 1 32x35 32x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 417 cnv 1 1 1 33x35 33x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 417 cnv 1 1 1 34x35 34x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 417 cnv 1 1 1 35x35 35x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 417 cnv 1 1 1 36x35 36x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 417 cnv 1 1 1 37x35 37x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 417 cnv 1 1 1 38x35 38x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 417 cnv 1 1 1 39x35 39x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 417 cnv 1 1 1 40x35 40x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 417 cnv 1 1 1 41x35 41x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 417 cnv 1 1 1 42x35 42x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 417 cnv 1 1 1 43x35 43x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 417 cnv 1 1 1 44x35 44x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 417 cnv 1 1 1 45x35 45x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 417 cnv 1 1 1 46x35 46x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 417 cnv 1 1 1 47x35 47x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 417 cnv 1 1 1 48x35 48x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 417 cnv 1 1 1 49x35 49x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 417 cnv 1 1 1 50x35 50x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 417 cnv 1 1 1 51x35 51x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 417 cnv 1 1 1 52x35 52x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 417 cnv 1 1 1 53x35 53x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 417 cnv 1 1 1 54x35 54x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 417 cnv 1 1 1 55x35 55x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 417 cnv 1 1 1 56x35 56x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 417 cnv 1 1 1 57x35 57x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 417 cnv 1 1 1 58x35 58x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 417 cnv 1 1 1 59x35 59x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 417 cnv 1 1 1 60x35 60x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 417 cnv 1 1 1 61x35 61x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 417 cnv 1 1 1 62x35 62x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 417 cnv 1 1 1 63x35 63x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 417 cnv 1 1 1 64x35 64x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 417 cnv 1 1 1 65x35 65x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 417 cnv 1 1 1 66x35 66x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 417 cnv 1 1 1 67x35 67x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 417 cnv 1 1 1 71x35 71x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 417 cnv 1 1 1 72x35 72x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 417 cnv 1 1 1 73x35 73x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 417 cnv 1 1 1 74x35 74x35-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 339 417 cnv 1 1 1 75x35 75x35-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 291 416 cnv 1 1 1 21x34 21x34-i empty 0 0 0 10 -74565 -1 0;
+#X obj 292 416 cnv 1 1 1 22x34 22x34-i empty 0 0 0 10 -211468 -1 0
+;
+#X obj 293 416 cnv 1 1 1 23x34 23x34-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 294 416 cnv 1 1 1 24x34 24x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 416 cnv 1 1 1 25x34 25x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 416 cnv 1 1 1 26x34 26x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 416 cnv 1 1 1 31x34 31x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 416 cnv 1 1 1 32x34 32x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 416 cnv 1 1 1 33x34 33x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 416 cnv 1 1 1 34x34 34x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 416 cnv 1 1 1 35x34 35x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 416 cnv 1 1 1 36x34 36x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 416 cnv 1 1 1 37x34 37x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 416 cnv 1 1 1 38x34 38x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 416 cnv 1 1 1 39x34 39x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 416 cnv 1 1 1 40x34 40x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 416 cnv 1 1 1 41x34 41x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 416 cnv 1 1 1 42x34 42x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 416 cnv 1 1 1 43x34 43x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 416 cnv 1 1 1 44x34 44x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 416 cnv 1 1 1 45x34 45x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 416 cnv 1 1 1 46x34 46x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 416 cnv 1 1 1 47x34 47x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 416 cnv 1 1 1 48x34 48x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 416 cnv 1 1 1 49x34 49x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 416 cnv 1 1 1 50x34 50x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 416 cnv 1 1 1 51x34 51x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 416 cnv 1 1 1 52x34 52x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 416 cnv 1 1 1 53x34 53x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 416 cnv 1 1 1 54x34 54x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 416 cnv 1 1 1 55x34 55x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 416 cnv 1 1 1 56x34 56x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 416 cnv 1 1 1 57x34 57x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 416 cnv 1 1 1 58x34 58x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 416 cnv 1 1 1 59x34 59x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 416 cnv 1 1 1 60x34 60x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 416 cnv 1 1 1 61x34 61x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 416 cnv 1 1 1 62x34 62x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 416 cnv 1 1 1 63x34 63x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 416 cnv 1 1 1 64x34 64x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 416 cnv 1 1 1 65x34 65x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 416 cnv 1 1 1 66x34 66x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 416 cnv 1 1 1 67x34 67x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 416 cnv 1 1 1 71x34 71x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 416 cnv 1 1 1 72x34 72x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 416 cnv 1 1 1 73x34 73x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 416 cnv 1 1 1 74x34 74x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 416 cnv 1 1 1 75x34 75x34-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 291 415 cnv 1 1 1 21x33 21x33-i empty 0 0 0 10 -120263 -1 0
+;
+#X obj 292 415 cnv 1 1 1 22x33 22x33-i empty 0 0 0 10 -236302 -1 0
+;
+#X obj 293 415 cnv 1 1 1 23x33 23x33-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 294 415 cnv 1 1 1 24x33 24x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 415 cnv 1 1 1 25x33 25x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 415 cnv 1 1 1 26x33 26x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 415 cnv 1 1 1 31x33 31x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 415 cnv 1 1 1 32x33 32x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 415 cnv 1 1 1 33x33 33x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 415 cnv 1 1 1 34x33 34x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 415 cnv 1 1 1 35x33 35x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 415 cnv 1 1 1 36x33 36x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 415 cnv 1 1 1 37x33 37x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 415 cnv 1 1 1 38x33 38x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 415 cnv 1 1 1 39x33 39x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 415 cnv 1 1 1 40x33 40x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 415 cnv 1 1 1 41x33 41x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 309 415 cnv 1 1 1 42x33 42x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 310 415 cnv 1 1 1 43x33 43x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 415 cnv 1 1 1 44x33 44x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 415 cnv 1 1 1 45x33 45x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 415 cnv 1 1 1 46x33 46x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 415 cnv 1 1 1 47x33 47x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 415 cnv 1 1 1 48x33 48x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 415 cnv 1 1 1 49x33 49x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 415 cnv 1 1 1 50x33 50x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 415 cnv 1 1 1 51x33 51x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 415 cnv 1 1 1 52x33 52x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 320 415 cnv 1 1 1 53x33 53x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 321 415 cnv 1 1 1 54x33 54x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 415 cnv 1 1 1 55x33 55x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 415 cnv 1 1 1 56x33 56x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 415 cnv 1 1 1 57x33 57x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 415 cnv 1 1 1 58x33 58x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 415 cnv 1 1 1 59x33 59x33-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 327 415 cnv 1 1 1 60x33 60x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 415 cnv 1 1 1 61x33 61x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 415 cnv 1 1 1 62x33 62x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 415 cnv 1 1 1 63x33 63x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 331 415 cnv 1 1 1 64x33 64x33-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 332 415 cnv 1 1 1 65x33 65x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 415 cnv 1 1 1 66x33 66x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 415 cnv 1 1 1 67x33 67x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 415 cnv 1 1 1 71x33 71x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 415 cnv 1 1 1 72x33 72x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 415 cnv 1 1 1 73x33 73x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 415 cnv 1 1 1 74x33 74x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 415 cnv 1 1 1 75x33 75x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 415 cnv 1 1 1 76x33 76x33-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 341 415 cnv 1 1 1 77x33 77x33-i empty 0 0 0 10 -116103 -1 0
+;
+#X obj 290 414 cnv 1 1 1 20x32 20x32-i empty 0 0 0 10 -49731 -1 0;
+#X obj 291 414 cnv 1 1 1 21x32 21x32-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 292 414 cnv 1 1 1 22x32 22x32-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 293 414 cnv 1 1 1 23x32 23x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 414 cnv 1 1 1 24x32 24x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 414 cnv 1 1 1 25x32 25x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 414 cnv 1 1 1 26x32 26x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 414 cnv 1 1 1 31x32 31x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 414 cnv 1 1 1 32x32 32x32-i empty 0 0 0 10 -236301 -1 0
+;
+#X obj 300 414 cnv 1 1 1 33x32 33x32-i empty 0 0 0 10 -165834 -1 0
+;
+#X obj 301 414 cnv 1 1 1 34x32 34x32-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 302 414 cnv 1 1 1 35x32 35x32-i empty 0 0 0 10 -169994 -1 0
+;
+#X obj 303 414 cnv 1 1 1 36x32 36x32-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 304 414 cnv 1 1 1 37x32 37x32-i empty 0 0 0 10 -252814 -1 0
+;
+#X obj 305 414 cnv 1 1 1 38x32 38x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 414 cnv 1 1 1 39x32 39x32-i empty 0 0 0 10 -257038 -1 0
+;
+#X obj 307 414 cnv 1 1 1 40x32 40x32-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 308 414 cnv 1 1 1 41x32 41x32-i empty 0 0 0 10 -153353 -1 0
+;
+#X obj 309 414 cnv 1 1 1 42x32 42x32-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 310 414 cnv 1 1 1 43x32 43x32-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 311 414 cnv 1 1 1 44x32 44x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 414 cnv 1 1 1 45x32 45x32-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 313 414 cnv 1 1 1 46x32 46x32-i empty 0 0 0 10 -169994 -1 0
+;
+#X obj 314 414 cnv 1 1 1 47x32 47x32-i empty 0 0 0 10 -236301 -1 0
+;
+#X obj 315 414 cnv 1 1 1 48x32 48x32-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 316 414 cnv 1 1 1 49x32 49x32-i empty 0 0 0 10 -178250 -1 0
+;
+#X obj 317 414 cnv 1 1 1 50x32 50x32-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 318 414 cnv 1 1 1 51x32 51x32-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 319 414 cnv 1 1 1 52x32 52x32-i empty 0 0 0 10 -174090 -1 0
+;
+#X obj 320 414 cnv 1 1 1 53x32 53x32-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 321 414 cnv 1 1 1 54x32 54x32-i empty 0 0 0 10 -178314 -1 0
+;
+#X obj 322 414 cnv 1 1 1 55x32 55x32-i empty 0 0 0 10 -174090 -1 0
+;
+#X obj 323 414 cnv 1 1 1 56x32 56x32-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 324 414 cnv 1 1 1 57x32 57x32-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 325 414 cnv 1 1 1 58x32 58x32-i empty 0 0 0 10 -190667 -1 0
+;
+#X obj 326 414 cnv 1 1 1 59x32 59x32-i empty 0 0 0 10 -149257 -1 0
+;
+#X obj 327 414 cnv 1 1 1 60x32 60x32-i empty 0 0 0 10 -194827 -1 0
+;
+#X obj 328 414 cnv 1 1 1 61x32 61x32-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 329 414 cnv 1 1 1 62x32 62x32-i empty 0 0 0 10 -232141 -1 0
+;
+#X obj 330 414 cnv 1 1 1 63x32 63x32-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 331 414 cnv 1 1 1 64x32 64x32-i empty 0 0 0 10 -149257 -1 0
+;
+#X obj 332 414 cnv 1 1 1 65x32 65x32-i empty 0 0 0 10 -186571 -1 0
+;
+#X obj 333 414 cnv 1 1 1 66x32 66x32-i empty 0 0 0 10 -244622 -1 0
+;
+#X obj 334 414 cnv 1 1 1 67x32 67x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 414 cnv 1 1 1 71x32 71x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 414 cnv 1 1 1 72x32 72x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 414 cnv 1 1 1 73x32 73x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 414 cnv 1 1 1 74x32 74x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 414 cnv 1 1 1 75x32 75x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 414 cnv 1 1 1 76x32 76x32-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 341 414 cnv 1 1 1 77x32 77x32-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 342 414 cnv 1 1 1 78x32 78x32-i empty 0 0 0 10 -49731 -1 0;
+#X obj 290 413 cnv 1 1 1 20x31 20x31-i empty 0 0 0 10 -153417 -1 0
+;
+#X obj 291 413 cnv 1 1 1 21x31 21x31-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 292 413 cnv 1 1 1 22x31 22x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 293 413 cnv 1 1 1 23x31 23x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 413 cnv 1 1 1 24x31 24x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 413 cnv 1 1 1 25x31 25x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 413 cnv 1 1 1 26x31 26x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 413 cnv 1 1 1 31x31 31x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 413 cnv 1 1 1 32x31 32x31-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 300 413 cnv 1 1 1 33x31 33x31-i empty 0 0 0 10 -20738 -1 0;
+#X obj 301 413 cnv 1 1 1 34x31 34x31-i empty 0 0 0 10 -45571 -1 0;
+#X obj 302 413 cnv 1 1 1 35x31 35x31-i empty 0 0 0 10 -58052 -1 0;
+#X obj 303 413 cnv 1 1 1 36x31 36x31-i empty 0 0 0 10 -45571 -1 0;
+#X obj 304 413 cnv 1 1 1 37x31 37x31-i empty 0 0 0 10 -153353 -1 0
+;
+#X obj 305 413 cnv 1 1 1 38x31 38x31-i empty 0 0 0 10 -244622 -1 0
+;
+#X obj 306 413 cnv 1 1 1 39x31 39x31-i empty 0 0 0 10 -215564 -1 0
+;
+#X obj 307 413 cnv 1 1 1 40x31 40x31-i empty 0 0 0 10 -53891 -1 0;
+#X obj 308 413 cnv 1 1 1 41x31 41x31-i empty 0 0 0 10 -57988 -1 0;
+#X obj 309 413 cnv 1 1 1 42x31 42x31-i empty 0 0 0 10 -45571 -1 0;
+#X obj 310 413 cnv 1 1 1 43x31 43x31-i empty 0 0 0 10 -87045 -1 0;
+#X obj 311 413 cnv 1 1 1 44x31 44x31-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 312 413 cnv 1 1 1 45x31 45x31-i empty 0 0 0 10 -178250 -1 0
+;
+#X obj 313 413 cnv 1 1 1 46x31 46x31-i empty 0 0 0 10 -28994 -1 0;
+#X obj 314 413 cnv 1 1 1 47x31 47x31-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 315 413 cnv 1 1 1 48x31 48x31-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 316 413 cnv 1 1 1 49x31 49x31-i empty 0 0 0 10 -41475 -1 0;
+#X obj 317 413 cnv 1 1 1 50x31 50x31-i empty 0 0 0 10 -165770 -1 0
+;
+#X obj 318 413 cnv 1 1 1 51x31 51x31-i empty 0 0 0 10 -203147 -1 0
+;
+#X obj 319 413 cnv 1 1 1 52x31 52x31-i empty 0 0 0 10 -41411 -1 0;
+#X obj 320 413 cnv 1 1 1 53x31 53x31-i empty 0 0 0 10 -95366 -1 0;
+#X obj 321 413 cnv 1 1 1 54x31 54x31-i empty 0 0 0 10 -70468 -1 0;
+#X obj 322 413 cnv 1 1 1 55x31 55x31-i empty 0 0 0 10 -33154 -1 0;
+#X obj 323 413 cnv 1 1 1 56x31 56x31-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 324 413 cnv 1 1 1 57x31 57x31-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 325 413 cnv 1 1 1 58x31 58x31-i empty 0 0 0 10 -53891 -1 0;
+#X obj 326 413 cnv 1 1 1 59x31 59x31-i empty 0 0 0 10 -66308 -1 0;
+#X obj 327 413 cnv 1 1 1 60x31 60x31-i empty 0 0 0 10 -136776 -1 0
+;
+#X obj 328 413 cnv 1 1 1 61x31 61x31-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 329 413 cnv 1 1 1 62x31 62x31-i empty 0 0 0 10 -107782 -1 0
+;
+#X obj 330 413 cnv 1 1 1 63x31 63x31-i empty 0 0 0 10 -37315 -1 0;
+#X obj 331 413 cnv 1 1 1 64x31 64x31-i empty 0 0 0 10 -91205 -1 0;
+#X obj 332 413 cnv 1 1 1 65x31 65x31-i empty 0 0 0 10 -111943 -1 0
+;
+#X obj 333 413 cnv 1 1 1 66x31 66x31-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 334 413 cnv 1 1 1 67x31 67x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 413 cnv 1 1 1 71x31 71x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 413 cnv 1 1 1 72x31 72x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 413 cnv 1 1 1 73x31 73x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 413 cnv 1 1 1 74x31 74x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 413 cnv 1 1 1 75x31 75x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 413 cnv 1 1 1 76x31 76x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 413 cnv 1 1 1 77x31 77x31-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 342 413 cnv 1 1 1 78x31 78x31-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 290 412 cnv 1 1 1 20x30 20x30-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 291 412 cnv 1 1 1 21x30 21x30-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 292 412 cnv 1 1 1 22x30 22x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 293 412 cnv 1 1 1 23x30 23x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 412 cnv 1 1 1 24x30 24x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 412 cnv 1 1 1 25x30 25x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 412 cnv 1 1 1 26x30 26x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 412 cnv 1 1 1 31x30 31x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 412 cnv 1 1 1 32x30 32x30-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 300 412 cnv 1 1 1 33x30 33x30-i empty 0 0 0 10 -16577 -1 0;
+#X obj 301 412 cnv 1 1 1 34x30 34x30-i empty 0 0 0 10 -145097 -1 0
+;
+#X obj 302 412 cnv 1 1 1 35x30 35x30-i empty 0 0 0 10 -215564 -1 0
+;
+#X obj 303 412 cnv 1 1 1 36x30 36x30-i empty 0 0 0 10 -107782 -1 0
+;
+#X obj 304 412 cnv 1 1 1 37x30 37x30-i empty 0 0 0 10 -49731 -1 0;
+#X obj 305 412 cnv 1 1 1 38x30 38x30-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 306 412 cnv 1 1 1 39x30 39x30-i empty 0 0 0 10 -124359 -1 0
+;
+#X obj 307 412 cnv 1 1 1 40x30 40x30-i empty 0 0 0 10 -49731 -1 0;
+#X obj 308 412 cnv 1 1 1 41x30 41x30-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 309 412 cnv 1 1 1 42x30 42x30-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 310 412 cnv 1 1 1 43x30 43x30-i empty 0 0 0 10 -28994 -1 0;
+#X obj 311 412 cnv 1 1 1 44x30 44x30-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 312 412 cnv 1 1 1 45x30 45x30-i empty 0 0 0 10 -182410 -1 0
+;
+#X obj 313 412 cnv 1 1 1 46x30 46x30-i empty 0 0 0 10 -29058 -1 0;
+#X obj 314 412 cnv 1 1 1 47x30 47x30-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 315 412 cnv 1 1 1 48x30 48x30-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 316 412 cnv 1 1 1 49x30 49x30-i empty 0 0 0 10 -41475 -1 0;
+#X obj 317 412 cnv 1 1 1 50x30 50x30-i empty 0 0 0 10 -165770 -1 0
+;
+#X obj 318 412 cnv 1 1 1 51x30 51x30-i empty 0 0 0 10 -174154 -1 0
+;
+#X obj 319 412 cnv 1 1 1 52x30 52x30-i empty 0 0 0 10 -28994 -1 0;
+#X obj 320 412 cnv 1 1 1 53x30 53x30-i empty 0 0 0 10 -153353 -1 0
+;
+#X obj 321 412 cnv 1 1 1 54x30 54x30-i empty 0 0 0 10 -116039 -1 0
+;
+#X obj 322 412 cnv 1 1 1 55x30 55x30-i empty 0 0 0 10 -33154 -1 0;
+#X obj 323 412 cnv 1 1 1 56x30 56x30-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 324 412 cnv 1 1 1 57x30 57x30-i empty 0 0 0 10 -165769 -1 0
+;
+#X obj 325 412 cnv 1 1 1 58x30 58x30-i empty 0 0 0 10 -20738 -1 0;
+#X obj 326 412 cnv 1 1 1 59x30 59x30-i empty 0 0 0 10 -211404 -1 0
+;
+#X obj 327 412 cnv 1 1 1 60x30 60x30-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 328 412 cnv 1 1 1 61x30 61x30-i empty 0 0 0 10 -174154 -1 0
+;
+#X obj 329 412 cnv 1 1 1 62x30 62x30-i empty 0 0 0 10 -28994 -1 0;
+#X obj 330 412 cnv 1 1 1 63x30 63x30-i empty 0 0 0 10 -174154 -1 0
+;
+#X obj 331 412 cnv 1 1 1 64x30 64x30-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 332 412 cnv 1 1 1 65x30 65x30-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 333 412 cnv 1 1 1 66x30 66x30-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 334 412 cnv 1 1 1 67x30 67x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 412 cnv 1 1 1 71x30 71x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 412 cnv 1 1 1 72x30 72x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 412 cnv 1 1 1 73x30 73x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 412 cnv 1 1 1 74x30 74x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 412 cnv 1 1 1 75x30 75x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 412 cnv 1 1 1 76x30 76x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 412 cnv 1 1 1 77x30 77x30-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 342 412 cnv 1 1 1 78x30 78x30-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 290 411 cnv 1 1 1 20x29 20x29-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 291 411 cnv 1 1 1 21x29 21x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 292 411 cnv 1 1 1 22x29 22x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 293 411 cnv 1 1 1 23x29 23x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 411 cnv 1 1 1 24x29 24x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 411 cnv 1 1 1 25x29 25x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 411 cnv 1 1 1 26x29 26x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 411 cnv 1 1 1 31x29 31x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 411 cnv 1 1 1 32x29 32x29-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 300 411 cnv 1 1 1 33x29 33x29-i empty 0 0 0 10 -20738 -1 0;
+#X obj 301 411 cnv 1 1 1 34x29 34x29-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 302 411 cnv 1 1 1 35x29 35x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 411 cnv 1 1 1 36x29 36x29-i empty 0 0 0 10 -194827 -1 0
+;
+#X obj 304 411 cnv 1 1 1 37x29 37x29-i empty 0 0 0 10 -4161 -1 0;
+#X obj 305 411 cnv 1 1 1 38x29 38x29-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 306 411 cnv 1 1 1 39x29 39x29-i empty 0 0 0 10 -91205 -1 0;
+#X obj 307 411 cnv 1 1 1 40x29 40x29-i empty 0 0 0 10 -66308 -1 0;
+#X obj 308 411 cnv 1 1 1 41x29 41x29-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 309 411 cnv 1 1 1 42x29 42x29-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 310 411 cnv 1 1 1 43x29 43x29-i empty 0 0 0 10 -33154 -1 0;
+#X obj 311 411 cnv 1 1 1 44x29 44x29-i empty 0 0 0 10 -165834 -1 0
+;
+#X obj 312 411 cnv 1 1 1 45x29 45x29-i empty 0 0 0 10 -182410 -1 0
+;
+#X obj 313 411 cnv 1 1 1 46x29 46x29-i empty 0 0 0 10 -29058 -1 0;
+#X obj 314 411 cnv 1 1 1 47x29 47x29-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 315 411 cnv 1 1 1 48x29 48x29-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 316 411 cnv 1 1 1 49x29 49x29-i empty 0 0 0 10 -41411 -1 0;
+#X obj 317 411 cnv 1 1 1 50x29 50x29-i empty 0 0 0 10 -165770 -1 0
+;
+#X obj 318 411 cnv 1 1 1 51x29 51x29-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 319 411 cnv 1 1 1 52x29 52x29-i empty 0 0 0 10 -145096 -1 0
+;
+#X obj 320 411 cnv 1 1 1 53x29 53x29-i empty 0 0 0 10 -58052 -1 0;
+#X obj 321 411 cnv 1 1 1 54x29 54x29-i empty 0 0 0 10 -20738 -1 0;
+#X obj 322 411 cnv 1 1 1 55x29 55x29-i empty 0 0 0 10 -28994 -1 0;
+#X obj 323 411 cnv 1 1 1 56x29 56x29-i empty 0 0 0 10 -244622 -1 0
+;
+#X obj 324 411 cnv 1 1 1 57x29 57x29-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 325 411 cnv 1 1 1 58x29 58x29-i empty 0 0 0 10 -16578 -1 0;
+#X obj 326 411 cnv 1 1 1 59x29 59x29-i empty 0 0 0 10 -240462 -1 0
+;
+#X obj 327 411 cnv 1 1 1 60x29 60x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 411 cnv 1 1 1 61x29 61x29-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 329 411 cnv 1 1 1 62x29 62x29-i empty 0 0 0 10 -16578 -1 0;
+#X obj 330 411 cnv 1 1 1 63x29 63x29-i empty 0 0 0 10 -41411 -1 0;
+#X obj 331 411 cnv 1 1 1 64x29 64x29-i empty 0 0 0 10 -37315 -1 0;
+#X obj 332 411 cnv 1 1 1 65x29 65x29-i empty 0 0 0 10 -8257 -1 0;
+#X obj 333 411 cnv 1 1 1 66x29 66x29-i empty 0 0 0 10 -194891 -1 0
+;
+#X obj 334 411 cnv 1 1 1 67x29 67x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 411 cnv 1 1 1 71x29 71x29-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 336 411 cnv 1 1 1 72x29 72x29-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 337 411 cnv 1 1 1 73x29 73x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 411 cnv 1 1 1 74x29 74x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 411 cnv 1 1 1 75x29 75x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 411 cnv 1 1 1 76x29 76x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 411 cnv 1 1 1 77x29 77x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 411 cnv 1 1 1 78x29 78x29-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 290 410 cnv 1 1 1 20x28 20x28-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 291 410 cnv 1 1 1 21x28 21x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 292 410 cnv 1 1 1 22x28 22x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 293 410 cnv 1 1 1 23x28 23x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 410 cnv 1 1 1 24x28 24x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 410 cnv 1 1 1 25x28 25x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 410 cnv 1 1 1 26x28 26x28-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 298 410 cnv 1 1 1 31x28 31x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 410 cnv 1 1 1 32x28 32x28-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 300 410 cnv 1 1 1 33x28 33x28-i empty 0 0 0 10 -16578 -1 0;
+#X obj 301 410 cnv 1 1 1 34x28 34x28-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 302 410 cnv 1 1 1 35x28 35x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 410 cnv 1 1 1 36x28 36x28-i empty 0 0 0 10 -203147 -1 0
+;
+#X obj 304 410 cnv 1 1 1 37x28 37x28-i empty 0 0 0 10 -20738 -1 0;
+#X obj 305 410 cnv 1 1 1 38x28 38x28-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 306 410 cnv 1 1 1 39x28 39x28-i empty 0 0 0 10 -149193 -1 0
+;
+#X obj 307 410 cnv 1 1 1 40x28 40x28-i empty 0 0 0 10 -33154 -1 0;
+#X obj 308 410 cnv 1 1 1 41x28 41x28-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 309 410 cnv 1 1 1 42x28 42x28-i empty 0 0 0 10 -124359 -1 0
+;
+#X obj 310 410 cnv 1 1 1 43x28 43x28-i empty 0 0 0 10 -33154 -1 0;
+#X obj 311 410 cnv 1 1 1 44x28 44x28-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 312 410 cnv 1 1 1 45x28 45x28-i empty 0 0 0 10 -182410 -1 0
+;
+#X obj 313 410 cnv 1 1 1 46x28 46x28-i empty 0 0 0 10 -29058 -1 0;
+#X obj 314 410 cnv 1 1 1 47x28 47x28-i empty 0 0 0 10 -145097 -1 0
+;
+#X obj 315 410 cnv 1 1 1 48x28 48x28-i empty 0 0 0 10 -153353 -1 0
+;
+#X obj 316 410 cnv 1 1 1 49x28 49x28-i empty 0 0 0 10 -28994 -1 0;
+#X obj 317 410 cnv 1 1 1 50x28 50x28-i empty 0 0 0 10 -174154 -1 0
+;
+#X obj 318 410 cnv 1 1 1 51x28 51x28-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 319 410 cnv 1 1 1 52x28 52x28-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 320 410 cnv 1 1 1 53x28 53x28-i empty 0 0 0 10 -182411 -1 0
+;
+#X obj 321 410 cnv 1 1 1 54x28 54x28-i empty 0 0 0 10 -78789 -1 0;
+#X obj 322 410 cnv 1 1 1 55x28 55x28-i empty 0 0 0 10 -58052 -1 0;
+#X obj 323 410 cnv 1 1 1 56x28 56x28-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 324 410 cnv 1 1 1 57x28 57x28-i empty 0 0 0 10 -132616 -1 0
+;
+#X obj 325 410 cnv 1 1 1 58x28 58x28-i empty 0 0 0 10 -12417 -1 0;
+#X obj 326 410 cnv 1 1 1 59x28 59x28-i empty 0 0 0 10 -190731 -1 0
+;
+#X obj 327 410 cnv 1 1 1 60x28 60x28-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 328 410 cnv 1 1 1 61x28 61x28-i empty 0 0 0 10 -190731 -1 0
+;
+#X obj 329 410 cnv 1 1 1 62x28 62x28-i empty 0 0 0 10 -33155 -1 0;
+#X obj 330 410 cnv 1 1 1 63x28 63x28-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 331 410 cnv 1 1 1 64x28 64x28-i empty 0 0 0 10 -149193 -1 0
+;
+#X obj 332 410 cnv 1 1 1 65x28 65x28-i empty 0 0 0 10 -49731 -1 0;
+#X obj 333 410 cnv 1 1 1 66x28 66x28-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 334 410 cnv 1 1 1 67x28 67x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 410 cnv 1 1 1 71x28 71x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 410 cnv 1 1 1 72x28 72x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 410 cnv 1 1 1 73x28 73x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 410 cnv 1 1 1 74x28 74x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 410 cnv 1 1 1 75x28 75x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 410 cnv 1 1 1 76x28 76x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 410 cnv 1 1 1 77x28 77x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 410 cnv 1 1 1 78x28 78x28-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 290 409 cnv 1 1 1 20x27 20x27-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 291 409 cnv 1 1 1 21x27 21x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 292 409 cnv 1 1 1 22x27 22x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 293 409 cnv 1 1 1 23x27 23x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 409 cnv 1 1 1 24x27 24x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 409 cnv 1 1 1 25x27 25x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 409 cnv 1 1 1 26x27 26x27-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 298 409 cnv 1 1 1 31x27 31x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 409 cnv 1 1 1 32x27 32x27-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 300 409 cnv 1 1 1 33x27 33x27-i empty 0 0 0 10 -20674 -1 0;
+#X obj 301 409 cnv 1 1 1 34x27 34x27-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 302 409 cnv 1 1 1 35x27 35x27-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 303 409 cnv 1 1 1 36x27 36x27-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 304 409 cnv 1 1 1 37x27 37x27-i empty 0 0 0 10 -16577 -1 0;
+#X obj 305 409 cnv 1 1 1 38x27 38x27-i empty 0 0 0 10 -178250 -1 0
+;
+#X obj 306 409 cnv 1 1 1 39x27 39x27-i empty 0 0 0 10 -236301 -1 0
+;
+#X obj 307 409 cnv 1 1 1 40x27 40x27-i empty 0 0 0 10 -91205 -1 0;
+#X obj 308 409 cnv 1 1 1 41x27 41x27-i empty 0 0 0 10 -41411 -1 0;
+#X obj 309 409 cnv 1 1 1 42x27 42x27-i empty 0 0 0 10 -45635 -1 0;
+#X obj 310 409 cnv 1 1 1 43x27 43x27-i empty 0 0 0 10 -136776 -1 0
+;
+#X obj 311 409 cnv 1 1 1 44x27 44x27-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 312 409 cnv 1 1 1 45x27 45x27-i empty 0 0 0 10 -186571 -1 0
+;
+#X obj 313 409 cnv 1 1 1 46x27 46x27-i empty 0 0 0 10 -45571 -1 0;
+#X obj 314 409 cnv 1 1 1 47x27 47x27-i empty 0 0 0 10 -82949 -1 0;
+#X obj 315 409 cnv 1 1 1 48x27 48x27-i empty 0 0 0 10 -53827 -1 0;
+#X obj 316 409 cnv 1 1 1 49x27 49x27-i empty 0 0 0 10 -82885 -1 0;
+#X obj 317 409 cnv 1 1 1 50x27 50x27-i empty 0 0 0 10 -219724 -1 0
+;
+#X obj 318 409 cnv 1 1 1 51x27 51x27-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 319 409 cnv 1 1 1 52x27 52x27-i empty 0 0 0 10 -62148 -1 0;
+#X obj 320 409 cnv 1 1 1 53x27 53x27-i empty 0 0 0 10 -41475 -1 0;
+#X obj 321 409 cnv 1 1 1 54x27 54x27-i empty 0 0 0 10 -37315 -1 0;
+#X obj 322 409 cnv 1 1 1 55x27 55x27-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 323 409 cnv 1 1 1 56x27 56x27-i empty 0 0 0 10 -215564 -1 0
+;
+#X obj 324 409 cnv 1 1 1 57x27 57x27-i empty 0 0 0 10 -66308 -1 0;
+#X obj 325 409 cnv 1 1 1 58x27 58x27-i empty 0 0 0 10 -4097 -1 0;
+#X obj 326 409 cnv 1 1 1 59x27 59x27-i empty 0 0 0 10 -70468 -1 0;
+#X obj 327 409 cnv 1 1 1 60x27 60x27-i empty 0 0 0 10 -136776 -1 0
+;
+#X obj 328 409 cnv 1 1 1 61x27 61x27-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 329 409 cnv 1 1 1 62x27 62x27-i empty 0 0 0 10 -140936 -1 0
+;
+#X obj 330 409 cnv 1 1 1 63x27 63x27-i empty 0 0 0 10 -49731 -1 0;
+#X obj 331 409 cnv 1 1 1 64x27 64x27-i empty 0 0 0 10 -62148 -1 0;
+#X obj 332 409 cnv 1 1 1 65x27 65x27-i empty 0 0 0 10 -124359 -1 0
+;
+#X obj 333 409 cnv 1 1 1 66x27 66x27-i empty 0 0 0 10 -240462 -1 0
+;
+#X obj 334 409 cnv 1 1 1 67x27 67x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 409 cnv 1 1 1 71x27 71x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 409 cnv 1 1 1 72x27 72x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 409 cnv 1 1 1 73x27 73x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 409 cnv 1 1 1 74x27 74x27-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 339 409 cnv 1 1 1 75x27 75x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 409 cnv 1 1 1 76x27 76x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 409 cnv 1 1 1 77x27 77x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 290 408 cnv 1 1 1 20x26 20x26-i empty 0 0 0 10 -257109 -1 0
+;
+#X obj 291 408 cnv 1 1 1 21x26 21x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 292 408 cnv 1 1 1 22x26 22x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 293 408 cnv 1 1 1 23x26 23x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 408 cnv 1 1 1 24x26 24x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 408 cnv 1 1 1 25x26 25x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 408 cnv 1 1 1 26x26 26x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 408 cnv 1 1 1 31x26 31x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 408 cnv 1 1 1 32x26 32x26-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 300 408 cnv 1 1 1 33x26 33x26-i empty 0 0 0 10 -20738 -1 0;
+#X obj 301 408 cnv 1 1 1 34x26 34x26-i empty 0 0 0 10 -120199 -1 0
+;
+#X obj 302 408 cnv 1 1 1 35x26 35x26-i empty 0 0 0 10 -128520 -1 0
+;
+#X obj 303 408 cnv 1 1 1 36x26 36x26-i empty 0 0 0 10 -33154 -1 0;
+#X obj 304 408 cnv 1 1 1 37x26 37x26-i empty 0 0 0 10 -70468 -1 0;
+#X obj 305 408 cnv 1 1 1 38x26 38x26-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 306 408 cnv 1 1 1 39x26 39x26-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 307 408 cnv 1 1 1 40x26 40x26-i empty 0 0 0 10 -236237 -1 0
+;
+#X obj 308 408 cnv 1 1 1 41x26 41x26-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 309 408 cnv 1 1 1 42x26 42x26-i empty 0 0 0 10 -211404 -1 0
+;
+#X obj 310 408 cnv 1 1 1 43x26 43x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 311 408 cnv 1 1 1 44x26 44x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 408 cnv 1 1 1 45x26 45x26-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 313 408 cnv 1 1 1 46x26 46x26-i empty 0 0 0 10 -211404 -1 0
+;
+#X obj 314 408 cnv 1 1 1 47x26 47x26-i empty 0 0 0 10 -223821 -1 0
+;
+#X obj 315 408 cnv 1 1 1 48x26 48x26-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 316 408 cnv 1 1 1 49x26 49x26-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 317 408 cnv 1 1 1 50x26 50x26-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 318 408 cnv 1 1 1 51x26 51x26-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 319 408 cnv 1 1 1 52x26 52x26-i empty 0 0 0 10 -219724 -1 0
+;
+#X obj 320 408 cnv 1 1 1 53x26 53x26-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 321 408 cnv 1 1 1 54x26 54x26-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 322 408 cnv 1 1 1 55x26 55x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 323 408 cnv 1 1 1 56x26 56x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 324 408 cnv 1 1 1 57x26 57x26-i empty 0 0 0 10 -128520 -1 0
+;
+#X obj 325 408 cnv 1 1 1 58x26 58x26-i empty 0 0 0 10 -12417 -1 0;
+#X obj 326 408 cnv 1 1 1 59x26 59x26-i empty 0 0 0 10 -194827 -1 0
+;
+#X obj 327 408 cnv 1 1 1 60x26 60x26-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 328 408 cnv 1 1 1 61x26 61x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 408 cnv 1 1 1 62x26 62x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 330 408 cnv 1 1 1 63x26 63x26-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 331 408 cnv 1 1 1 64x26 64x26-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 332 408 cnv 1 1 1 65x26 65x26-i empty 0 0 0 10 -240462 -1 0
+;
+#X obj 333 408 cnv 1 1 1 66x26 66x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 408 cnv 1 1 1 67x26 67x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 408 cnv 1 1 1 71x26 71x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 408 cnv 1 1 1 72x26 72x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 408 cnv 1 1 1 73x26 73x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 408 cnv 1 1 1 74x26 74x26-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 339 408 cnv 1 1 1 75x26 75x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 408 cnv 1 1 1 76x26 76x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 408 cnv 1 1 1 77x26 77x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 291 407 cnv 1 1 1 21x25 21x25-i empty 0 0 0 10 -257040 -1 0
+;
+#X obj 292 407 cnv 1 1 1 22x25 22x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 293 407 cnv 1 1 1 23x25 23x25-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 294 407 cnv 1 1 1 24x25 24x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 407 cnv 1 1 1 25x25 25x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 407 cnv 1 1 1 26x25 26x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 407 cnv 1 1 1 31x25 31x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 407 cnv 1 1 1 32x25 32x25-i empty 0 0 0 10 -215564 -1 0
+;
+#X obj 300 407 cnv 1 1 1 33x25 33x25-i empty 0 0 0 10 -62148 -1 0;
+#X obj 301 407 cnv 1 1 1 34x25 34x25-i empty 0 0 0 10 -49731 -1 0;
+#X obj 302 407 cnv 1 1 1 35x25 35x25-i empty 0 0 0 10 -70468 -1 0;
+#X obj 303 407 cnv 1 1 1 36x25 36x25-i empty 0 0 0 10 -132616 -1 0
+;
+#X obj 304 407 cnv 1 1 1 37x25 37x25-i empty 0 0 0 10 -240462 -1 0
+;
+#X obj 305 407 cnv 1 1 1 38x25 38x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 407 cnv 1 1 1 39x25 39x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 407 cnv 1 1 1 40x25 40x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 407 cnv 1 1 1 41x25 41x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 407 cnv 1 1 1 42x25 42x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 407 cnv 1 1 1 43x25 43x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 407 cnv 1 1 1 44x25 44x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 407 cnv 1 1 1 45x25 45x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 407 cnv 1 1 1 46x25 46x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 407 cnv 1 1 1 47x25 47x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 407 cnv 1 1 1 48x25 48x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 407 cnv 1 1 1 49x25 49x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 407 cnv 1 1 1 50x25 50x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 407 cnv 1 1 1 51x25 51x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 407 cnv 1 1 1 52x25 52x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 407 cnv 1 1 1 53x25 53x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 407 cnv 1 1 1 54x25 54x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 407 cnv 1 1 1 55x25 55x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 407 cnv 1 1 1 56x25 56x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 407 cnv 1 1 1 57x25 57x25-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 325 407 cnv 1 1 1 58x25 58x25-i empty 0 0 0 10 -211404 -1 0
+;
+#X obj 326 407 cnv 1 1 1 59x25 59x25-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 327 407 cnv 1 1 1 60x25 60x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 407 cnv 1 1 1 61x25 61x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 407 cnv 1 1 1 62x25 62x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 407 cnv 1 1 1 63x25 63x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 407 cnv 1 1 1 64x25 64x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 407 cnv 1 1 1 65x25 65x25-i empty 0 0 0 10 -257038 -1 0
+;
+#X obj 333 407 cnv 1 1 1 66x25 66x25-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 334 407 cnv 1 1 1 67x25 67x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 407 cnv 1 1 1 71x25 71x25-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 336 407 cnv 1 1 1 72x25 72x25-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 337 407 cnv 1 1 1 73x25 73x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 407 cnv 1 1 1 74x25 74x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 407 cnv 1 1 1 75x25 75x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 407 cnv 1 1 1 76x25 76x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 407 cnv 1 1 1 77x25 77x25-i empty 0 0 0 10 -248719 -1 0
+;
+#X obj 291 406 cnv 1 1 1 21x24 21x24-i empty 0 0 0 10 -199056 -1 0
+;
+#X obj 292 406 cnv 1 1 1 22x24 22x24-i empty 0 0 0 10 -257107 -1 0
+;
+#X obj 293 406 cnv 1 1 1 23x24 23x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 406 cnv 1 1 1 24x24 24x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 406 cnv 1 1 1 25x24 25x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 406 cnv 1 1 1 26x24 26x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 406 cnv 1 1 1 31x24 31x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 406 cnv 1 1 1 32x24 32x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 406 cnv 1 1 1 33x24 33x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 406 cnv 1 1 1 34x24 34x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 406 cnv 1 1 1 35x24 35x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 406 cnv 1 1 1 36x24 36x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 406 cnv 1 1 1 37x24 37x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 406 cnv 1 1 1 38x24 38x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 406 cnv 1 1 1 39x24 39x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 406 cnv 1 1 1 40x24 40x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 406 cnv 1 1 1 41x24 41x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 406 cnv 1 1 1 42x24 42x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 406 cnv 1 1 1 43x24 43x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 406 cnv 1 1 1 44x24 44x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 406 cnv 1 1 1 45x24 45x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 406 cnv 1 1 1 46x24 46x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 406 cnv 1 1 1 47x24 47x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 406 cnv 1 1 1 48x24 48x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 406 cnv 1 1 1 49x24 49x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 406 cnv 1 1 1 50x24 50x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 406 cnv 1 1 1 51x24 51x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 406 cnv 1 1 1 52x24 52x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 406 cnv 1 1 1 53x24 53x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 406 cnv 1 1 1 54x24 54x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 406 cnv 1 1 1 55x24 55x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 406 cnv 1 1 1 56x24 56x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 406 cnv 1 1 1 57x24 57x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 406 cnv 1 1 1 58x24 58x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 406 cnv 1 1 1 59x24 59x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 406 cnv 1 1 1 60x24 60x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 406 cnv 1 1 1 61x24 61x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 406 cnv 1 1 1 62x24 62x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 406 cnv 1 1 1 63x24 63x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 406 cnv 1 1 1 64x24 64x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 406 cnv 1 1 1 65x24 65x24-i empty 0 0 0 10 -252814 -1 0
+;
+#X obj 333 406 cnv 1 1 1 66x24 66x24-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 334 406 cnv 1 1 1 67x24 67x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 406 cnv 1 1 1 71x24 71x24-i empty 0 0 0 10 -257038 -1 0
+;
+#X obj 336 406 cnv 1 1 1 72x24 72x24-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 337 406 cnv 1 1 1 73x24 73x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 406 cnv 1 1 1 74x24 74x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 406 cnv 1 1 1 75x24 75x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 406 cnv 1 1 1 76x24 76x24-i empty 0 0 0 10 -257107 -1 0
+;
+#X obj 341 406 cnv 1 1 1 77x24 77x24-i empty 0 0 0 10 -199056 -1 0
+;
+#X obj 292 405 cnv 1 1 1 22x23 22x23-i empty 0 0 0 10 -199121 -1 0
+;
+#X obj 293 405 cnv 1 1 1 23x23 23x23-i empty 0 0 0 10 -261269 -1 0
+;
+#X obj 294 405 cnv 1 1 1 24x23 24x23-i empty 0 0 0 10 -257106 -1 0
+;
+#X obj 295 405 cnv 1 1 1 25x23 25x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 405 cnv 1 1 1 26x23 26x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 405 cnv 1 1 1 31x23 31x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 405 cnv 1 1 1 32x23 32x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 405 cnv 1 1 1 33x23 33x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 405 cnv 1 1 1 34x23 34x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 405 cnv 1 1 1 35x23 35x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 405 cnv 1 1 1 36x23 36x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 405 cnv 1 1 1 37x23 37x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 405 cnv 1 1 1 38x23 38x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 405 cnv 1 1 1 39x23 39x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 405 cnv 1 1 1 40x23 40x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 405 cnv 1 1 1 41x23 41x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 405 cnv 1 1 1 42x23 42x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 405 cnv 1 1 1 43x23 43x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 405 cnv 1 1 1 44x23 44x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 405 cnv 1 1 1 45x23 45x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 405 cnv 1 1 1 46x23 46x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 405 cnv 1 1 1 47x23 47x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 405 cnv 1 1 1 48x23 48x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 405 cnv 1 1 1 49x23 49x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 405 cnv 1 1 1 50x23 50x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 405 cnv 1 1 1 51x23 51x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 405 cnv 1 1 1 52x23 52x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 405 cnv 1 1 1 53x23 53x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 405 cnv 1 1 1 54x23 54x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 405 cnv 1 1 1 55x23 55x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 405 cnv 1 1 1 56x23 56x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 405 cnv 1 1 1 57x23 57x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 405 cnv 1 1 1 58x23 58x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 405 cnv 1 1 1 59x23 59x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 405 cnv 1 1 1 60x23 60x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 405 cnv 1 1 1 61x23 61x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 405 cnv 1 1 1 62x23 62x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 405 cnv 1 1 1 63x23 63x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 405 cnv 1 1 1 64x23 64x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 405 cnv 1 1 1 65x23 65x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 405 cnv 1 1 1 66x23 66x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 405 cnv 1 1 1 67x23 67x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 405 cnv 1 1 1 71x23 71x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 405 cnv 1 1 1 72x23 72x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 405 cnv 1 1 1 73x23 73x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 293 404 cnv 1 1 1 23x22 23x22-i empty 0 0 0 10 -219791 -1 0
+;
+#X obj 294 404 cnv 1 1 1 24x22 24x22-i empty 0 0 0 10 -257242 -1 0
+;
+#X obj 295 404 cnv 1 1 1 25x22 25x22-i empty 0 0 0 10 -257241 -1 0
+;
+#X obj 296 404 cnv 1 1 1 26x22 26x22-i empty 0 0 0 10 -257108 -1 0
+;
+#X obj 298 404 cnv 1 1 1 31x22 31x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 299 404 cnv 1 1 1 32x22 32x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 404 cnv 1 1 1 33x22 33x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 404 cnv 1 1 1 34x22 34x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 404 cnv 1 1 1 35x22 35x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 404 cnv 1 1 1 36x22 36x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 404 cnv 1 1 1 37x22 37x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 404 cnv 1 1 1 38x22 38x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 404 cnv 1 1 1 39x22 39x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 404 cnv 1 1 1 40x22 40x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 404 cnv 1 1 1 41x22 41x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 404 cnv 1 1 1 42x22 42x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 404 cnv 1 1 1 43x22 43x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 404 cnv 1 1 1 44x22 44x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 404 cnv 1 1 1 45x22 45x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 404 cnv 1 1 1 46x22 46x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 404 cnv 1 1 1 47x22 47x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 404 cnv 1 1 1 48x22 48x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 404 cnv 1 1 1 49x22 49x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 404 cnv 1 1 1 50x22 50x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 404 cnv 1 1 1 51x22 51x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 404 cnv 1 1 1 52x22 52x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 404 cnv 1 1 1 53x22 53x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 404 cnv 1 1 1 54x22 54x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 404 cnv 1 1 1 55x22 55x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 404 cnv 1 1 1 56x22 56x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 404 cnv 1 1 1 57x22 57x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 404 cnv 1 1 1 58x22 58x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 404 cnv 1 1 1 59x22 59x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 404 cnv 1 1 1 60x22 60x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 404 cnv 1 1 1 61x22 61x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 404 cnv 1 1 1 62x22 62x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 404 cnv 1 1 1 63x22 63x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 404 cnv 1 1 1 64x22 64x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 404 cnv 1 1 1 65x22 65x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 404 cnv 1 1 1 66x22 66x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 404 cnv 1 1 1 67x22 67x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 404 cnv 1 1 1 71x22 71x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 404 cnv 1 1 1 72x22 72x22-i empty 0 0 0 10 -257173 -1 0
+;
+#X obj 337 404 cnv 1 1 1 73x22 73x22-i empty 0 0 0 10 -261271 -1 0
+;
+#X obj 293 403 cnv 1 1 1 23x21 23x21-i empty 0 0 0 10 -12417 -1 0;
+#X obj 294 403 cnv 1 1 1 24x21 24x21-i empty 0 0 0 10 -219793 -1 0
+;
+#X obj 295 403 cnv 1 1 1 25x21 25x21-i empty 0 0 0 10 -236371 -1 0
+;
+#X obj 296 403 cnv 1 1 1 26x21 26x21-i empty 0 0 0 10 -257241 -1 0
+;
+#X obj 298 403 cnv 1 1 1 31x21 31x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 299 403 cnv 1 1 1 32x21 32x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 300 403 cnv 1 1 1 33x21 33x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 301 403 cnv 1 1 1 34x21 34x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 302 403 cnv 1 1 1 35x21 35x21-i empty 0 0 0 10 -257310 -1 0
+;
+#X obj 303 403 cnv 1 1 1 36x21 36x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 304 403 cnv 1 1 1 37x21 37x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 305 403 cnv 1 1 1 38x21 38x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 306 403 cnv 1 1 1 39x21 39x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 307 403 cnv 1 1 1 40x21 40x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 308 403 cnv 1 1 1 41x21 41x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 309 403 cnv 1 1 1 42x21 42x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 310 403 cnv 1 1 1 43x21 43x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 311 403 cnv 1 1 1 44x21 44x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 312 403 cnv 1 1 1 45x21 45x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 313 403 cnv 1 1 1 46x21 46x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 314 403 cnv 1 1 1 47x21 47x21-i empty 0 0 0 10 -257310 -1 0
+;
+#X obj 315 403 cnv 1 1 1 48x21 48x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 316 403 cnv 1 1 1 49x21 49x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 317 403 cnv 1 1 1 50x21 50x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 318 403 cnv 1 1 1 51x21 51x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 319 403 cnv 1 1 1 52x21 52x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 320 403 cnv 1 1 1 53x21 53x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 321 403 cnv 1 1 1 54x21 54x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 322 403 cnv 1 1 1 55x21 55x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 323 403 cnv 1 1 1 56x21 56x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 324 403 cnv 1 1 1 57x21 57x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 325 403 cnv 1 1 1 58x21 58x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 326 403 cnv 1 1 1 59x21 59x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 327 403 cnv 1 1 1 60x21 60x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 328 403 cnv 1 1 1 61x21 61x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 329 403 cnv 1 1 1 62x21 62x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 330 403 cnv 1 1 1 63x21 63x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 331 403 cnv 1 1 1 64x21 64x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 332 403 cnv 1 1 1 65x21 65x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 333 403 cnv 1 1 1 66x21 66x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 334 403 cnv 1 1 1 67x21 67x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 335 403 cnv 1 1 1 71x21 71x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 336 403 cnv 1 1 1 72x21 72x21-i empty 0 0 0 10 -257308 -1 0
+;
+#X obj 337 403 cnv 1 1 1 73x21 73x21-i empty 0 0 0 10 -236372 -1 0
+;
+#X obj 340 417 cnv 1 1 1 76x35 76x35-i empty 0 0 0 10 -78725 -1 0;
+#X obj 340 416 cnv 1 1 1 76x34 76x34-i empty 0 0 0 10 -219724 -1 0
+;
+#X obj 338 405 cnv 1 1 1 74x23 74x23-i empty 0 0 0 10 -257106 -1 0
+;
+#X obj 339 405 cnv 1 1 1 75x23 75x23-i empty 0 0 0 10 -261269 -1 0
+;
+#X obj 338 404 cnv 1 1 1 74x22 74x22-i empty 0 0 0 10 -257240 -1 0
+;
+#X obj 338 403 cnv 1 1 1 74x21 74x21-i empty 0 0 0 10 -219794 -1 0
+;
+#X obj 341 416 cnv 1 1 1 77x34 77x34-i empty 0 0 0 10 -70468 -1 0;
+#X text 9 418 Specific features can be commissioned from the author.
+;
+#X text 9 407 Donations can be made through Paypal \, click on;
+#X text 7 447 (C) 2021 Jo�o Pais - jmmmpais@gmail.com;
+#X text 13 28 ## adicionar coordenacao do timing na rede. usar prefixo
+"sync", f 43;

@@ -1,0 +1,207 @@
+#N canvas 82 113 682 455 10;
+#X obj 31 109 cnv 15 66 128 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 19 322 *~;
+#X obj 148 292 line~;
+#X msg 148 272 \$1 20;
+#X obj 328 67 inlet Lautstaerke;
+#X obj 19 47 inlet~ Signal;
+#X obj 19 372 outlet~;
+#X obj 148 252 dbtorms;
+#X obj 338 282 outlet;
+#X obj 84 113 vsl 10 119 0 127 0 0 empty empty empty 0 -8 0 8 -195568
+-1 -1 0 0;
+#X obj 86 138 cnv 1 6 2 empty empty empty 20 12 0 14 -262144 -262144
+0;
+#X obj 34 113 vsl 10 119 -100 12 0 0 empty empty empty 0 -8 0 8 -195568
+-1 -1 0 0;
+#X obj 311 87 inlet mute;
+#X obj 311 112 bang;
+#X obj 311 132 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X obj 148 232 *;
+#X obj 336 170 expr if ($f1 == 0 \, 22 \, 20);
+#X msg 336 190 color \$1;
+#N canvas 0 0 426 446 license 0;
+#X text 8 47 All rights reserved.;
+#X text 8 227 The names of its contributors may not be used to endorse
+or promote products derived from this software without specific prior
+written permission.;
+#X text 8 87 Redistribution and use in source and binary forms \, with
+or without modification \, are permitted provided that the following
+conditions are met:;
+#X text 8 127 Redistributions of source code must retain the above
+copyright notice \, this list of conditions and the following disclaimer.
+;
+#X text 8 297 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES \, INCLUDING
+\, BUT NOT LIMITED TO \, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT \, INDIRECT
+\, INCIDENTAL \, SPECIAL \, EXEMPLARY \, OR CONSEQUENTIAL DAMAGES (INCLUDING
+\, BUT NOT LIMITED TO \, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+;
+#X text 8 167 Redistributions in binary form must reproduce the above
+copyright notice \, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.
+;
+#X text 8 27 jmmmpais@gmail.com;
+#X text 8 7 Copyright 2019 \, João Pais;
+#X restore 15 416 pd license;
+#X text 510 95 Inlets;
+#X text 510 245 Outlets;
+#X text 510 345 - Signal level (0-1);
+#X text 510 215 - Level (0-127);
+#X text 510 195 - Mute / Unmute (bang);
+#X obj 109 322 *~;
+#X obj 109 47 inlet~ Signal;
+#X obj 109 372 outlet~;
+#X obj 46 113 vsl 10 119 -100 12 0 0 empty empty empty 0 -8 0 8 -195568
+-1 -1 0 0;
+#X obj 441 87 moses 1;
+#X text 510 65 - Level (0-127);
+#X text 510 45 Arguments;
+#N canvas 0 50 1002 354 colors 0;
+#X obj 31 144 change;
+#X msg 31 164 color \$1 22 22;
+#X obj 31 104 expr if ($f1 == -100 \, 20 \, if ($f1 < -52 \, 16 \,
+if ($f1 < -22 \, 15 \, if ($f1 < -16 \, 14 \, 13))));
+#X obj 31 84 spigot;
+#X obj 514 34 inlet;
+#X obj 31 64 inlet;
+#X obj 31 184 outlet;
+#X obj 91 264 change;
+#X msg 91 284 color \$1 22 22;
+#X obj 91 224 expr if ($f1 == -100 \, 20 \, if ($f1 < -52 \, 16 \,
+if ($f1 < -22 \, 15 \, if ($f1 < -16 \, 14 \, 13))));
+#X obj 91 204 spigot;
+#X obj 91 184 inlet;
+#X obj 91 304 outlet;
+#X obj 401 144 change;
+#X msg 401 164 color \$1 22 22;
+#X obj 401 104 expr if ($f1 == -100 \, 20 \, if ($f1 < -52 \, 16 \,
+if ($f1 < -22 \, 15 \, if ($f1 < -16 \, 14 \, 13))));
+#X obj 401 84 spigot;
+#X obj 401 64 inlet;
+#X obj 401 184 outlet;
+#X obj 461 264 change;
+#X msg 461 284 color \$1 22 22;
+#X obj 461 224 expr if ($f1 == -100 \, 20 \, if ($f1 < -52 \, 16 \,
+if ($f1 < -22 \, 15 \, if ($f1 < -16 \, 14 \, 13))));
+#X obj 461 204 spigot;
+#X obj 461 184 inlet;
+#X obj 461 304 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 6 0;
+#X connect 2 0 0 0;
+#X connect 3 0 2 0;
+#X connect 4 0 3 1;
+#X connect 4 0 10 1;
+#X connect 4 0 16 1;
+#X connect 4 0 22 1;
+#X connect 5 0 3 0;
+#X connect 7 0 8 0;
+#X connect 8 0 12 0;
+#X connect 9 0 7 0;
+#X connect 10 0 9 0;
+#X connect 11 0 10 0;
+#X connect 13 0 14 0;
+#X connect 14 0 18 0;
+#X connect 15 0 13 0;
+#X connect 16 0 15 0;
+#X connect 17 0 16 0;
+#X connect 19 0 20 0;
+#X connect 20 0 24 0;
+#X connect 21 0 19 0;
+#X connect 22 0 21 0;
+#X connect 23 0 22 0;
+#X restore 407 281 pd colors;
+#X obj 311 150 t b f f;
+#X text 510 115 - Signal 1;
+#X text 510 135 - Signal 2;
+#X text 510 155 - Signal 3;
+#X text 510 175 - Signal 4;
+#X text 510 265 - Amplified signal 1;
+#X text 510 285 - Amplified signal 2;
+#X text 510 305 - Amplified signal 3;
+#X text 510 325 - Amplified signal 4;
+#X text 12 398 (C) 2019 João Pais - jmmmpais@gmail.com;
+#X obj 199 322 *~;
+#X obj 199 47 inlet~ Signal;
+#X obj 199 372 outlet~;
+#X obj 289 322 *~;
+#X obj 289 47 inlet~ Signal;
+#X obj 289 372 outlet~;
+#X obj 58 113 vsl 10 119 -100 12 0 0 empty empty empty 0 -8 0 8 -195568
+-1 -1 0 0;
+#X obj 70 113 vsl 10 119 -100 12 0 0 empty empty empty 0 -8 0 8 -195568
+-1 -1 0 0;
+#X text 11 8 [mat4~] - Level meter with amplitude control \, 4-channel
+;
+#X obj 441 67 \$1;
+#X obj 441 47 loadbang;
+#X obj 341 112 1;
+#X obj 72 142 cnv 1 6 2 empty empty empty 20 12 0 14 -262144 -262144
+0;
+#X obj 60 142 cnv 1 6 2 empty empty empty 20 12 0 14 -262144 -262144
+0;
+#X obj 48 142 cnv 1 6 2 empty empty empty 20 12 0 14 -262144 -262144
+0;
+#X obj 36 142 cnv 1 6 2 empty empty empty 20 12 0 14 -262144 -262144
+0;
+#X obj 29 342 jp.sigtovu~;
+#X obj 119 342 jp.sigtovu~;
+#X obj 209 342 jp.sigtovu~;
+#X obj 299 342 jp.sigtovu~;
+#X connect 1 0 6 0;
+#X connect 1 0 58 0;
+#X connect 2 0 1 1;
+#X connect 2 0 24 1;
+#X connect 2 0 42 1;
+#X connect 2 0 45 1;
+#X connect 3 0 2 0;
+#X connect 4 0 9 0;
+#X connect 5 0 1 0;
+#X connect 7 0 3 0;
+#X connect 7 0 8 0;
+#X connect 9 0 15 0;
+#X connect 12 0 13 0;
+#X connect 13 0 14 0;
+#X connect 14 0 32 0;
+#X connect 15 0 7 0;
+#X connect 16 0 17 0;
+#X connect 17 0 11 0;
+#X connect 17 0 27 0;
+#X connect 17 0 48 0;
+#X connect 17 0 49 0;
+#X connect 24 0 26 0;
+#X connect 24 0 59 0;
+#X connect 25 0 24 0;
+#X connect 28 1 9 0;
+#X connect 31 0 11 0;
+#X connect 31 1 27 0;
+#X connect 31 2 48 0;
+#X connect 31 3 49 0;
+#X connect 32 0 15 0;
+#X connect 32 1 15 1;
+#X connect 32 1 16 0;
+#X connect 32 2 31 4;
+#X connect 42 0 44 0;
+#X connect 42 0 60 0;
+#X connect 43 0 42 0;
+#X connect 45 0 47 0;
+#X connect 45 0 61 0;
+#X connect 46 0 45 0;
+#X connect 51 0 28 0;
+#X connect 52 0 51 0;
+#X connect 52 0 53 0;
+#X connect 53 0 14 0;
+#X connect 58 0 31 0;
+#X connect 58 0 11 0;
+#X connect 59 0 31 1;
+#X connect 59 0 27 0;
+#X connect 60 0 31 2;
+#X connect 60 0 48 0;
+#X connect 61 0 31 3;
+#X connect 61 0 49 0;
+#X coords 0 -1 1 1 68 130 2 30 108;

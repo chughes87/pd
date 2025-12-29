@@ -1,0 +1,74 @@
+#N canvas 649 80 678 381 10;
+#N canvas 0 50 396 416 license 0;
+#X text 8 47 All rights reserved.;
+#X text 8 227 The names of its contributors may not be used to endorse
+or promote products derived from this software without specific prior
+written permission.;
+#X text 8 87 Redistribution and use in source and binary forms \, with
+or without modification \, are permitted provided that the following
+conditions are met:;
+#X text 8 127 Redistributions of source code must retain the above
+copyright notice \, this list of conditions and the following disclaimer.
+;
+#X text 8 297 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES \, INCLUDING
+\, BUT NOT LIMITED TO \, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT \, INDIRECT
+\, INCIDENTAL \, SPECIAL \, EXEMPLARY \, OR CONSEQUENTIAL DAMAGES (INCLUDING
+\, BUT NOT LIMITED TO \, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+;
+#X text 8 167 Redistributions in binary form must reproduce the above
+copyright notice \, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.
+;
+#X text 8 27 jmmmpais@gmail.com;
+#X text 8 7 Copyright 2020 \, João Pais;
+#X restore 12 344 pd license;
+#N canvas 139 65 384 225 META 0;
+#X text 12 55 AUTHOR João Pais <jmmmpais@gmail.com>;
+#X text 12 95 LICENSE BSD;
+#X text 12 75 LIBRARY jmmmp;
+#X text 13 115 WEBSITE http://puredata.info/Members/jmmmp;
+#X text 12 6 DESCRIPTION like vanilla's change \, but for symbols;
+#X text 12 36 KEYWORDS symbol;
+#X text 12 135 VERSION 0.61;
+#X text 14 165 INLET_0 - symbol \, bang \, set;
+#X text 14 185 OUTLET_0 - symbol output;
+#X restore 102 344 pd META;
+#X text 309 251 ARGUMENTS;
+#X text 9 326 (C) 2020 João Pais - jmmmpais@gmail.com;
+#X text 309 111 INLETS;
+#X text 309 201 OUTLETS;
+#X obj 92 181 change-symbol;
+#X msg 92 91 bang;
+#X symbolatom 102 111 10 0 0 0 - - -;
+#X text 11 11 [change-symbol] - like vanilla's change \, but for symbols
+;
+#X text 12 41 The change-symbol object outputs its input only when
+it changes. You can "set" the current value \, or bang to force output.
+;
+#X symbolatom 112 141 10 0 0 0 - - -;
+#X msg 112 161 set \$1;
+#X obj 92 291 print;
+#X msg 92 251 bang;
+#X obj 92 271 change-symbol symb1;
+#X text 22 231 creation argument initializes first value;
+#X text 331 151 bang - output current value;
+#X text 310 131 0) symbol - outputs symbol if different than previous
+one;
+#X text 310 271 1) symbol - creation argument initializes first value
+;
+#X text 310 221 symbol - the scaled values according to output range
+;
+#X text 331 171 set \$1 - set the stored value;
+#X obj 92 201 print out;
+#X symbolatom 132 251 10 0 0 0 - - -;
+#X connect 6 0 22 0;
+#X connect 7 0 6 0;
+#X connect 8 0 6 0;
+#X connect 11 0 12 0;
+#X connect 12 0 6 0;
+#X connect 14 0 15 0;
+#X connect 15 0 13 0;
+#X connect 23 0 15 0;

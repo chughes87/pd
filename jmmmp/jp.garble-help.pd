@@ -1,0 +1,15 @@
+#N canvas 593 52 340 185 10;
+#X text 12 139 Released under the BSD License;
+#N canvas 586 176 494 344 META 0;
+#X text 12 95 LICENSE BSD;
+#X text 12 75 LIBRARY jmmmp;
+#X text 13 115 WEBSITE http://puredata.info/Members/jmmmp;
+#X text 12 55 AUTHOR João Pais <jmmmpais@gmail.com>;
+#X text 12 6 DESCRIPTION garble Pd patches;
+#X text 12 36 KEYWORDS encription security patch;
+#X text 12 135 VERSION 2019;
+#X restore 262 146 pd META;
+#X text 13 35 See the abstraction for further details.;
+#X text 11 122 (C) 2019 João Pais - jmmmpais@gmail.com;
+#X text 13 15 [jp.garble] - garble Pd patches;
+#X obj 107 81 jp.garble;

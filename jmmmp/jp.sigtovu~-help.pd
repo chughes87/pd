@@ -1,0 +1,51 @@
+#N canvas 0 50 393 240 10;
+#X obj 12 128 outlet;
+#X obj 12 88 inlet~;
+#N canvas 0 0 426 446 license 0;
+#X text 8 47 All rights reserved.;
+#X text 8 227 The names of its contributors may not be used to endorse
+or promote products derived from this software without specific prior
+written permission.;
+#X text 8 87 Redistribution and use in source and binary forms \, with
+or without modification \, are permitted provided that the following
+conditions are met:;
+#X text 8 127 Redistributions of source code must retain the above
+copyright notice \, this list of conditions and the following disclaimer.
+;
+#X text 8 297 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES \, INCLUDING
+\, BUT NOT LIMITED TO \, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT \, INDIRECT
+\, INCIDENTAL \, SPECIAL \, EXEMPLARY \, OR CONSEQUENTIAL DAMAGES (INCLUDING
+\, BUT NOT LIMITED TO \, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+;
+#X text 8 167 Redistributions in binary form must reproduce the above
+copyright notice \, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.
+;
+#X text 8 27 jmmmpais@gmail.com;
+#X text 8 7 Copyright 2019 \, João Pais;
+#X restore 12 198 pd license;
+#X text 9 178 (C) 2019 João Pais - jmmmpais@gmail.com;
+#X text 192 68 Inlet;
+#X text 192 88 - audio signal;
+#X text 192 118 Outlet;
+#X text 192 138 - VU Meter value;
+#X text 11 8 [jp.sigtovu~] - signal to rms converter in VU meter format:
+range is transformed and moved to -100 - +12.;
+#N canvas 564 268 494 344 META 0;
+#X text 12 55 AUTHOR João Pais <jmmmpais@gmail.com>;
+#X text 12 95 LICENSE BSD;
+#X text 12 75 LIBRARY jmmmp;
+#X text 13 115 WEBSITE http://puredata.info/Members/jmmmp;
+#X text 12 135 VERSION 0.54;
+#X text 12 6 DESCRIPTION signal to rms converter in VU meter format
+;
+#X text 12 36 KEYWORDS VU meter rms;
+#X restore 92 198 pd META;
+#X obj 12 108 jp.sigtovu~;
+#X text 11 38 See the inside of the mat~ object group for more details.
+;
+#X connect 1 0 10 0;
+#X connect 10 0 0 0;

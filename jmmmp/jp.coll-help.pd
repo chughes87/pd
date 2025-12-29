@@ -1,0 +1,2826 @@
+#N canvas 263 154 874 439 10;
+#N canvas 0 50 396 427 license 0;
+#X text 8 47 All rights reserved.;
+#X text 8 227 The names of its contributors may not be used to endorse
+or promote products derived from this software without specific prior
+written permission.;
+#X text 8 87 Redistribution and use in source and binary forms \, with
+or without modification \, are permitted provided that the following
+conditions are met:;
+#X text 8 127 Redistributions of source code must retain the above
+copyright notice \, this list of conditions and the following disclaimer.
+;
+#X text 8 297 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES \, INCLUDING
+\, BUT NOT LIMITED TO \, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT \, INDIRECT
+\, INCIDENTAL \, SPECIAL \, EXEMPLARY \, OR CONSEQUENTIAL DAMAGES (INCLUDING
+\, BUT NOT LIMITED TO \, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES
+;
+#X text 8 167 Redistributions in binary form must reproduce the above
+copyright notice \, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.
+;
+#X text 8 27 jmmmpais@gmail.com;
+#X text 8 7 Copyright 2020 \, João Pais;
+#N canvas 0 50 450 300 paypal 0;
+#X obj 12 51 pdcontrol;
+#X msg 12 31 browse https://www.paypal.me/jmmmp;
+#X obj 12 11 r \$0-paypal;
+#X connect 1 0 0 0;
+#X connect 2 0 1 0;
+#X restore 9 398 pd paypal;
+#X restore 12 404 pd license;
+#N canvas 139 65 384 325 META 0;
+#X text 12 55 AUTHOR João Pais <jmmmpais@gmail.com>;
+#X text 12 95 LICENSE BSD;
+#X text 12 75 LIBRARY jmmmp;
+#X text 13 115 WEBSITE http://puredata.info/Members/jmmmp;
+#X text 12 6 DESCRIPTION store/edit message collections VERY SIMILAR
+to cyclone/coll \, but in vanilla;
+#X text 12 36 KEYWORDS messages;
+#X text 12 135 VERSION 0.6;
+#X text 14 165 INLET_0 - several operations;
+#X text 14 195 OUTLET_0 - anything - the stored message at a given
+address;
+#X text 14 215 OUTLET_1 - float/symbol - integer or symbol address
+of the stored message;
+#X text 14 245 OUTLET_2 - bang - when finishing a read operation;
+#X text 14 265 OUTLET_3 - bang - when finishing a dump operation;
+#X restore 102 404 pd META;
+#X text 489 281 ARGUMENTS;
+#X text 9 386 (C) 2020 João Pais - jmmmpais@gmail.com;
+#X text 489 41 INLETS;
+#X text 489 161 OUTLETS;
+#X obj 224 231 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -228856
+-1 -1 0;
+#X obj 180 306 print;
+#X obj 225 307 nbx 2 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 1 256;
+#X text 240 231 0;
+#X text 240 246 1;
+#X text 257 307 <= address;
+#X obj 169 231 bng 18 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X text 96 184 click messages \; & store data ==>;
+#X text 89 307 stored data =>;
+#X text 292 181 list stored at address "0";
+#X text 292 206 list stored at address "1";
+#X msg 202 181 0 500 1000 hi;
+#X msg 211 205 1 5 10 hello;
+#X text 39 231 go to next address =>;
+#X text 255 231 <= recall data from address;
+#X text 490 61 bang - outputs next address and its data;
+#X text 490 81 float/symbol - an "int float" or "symbol" address: outputs
+the stored data;
+#X text 490 181 0 - anything - the stored message at a given address
+;
+#X text 490 201 1 - float/symbol - integer or symbol address of the
+stored message;
+#X text 490 231 2 - bang - when finishing a read operation;
+#X text 490 251 3 - bang - when finishing a dump operation;
+#X text 490 301 1 - symbol - name or filename to load (same name colls
+share contents);
+#N canvas 643 41 678 651 All_Messages 0;
+#X text 117 117 length -;
+#X text 129 177 next -;
+#X text 129 222 open -;
+#X text 129 237 prev -;
+#X text 75 252 read <symbol> -;
+#X text 99 267 readagain -;
+#X text 69 282 refer <symbol> -;
+#X text 123 372 start -;
+#X text 15 417 subsym <symbol \, symbol> -;
+#X text 117 448 wclose -;
+#X text 174 449 closes the data window containing the collection,
+f 79;
+#X text 69 463 write <symbol> -;
+#X text 93 478 writeagain -;
+#X text 174 252 opens file specified by the symbol (without a symbol
+\, a dialog window opens), f 79;
+#X text 39 357 sort <float \, float> -;
+#X text 174 463 saves file specified by the symbol (without a symbol
+\, a dialog window opens), f 79;
+#X text 174 417 substitutes an address symbol (2nd element) by the
+first given symbol, f 79;
+#X text 15 147 merge <int/symbol \, any> -;
+#X text 174 177 same as bang: outputs next address and its data, f
+79;
+#X text 174 237 outputs previous address and its data, f 79;
+#X text 174 267 reopen last file - if no file had been open \, a dialog
+box is shown, f 79;
+#X text 39 297 remove <int/symbol> -;
+#X text 174 478 resaves last file - if no file had been saved \, a
+dialog box is shown, f 79;
+#X text 69 342 separate <int> -;
+#X text 174 403 same as nsub \, but the substituted message is sent
+out, f 79;
+#X text 174 102 same as insert \, but only increments if necessary
+to include the new address, f 79;
+#X text 15 102 insert2 <int \, anything> -;
+#X text 3 602 nstore <int \, symbol \, any> -;
+#X text 15 432 swap <int/sym \, int/sym> -;
+#X text 174 116 sends number of stored values to the left outlet,
+f 79;
+#X text 174 147 sets address and any message to be appended to the
+stored message, f 79;
+#X text 27 192 nth <int/symbol \, int> -;
+#X text 87 162 min <float> -;
+#X text 174 132 sends max value of all <nth> elements (starts at 1
+\, default) on left outlet, f 79;
+#X text 174 162 sends min value of all <nth> elements (starts at 1
+\, default) on left outlet, f 79;
+#X text 174 432 swaps data between two addresses, f 79;
+#X text 99 132 max <int> -;
+#X text 174 602 or <symbol \, int \, any>: stores any data to an int
+address with a symbol alias, f 79;
+#X text 9 207 nsub <int/sym \, int \, any> -;
+#X text 174 192 address and nth element to be output (starts at 1)
+, f 79;
+#X text 174 208 the address \, an element (starts at 1) and any value
+to substitute it to, f 79;
+#X text 174 222 opens the window with the data collection (allows manual
+data editing), f 79;
+#X text 174 282 refers to the data from another [coll] object with
+that symbol name, f 79;
+#X text 174 297 removes address and its data without renumbering (unlike
+delete), f 79;
+#X text 69 312 renumber <int> -;
+#X text 174 312 lists int addresses consecutively \, argument sets
+starting value (default 0), f 79;
+#X text 174 341 increments by 1 addresses from the given <int> and
+above (opening a slot), f 79;
+#X text 33 387 store <int/sym \, any> -;
+#X text 174 387 int or symbol address and any message to be stored
+at it, f 79;
+#X text 15 402 sub <int/sym \, int \, any> -;
+#X text 174 372 sets the pointer to the first entry/address, f 79
+;
+#X text 174 357 <flag> -1: ascending / 1: descending \, <sort element>
+from 0 (-1 is address), f 79;
+#X text 129 42 dump -;
+#X text 39 552 assoc <symbol \, int> -;
+#X text 27 562 deassoc <symbol \, int> -;
+#X text 174 42 dumps all values (1st outlet) \, addresses (2nd) and
+bangs (4th) when done, f 79;
+#X text 39 27 delete <int/symbol> -;
+#X text 174 552 associates a symbol alias to an int address, f 79
+;
+#X text 174 562 desassociates the symbol alias of an int address,
+f 79;
+#X text 174 27 deletes the address (if an int \, higher addresses are
+decremented by 1), f 79;
+#X text 123 12 clear -;
+#X text 174 12 deletes all adresses (the complete data collection)
+from [coll], f 79;
+#X text 135 57 end -;
+#X text 51 582 filetype <symbol> -;
+#X text 75 572 embed <float> -;
+#X text 21 87 insert <int \, anything> -;
+#X text 174 72 sets an address to go to (only sets the pointer \, no
+output), f 79;
+#X text 174 87 an int address and any message to insert \, increments
+equal/greater addresses, f 79;
+#X text 33 592 flags <float \, float> -;
+#X text 174 572 <1> saves contents whith the patch \, <0> doesn't,
+f 79;
+#X text 174 592 first flag is the embed flag \, second is unused (just
+use 'embed' instead), f 79;
+#X text 51 72 goto <int/symbol> -;
+#X text 174 57 sets the pointer to the last entry/address, f 79;
+#X text 63 327 renumber2 <int> -;
+#X text 174 327 increments int addresses by one \, starting from the
+given address (default 0), f 79;
+#X text 174 582 sets file type to read/write (no symbol sets no extension:
+default), f 79;
+#X text 14 533 NOT SUPPORTED in [jp.coll];
+#X text 99 508 coll.init -;
+#X text 174 508 NEW IN Pd: added to initiate jp.coll in dynamic patching
+situations, f 79;
+#X restore 754 126 pd All_Messages;
+#N canvas 245 76 734 583 details 0;
+#X text 444 372 query data:;
+#N canvas 421 155 901 540 swap_subsym 0;
+#X obj 61 246 loadbang;
+#X msg 103 299 1;
+#X msg 138 299 2;
+#X msg 170 497 4;
+#X msg 170 300 Three;
+#X msg 214 300 Four;
+#X msg 225 332 swap Three Four;
+#X msg 244 356 swap 1 2;
+#X msg 257 381 swap 2 Four;
+#X text 250 300 <= addresses;
+#X text 161 71 1 \, 100 \; 2 \, 200 \;;
+#X text 43 29 The swap message takes two addresses (ints or symbols)
+and exchanges between them. For instance \, take the data below:;
+#X text 45 110 If you swap the addresses \, here's what you get.;
+#X text 164 135 2 \, 100 \; 1 \, 200 \;;
+#X text 43 182 Note that the address is swapped \, not the data. Now
+try the example below.;
+#X msg 582 205 Three;
+#X msg 601 230 Four;
+#X text 646 218 <= addresses;
+#X obj 542 131 loadbang;
+#X msg 542 157 store Three 3 \, store Four 4;
+#X obj 542 444 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X msg 642 342 TrÃªs;
+#X msg 661 367 Quatro;
+#X text 713 352 <= new addresses;
+#X text 747 283 <= change addresses;
+#X msg 622 272 subsym TrÃªs Three;
+#X msg 627 299 subsym Quatro Four;
+#X text 462 51 The subsym message substitues a symbol adress by another
+\, the first symbol is the new address name and the second is the address
+to be substituted.;
+#X msg 61 272 store 1 One \, store 2 Two \, store Three 3 \, store
+Four 4;
+#X obj 170 430 jp.coll;
+#X msg 110 410 open;
+#X obj 170 453 list prepend set;
+#X obj 170 473 list trim;
+#X obj 542 411 jp.coll;
+#X msg 502 391 open;
+#X connect 0 0 28 0;
+#X connect 1 0 29 0;
+#X connect 2 0 29 0;
+#X connect 4 0 29 0;
+#X connect 5 0 29 0;
+#X connect 6 0 29 0;
+#X connect 7 0 29 0;
+#X connect 8 0 29 0;
+#X connect 15 0 33 0;
+#X connect 16 0 33 0;
+#X connect 18 0 19 0;
+#X connect 19 0 33 0;
+#X connect 21 0 33 0;
+#X connect 22 0 33 0;
+#X connect 25 0 33 0;
+#X connect 26 0 33 0;
+#X connect 28 0 29 0;
+#X connect 29 0 31 0;
+#X connect 30 0 29 0;
+#X connect 31 0 32 0;
+#X connect 32 0 3 0;
+#X connect 33 0 20 0;
+#X connect 34 0 33 0;
+#X restore 499 282 pd swap_subsym;
+#N canvas 562 164 521 530 renumber(2) 0;
+#X msg 108 220 dump;
+#X obj 27 139 loadbang;
+#X msg 126 252 renumber;
+#X msg 153 307 renumber2;
+#X obj 108 413 swap;
+#X obj 108 440 pack;
+#X obj 108 470 print Address/Data;
+#X text 183 253 from 0 (default);
+#X obj 147 437 print -----------:;
+#X text 144 220 <= check original \, then renumber and check again
+;
+#X text 99 37 The renumber message affects only integer addresses and
+lists all of them in a consecutive order starting at a given value
+(default 0).;
+#X text 100 87 The renumber2 message also only affects integer addresses
+and increments all of them by one - also starting at a given value
+(default 0).;
+#X msg 27 166 1 100 \, 2 200 \, 3 300 \, 4 400 \, 5 500 \, 6 600 \,
+7 700 \, 8 800 \, 9 900 \, 10 1000;
+#X msg 147 410 ::-------;
+#X text 216 307 increments by 1 (from 0);
+#X msg 136 275 renumber 2;
+#X text 209 276 from 2;
+#X msg 162 338 renumber2 8;
+#X text 241 339 (from 8);
+#X obj 108 386 jp.coll;
+#X msg 58 366 open;
+#X connect 0 0 19 0;
+#X connect 1 0 12 0;
+#X connect 2 0 19 0;
+#X connect 3 0 19 0;
+#X connect 4 0 5 0;
+#X connect 4 1 5 1;
+#X connect 5 0 6 0;
+#X connect 12 0 19 0;
+#X connect 13 0 8 0;
+#X connect 15 0 19 0;
+#X connect 17 0 19 0;
+#X connect 19 0 4 0;
+#X connect 19 1 4 1;
+#X connect 19 3 13 0;
+#X connect 20 0 19 0;
+#X restore 499 303 pd renumber(2);
+#N canvas 533 152 456 357 separate 0;
+#X text 28 20 Given an int address as the argument \, the separate
+message increments numeric addresses equal and above it. Thus \, it
+creates an open slot or a separation in the data collection.;
+#X obj 128 85 loadbang;
+#X msg 128 111 0 0 \, 1 1 \, 2 2 \, 3 3 \, 4 4 \, 5 5;
+#X msg 177 177 separate 3;
+#X msg 153 145 dump;
+#X obj 128 252 swap;
+#X obj 128 279 pack;
+#X obj 128 309 print Address/Data;
+#X obj 197 276 print -----------:;
+#X msg 197 249 ::-----;
+#X text 252 176 addresses;
+#X obj 128 220 jp.coll;
+#X msg 88 190 open;
+#X connect 1 0 2 0;
+#X connect 2 0 11 0;
+#X connect 3 0 11 0;
+#X connect 4 0 11 0;
+#X connect 5 0 6 0;
+#X connect 5 1 6 1;
+#X connect 6 0 7 0;
+#X connect 9 0 8 0;
+#X connect 11 0 5 0;
+#X connect 11 1 5 1;
+#X connect 11 3 9 0;
+#X connect 12 0 11 0;
+#X restore 517 324 pd separate;
+#N canvas 192 244 808 419 min_max 0;
+#X msg 164 184 max;
+#X msg 154 160 min;
+#X msg 199 245 max 2;
+#X obj 103 342 nbx 5 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X msg 103 130 1 10 100 1000 \, 2 20 200 2000 \, 3 30 300 3000;
+#X obj 103 104 loadbang;
+#X text 239 245 <= 2nd element;
+#X text 203 172 <= 1st element (same as;
+#X text 234 186 "min 1" / "max 1");
+#X msg 183 222 min 3;
+#X text 225 222 <= 3rd element;
+#X obj 116 317 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X msg 39 218 length;
+#X text 34 372 The length message outputs the number of entries/addresses
+in the collection to the left outlet.;
+#X obj 509 74 loadbang;
+#X msg 564 365 E;
+#X msg 509 100 store A 0 1 2 3 4 5 \, store 1 A B C D E F;
+#X obj 636 186 hradio 15 1 0 6 empty empty empty 0 -8 0 10 -228856
+-1 -1 4;
+#X floatatom 636 232 3 0 0 0 - - -;
+#X msg 636 254 nth 1 \$1;
+#X obj 636 208 + 1;
+#X obj 564 154 hradio 15 1 0 6 empty empty empty 0 -8 0 10 -228856
+-1 -1 3;
+#X floatatom 564 200 3 0 0 0 - - -;
+#X obj 564 176 + 1;
+#X msg 564 222 nth A \$1;
+#X text 594 364 <= nth;
+#X text 158 316 <= address of min/max value;
+#X text 166 341 <= min/max value;
+#X text 29 10 The 'min' and 'max' messages can find the lowest and
+highest numerical value of a given element in the list (starting from
+1 \, the default). The min/max value comes out the left outlet and
+the address on the 2nd outlet.;
+#X text 424 16 The nth message specifies an address and an element
+number (startng at 1). This element is then output to the left outlet.
+;
+#X obj 564 296 jp.coll;
+#X msg 524 276 open;
+#X obj 564 317 list prepend set;
+#X obj 564 338 list trim;
+#X obj 103 290 jp.coll;
+#X msg 53 270 open;
+#X connect 0 0 34 0;
+#X connect 1 0 34 0;
+#X connect 2 0 34 0;
+#X connect 4 0 34 0;
+#X connect 5 0 4 0;
+#X connect 9 0 34 0;
+#X connect 12 0 34 0;
+#X connect 14 0 16 0;
+#X connect 16 0 30 0;
+#X connect 17 0 20 0;
+#X connect 18 0 19 0;
+#X connect 19 0 30 0;
+#X connect 20 0 18 0;
+#X connect 21 0 23 0;
+#X connect 22 0 24 0;
+#X connect 23 0 22 0;
+#X connect 24 0 30 0;
+#X connect 30 0 32 0;
+#X connect 31 0 30 0;
+#X connect 32 0 33 0;
+#X connect 33 0 15 0;
+#X connect 34 0 3 0;
+#X connect 34 1 11 0;
+#X connect 35 0 34 0;
+#X restore 517 360 pd min_max \; length \; nth;
+#N canvas 442 161 941 387 merge 0;
+#X msg 42 143 1 one;
+#X msg 109 107 merge 1 two three;
+#X text 66 24 The merge message appends any message to an address.
+The address is the first argument (an int or symbol) and the remaining
+elements is the message to append - if the address doesn't exist \,
+merge creates the address with that message.;
+#X obj 42 118 loadbang;
+#X obj 109 287 cyclone/prepend set;
+#X msg 163 208 1;
+#X msg 159 185 one;
+#X msg 123 152 merge one 1 2 3;
+#X text 226 153 creates address "one" if not existing;
+#X text 220 107 appends "two three" after "one" in addres 1;
+#X text 196 197 <= addresses;
+#X text 48 322 data =>;
+#X obj 542 154 loadbang;
+#X msg 645 215 sub 0 3 three;
+#X obj 622 287 cyclone/prepend set;
+#X msg 622 336 1 2 3 4 5;
+#X msg 635 180 nsub 0 3 trÃªs;
+#X msg 622 153 0;
+#X text 527 23 You can substitute a particular element in a message
+with the "sub" and "nsub" messages. The first argument is the address
+(an int or symbol) the second is the element number and the third is
+the element to substitute to.;
+#X text 528 85 The difference is that "sub" automatically outputs the
+substituted message \, while "nsub" doesn't.;
+#X msg 542 179 0 1 2 3 4 5;
+#X text 653 154 output message;
+#X text 726 181 substitute without output;
+#X text 733 216 outputs automatically;
+#X obj 109 252 jp.coll;
+#X msg 59 232 open;
+#X msg 109 320 1 2 3 4 5;
+#X obj 622 254 jp.coll;
+#X msg 582 254 open;
+#X connect 0 0 24 0;
+#X connect 1 0 24 0;
+#X connect 3 0 0 0;
+#X connect 4 0 26 0;
+#X connect 5 0 24 0;
+#X connect 6 0 24 0;
+#X connect 7 0 24 0;
+#X connect 12 0 20 0;
+#X connect 13 0 27 0;
+#X connect 14 0 15 0;
+#X connect 16 0 27 0;
+#X connect 17 0 27 0;
+#X connect 20 0 27 0;
+#X connect 24 0 4 0;
+#X connect 25 0 24 0;
+#X connect 27 0 14 0;
+#X connect 28 0 27 0;
+#X restore 526 235 pd merge \; sub/nsub;
+#X obj 148 279 nbx 2 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X obj 246 145 loadbang;
+#X obj 56 148 hradio 15 1 0 5 empty empty empty 0 -8 0 10 -228856 -1
+-1 1;
+#X obj 56 169 nbx 2 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X obj 74 383 bng 15 250 50 0 empty empty empty 17 7 0 10 -228856 -1
+-1;
+#X obj 119 383 bng 15 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X obj 164 383 bng 15 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X obj 209 383 bng 15 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X obj 74 355 route float list symbol;
+#X text 69 401 float;
+#X text 116 401 list;
+#X text 160 401 symbol;
+#X text 205 401 anything;
+#X obj 135 322 print coll_data;
+#N canvas 481 91 829 431 store/remove 0;
+#X obj 23 144 loadbang;
+#X obj 23 274 nbx 2 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 23 256;
+#X msg 23 170 store -1 23 \, -1;
+#X text 60 249 address;
+#X obj 169 331 nbx 4 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 440 256;
+#X msg 184 161 symbol gain;
+#X symbolatom 182 306 6 0 0 0 - - -;
+#X floatatom 36 250 3 0 0 0 - - -;
+#X text 58 275 data;
+#X msg 201 207 symbol freq;
+#X text 188 142 addresses:;
+#X text 217 331 data;
+#X obj 143 235 bng 15 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X obj 491 66 loadbang;
+#X msg 451 154 dump;
+#X msg 533 173 remove note;
+#X text 416 21 To remove a data message from [coll] \, use the remove
+message. It removes the address specified by an int/symbol along with
+its data.;
+#X msg 491 91 store 1 0.1 \, 2 3 \, store velocity 127 \, store note
+60;
+#X msg 519 149 remove 1;
+#X obj 491 322 print coll_data;
+#X obj 504 296 print coll_address;
+#X msg 193 182 gain;
+#X msg 213 230 freq;
+#X msg 567 204 1;
+#X msg 574 231 note;
+#X text 437 369 If you send it an address that doesn't exist or has
+been removed \, the coll object will not output anything or respond
+in any way.;
+#X text 13 16 You can use the "store" message to store data at a given
+symbol adress. You can also use it for int addresses \, but it is not
+needed as you can just use a list that starts with an integer for that.
+Note that storing to an existing address updates it!;
+#X obj 169 90 loadbang;
+#X msg 169 115 store gain 0.5 \, store freq 440;
+#X text 226 182 works without the symbol selector *;
+#X text 12 366 * The symbol address input has an optional symbol selector
+\, but it's always output as a symbol message with the symbol selector.
+;
+#X text 227 306 <= address *;
+#X obj 23 224 jp.coll;
+#X msg 33 200 open;
+#X obj 169 281 jp.coll;
+#X msg 219 261 open;
+#X obj 491 270 jp.coll;
+#X msg 441 250 open;
+#X connect 0 0 2 0;
+#X connect 2 0 32 0;
+#X connect 5 0 34 0;
+#X connect 9 0 34 0;
+#X connect 12 0 34 0;
+#X connect 13 0 17 0;
+#X connect 14 0 36 0;
+#X connect 15 0 36 0;
+#X connect 17 0 36 0;
+#X connect 18 0 36 0;
+#X connect 21 0 34 0;
+#X connect 22 0 34 0;
+#X connect 23 0 36 0;
+#X connect 24 0 36 0;
+#X connect 27 0 28 0;
+#X connect 28 0 34 0;
+#X connect 32 0 1 0;
+#X connect 32 1 7 0;
+#X connect 33 0 32 0;
+#X connect 34 0 4 0;
+#X connect 34 1 6 0;
+#X connect 35 0 34 0;
+#X connect 36 0 19 0;
+#X connect 36 1 20 0;
+#X connect 37 0 36 0;
+#X restore 490 172 pd store/remove;
+#X text 386 281 change addresses:;
+#X text 406 173 change data:;
+#N canvas 340 43 820 455 insert(2) 0;
+#X obj 120 115 loadbang;
+#X obj 159 383 print Address/Data;
+#X msg 138 180 dump;
+#X msg 159 357 =====;
+#X obj 518 142 loadbang;
+#X obj 557 400 print Address/Data;
+#X msg 536 207 dump;
+#X msg 557 377 =====;
+#X msg 518 173 0 0 \, 5 5 \, 10 10 \, 15 15;
+#X msg 120 145 0 0 \, 1 1 \, 2 2 \, 3 3 \, 4 4 \, 5 5;
+#X msg 557 269 insert2 3 three;
+#X text 416 67 The insert2 message is the same as insert \, but in
+this case it doesn't shift addresses up (so it only does it if it has
+to include an existing address).;
+#X msg 180 239 store 4 Four;
+#X text 264 240 *;
+#X text 50 414 * Note that storing an existing address only updates
+it!;
+#X text 24 15 The insert message is only for int addresses! It inserts
+a new int address and increments all addresses equal or greater than
+it by 1 - this allows the address to be inserted even if that address
+was already in the collection (since it is now shifted up).;
+#X text 415 15 You can also insert an address that's not in the collection.
+In this case \, the "insert" message will still increment addresses
+that are greater by!;
+#X msg 149 210 insert 2 two;
+#X obj 120 308 swap;
+#X obj 120 335 pack;
+#X msg 80 248 open;
+#X msg 478 275 open;
+#X obj 518 335 swap;
+#X obj 518 362 pack;
+#X obj 120 278 jp.coll;
+#X obj 518 305 jp.coll;
+#X msg 548 237 insert2 8 eigth;
+#X connect 0 0 9 0;
+#X connect 2 0 24 0;
+#X connect 3 0 1 0;
+#X connect 4 0 8 0;
+#X connect 6 0 25 0;
+#X connect 7 0 5 0;
+#X connect 8 0 25 0;
+#X connect 9 0 24 0;
+#X connect 10 0 25 0;
+#X connect 12 0 24 0;
+#X connect 17 0 24 0;
+#X connect 18 0 19 0;
+#X connect 18 1 19 1;
+#X connect 19 0 1 0;
+#X connect 20 0 24 0;
+#X connect 21 0 25 0;
+#X connect 22 0 23 0;
+#X connect 22 1 23 1;
+#X connect 23 0 5 0;
+#X connect 24 0 18 0;
+#X connect 24 1 18 1;
+#X connect 24 3 3 0;
+#X connect 25 0 22 0;
+#X connect 25 1 22 1;
+#X connect 25 3 7 0;
+#X connect 26 0 25 0;
+#X restore 508 192 pd insert(2);
+#N canvas 682 97 402 395 delete 0;
+#X obj 114 131 loadbang;
+#X msg 72 182 dump;
+#X msg 143 196 delete 2;
+#X msg 26 183 clear;
+#X msg 114 162 0 0 \, 1 1 \, 2 2 \, 3 3 \, 4 4 \, 5 5 \, store six
+6;
+#X obj 183 354 print Address/Data;
+#X msg 183 311 =====;
+#X obj 68 294 list prepend;
+#X obj 68 317 list trim;
+#X msg 146 227 delete six;
+#X text 16 15 The delete message removes an int address and decrements
+all addresses equal or greater than it by 1 - this prevents from leaving
+an open slot \, as it is the case with the "remove" message.;
+#X text 17 81 The delete message can also remove a symbol address -
+in this case it acts in the same way as "remove".;
+#X obj 114 264 jp.coll;
+#X msg 64 264 open;
+#X connect 0 0 4 0;
+#X connect 1 0 12 0;
+#X connect 2 0 12 0;
+#X connect 3 0 12 0;
+#X connect 4 0 12 0;
+#X connect 6 0 5 0;
+#X connect 7 0 8 0;
+#X connect 8 0 5 0;
+#X connect 9 0 12 0;
+#X connect 12 0 7 0;
+#X connect 12 1 7 1;
+#X connect 12 3 6 0;
+#X connect 13 0 12 0;
+#X restore 526 213 pd delete;
+#X msg 95 173 dump;
+#X msg 135 173 clear;
+#X obj 148 300 print address;
+#X obj 194 256 bng 15 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X msg 145 198 open;
+#X msg 183 198 wclose;
+#X msg 246 176 0 0.1 \, 1 0 2 3 \, 2 list one two \, 3 hi \, 4 let's
+go, f 16;
+#X text 138 148 <== address;
+#N canvas 454 189 826 370 read/write 0;
+#X msg 193 207 write coll.txt;
+#X msg 166 124 read coll.txt;
+#X msg 61 114 next;
+#X msg 78 143 prev;
+#X obj 78 303 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X msg 175 150 readagain;
+#X msg 205 232 writeagain;
+#X msg 146 96 read;
+#X obj 119 303 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X msg 185 181 write;
+#X obj 160 301 bng 18 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X obj 21 113 bng 18 250 50 0 empty empty empty 17 7 0 10 -228856 -1
+-1;
+#X text 40 114 or;
+#X text 240 150 reopens file;
+#X text 257 123 opens file;
+#X text 178 96 opens dialog window to open file;
+#X text 227 180 opens dialog window to save;
+#X text 288 207 saves to file;
+#X text 276 232 resaves to file;
+#X msg 662 199 next;
+#X msg 661 174 prev;
+#X msg 524 184 goto 50;
+#X msg 590 159 start;
+#X msg 609 183 end;
+#X text 460 164 goes to address 50;
+#X text 436 16 The basic navigation through [coll]'s data is with the
+"next" (same as a bang) or "prev" messages that \, respectively \,
+go to the next and the previous address.;
+#X text 19 28 You can also use the 1st argument to specify a filename
+for [coll] to load when instantiated. The read/write messages allow
+you to read/write from and to other files.;
+#X text 184 310 (also bangs on instantiation);
+#X obj 160 333 print done_reading;
+#X text 185 294 bang when finishing read operation;
+#X text 436 66 The pointer to the address is set for all [coll] objects
+with the same 1st argument (name or filename). So navigating in the
+object to the left affects the navigation of the object below. The
+"goto <address>" message ses the pointer to an address \, "start" goes
+to the first address \, "end" goes to the last one.;
+#X text 437 295 Note how above there's a 2nd argument to prevent it
+from searching for a file because the [coll] to the left already loaded
+the file - since [coll] objects with the same name share data \, it
+doesn't need to load the file again!;
+#X msg 38 250 open;
+#X obj 78 270 jp.coll coll.txt;
+#X obj 609 229 jp.coll coll.txt;
+#X obj 609 259 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X obj 654 259 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X msg 559 229 open;
+#X connect 0 0 33 0;
+#X connect 1 0 33 0;
+#X connect 2 0 33 0;
+#X connect 3 0 33 0;
+#X connect 5 0 33 0;
+#X connect 6 0 33 0;
+#X connect 7 0 33 0;
+#X connect 9 0 33 0;
+#X connect 10 0 28 0;
+#X connect 11 0 33 0;
+#X connect 19 0 34 0;
+#X connect 20 0 34 0;
+#X connect 21 0 34 0;
+#X connect 22 0 34 0;
+#X connect 23 0 34 0;
+#X connect 32 0 33 0;
+#X connect 33 0 4 0;
+#X connect 33 1 8 0;
+#X connect 33 2 10 0;
+#X connect 34 0 35 0;
+#X connect 34 1 36 0;
+#X connect 37 0 34 0;
+#X restore 460 78 pd read/write files \; data navigation;
+#X obj 184 276 print finish_dump;
+#X text 24 15 In [coll] \, any message type can be stored at a particular
+address \, which can be either an "integer float" (positive or negative)
+or a symbol.;
+#X text 23 64 If an input list starts with an int \, this first element
+is treated as an address in which the other element(s) are stored.
+Any message can be stored \, but single symbol atoms are stored as
+symbol messages.;
+#X text 31 436 A dump message spits all stored data and then sends
+a bang in the rightmost outlet when it's done. A clear message clears
+all data stored in the collection.;
+#X text 31 487 The "open" and "wclose" messages open/close the data
+window for visualization and manully editing. You can type in or delete
+data \, then close it and save it. The format for each line is: adrress
+\, data \;;
+#X text 31 537 NEW Clicking on the [jp.coll] object doesn't open the
+editing window \, but just the abstraction.;
+#X text 419 424 NEW These features aren't possible in [jp.coll]:;
+#N canvas 0 50 377 205 removed.features 0;
+#N canvas 574 173 804 263 embbed 0;
+#X msg 92 99 dump;
+#X obj 92 228 print coll_embedded;
+#X text 218 230 print address/data;
+#X text 129 98 <= check Pd window;
+#X msg 465 153 embed \$1;
+#X obj 465 124 tgl 15 0 empty empty empty 17 7 0 10 -228856 -1 -1 0
+1;
+#X text 23 19 By default \, the contents of [coll] are not saved as
+part of the patch \, but you can change that! Check the example below
+where the contents of [coll] were stored with this example patch. Dump
+the contents and check it.;
+#X text 487 122 (1: saves with the patch \, 0: doesn't save);
+#X text 413 18 You can set [coll] to store its contents with the embed
+message / attribute plus the argument: "1" sets coll to store the data
+with the patch \, "0" (the default) to not save it. Note that changing
+the data collection is not enough \, you have to save the patch!;
+#X obj 92 141 jp.coll @embed 1;
+#X obj 465 195 jp.coll;
+#X obj 92 171 swap;
+#X obj 92 198 pack;
+#X connect 0 0 9 0;
+#X connect 4 0 10 0;
+#X connect 5 0 4 0;
+#X connect 9 0 11 0;
+#X connect 9 1 11 1;
+#X connect 11 0 12 0;
+#X connect 11 1 12 1;
+#X connect 12 0 1 0;
+#X restore 85 62 pd embbed;
+#N canvas 450 160 787 431 alias 0;
+#X msg 26 222 1;
+#X msg 56 222 2;
+#X msg 46 147 1 foo \, 2 bar;
+#X msg 128 101 assoc foo 1;
+#X msg 140 122 deassoc foo 1;
+#X msg 154 152 assoc bar 2;
+#X msg 164 173 deassoc bar 2;
+#X msg 175 206 foo;
+#X msg 211 206 bar;
+#X text 228 121 deassociates foo & 1;
+#X text 204 99 associates foo & 1;
+#X text 233 151 associates bar & 2;
+#X text 253 173 deassociates bar & 2;
+#X text 24 17 Use "assoc" and "deassoc" to associate and deassociate
+a symbol alias to an int address \, so you can optionally use the symbol
+name address instead of the int address.;
+#X obj 46 123 loadbang;
+#X msg 218 239 remove foo;
+#X text 289 239 *;
+#X obj 531 166 loadbang;
+#X msg 561 235 one;
+#X floatatom 151 300 3 0 0 0 - - -;
+#X symbolatom 128 326 7 0 0 0 - - -;
+#X text 125 77 click to associate / deassociate;
+#X text 177 300 <= address is still an int;
+#X text 255 315 not the alias;
+#X text 73 324 data =>;
+#X text 602 247 alias;
+#X text 592 363 data;
+#X text 409 44 The format in which the alias is saved inside the [coll]
+object is: "<int> <alias> \, <data>".;
+#X msg 531 191 nstore 1 one 1.1 \, nstore two 2 2.2;
+#X msg 569 262 two;
+#X text 408 83 You can store an int address with an alias with the
+"nstore" message. The first two elements are the int address and the
+alias \, and they can come in any order <int \, symbol> or <symbol
+\, int> - the remaining element(s) set the stored data.;
+#X text 614 332 address;
+#X text 37 369 * Once you have an associated alias \, you can perform
+any operation using the alias insteas of the int address \, such as
+removing the address from the collection.;
+#X obj 531 364 nbx 5 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X obj 554 332 nbx 5 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X obj 128 272 jp.coll;
+#X obj 531 306 jp.coll;
+#X connect 0 0 35 0;
+#X connect 1 0 35 0;
+#X connect 2 0 35 0;
+#X connect 3 0 35 0;
+#X connect 4 0 35 0;
+#X connect 5 0 35 0;
+#X connect 6 0 35 0;
+#X connect 7 0 35 0;
+#X connect 8 0 35 0;
+#X connect 14 0 2 0;
+#X connect 15 0 35 0;
+#X connect 17 0 28 0;
+#X connect 18 0 36 0;
+#X connect 28 0 36 0;
+#X connect 29 0 36 0;
+#X connect 35 0 20 0;
+#X connect 35 1 19 0;
+#X connect 36 0 33 0;
+#X connect 36 1 34 0;
+#X restore 85 82 pd alias \; nstore;
+#X text 15 23 These features were removed (the patches are just for
+documentation \, clicking on them won't do anything):;
+#N canvas 413 197 810 540 threaded 0;
+#X obj 193 142 bng 20 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X obj 323 245 bng 20 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X text 266 246 finished;
+#X text 220 143 2) click and check;
+#X text 25 165 1) raise the volume;
+#X obj 220 282 timer;
+#X obj 220 306 nbx 6 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X text 289 298 time in ms it took;
+#X text 292 314 to read the file;
+#X msg 558 152 threaded \$1;
+#X obj 558 122 tgl 20 0 empty empty empty 17 7 0 10 -228856 -1 -1 0
+1;
+#X obj 507 115 bng 20 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X text 430 472 Users of Pd-l2ork and cyclone 0.2 beta1/beta2 that
+were using this extra argument for the threaded feature must now adapt
+their patches.;
+#X text 41 354 ============================================================
+;
+#X text 404 354 ============================================================
+;
+#X text 18 91 Below \, [coll] loads 300 thousand entries from a file
+\, which would cause an audio drop out if not in threaded mode.;
+#N canvas 676 50 503 504 depth-first 0;
+#X msg 48 150 threaded \$1;
+#X obj 48 122 tgl 20 0 empty empty empty 17 7 0 10 -228856 -1 -1 0
+1;
+#X obj 144 85 bng 25 250 50 0 empty empty empty 17 7 0 10 -228856 -1
+-1;
+#X obj 286 243 bng 15 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X msg 286 278 2;
+#X obj 286 332 print;
+#X obj 144 151 trigger bang anything bang;
+#X obj 363 243 bng 15 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X obj 144 243 bng 15 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X text 173 90 <= click and check the printed order;
+#X text 42 102 try in both;
+#X text 78 122 modes;
+#X text 61 17 Unthreaded mode always provide the depth first behaviour
+\, meaning that the print order below is "1 \, 2 \, 3". The threaded
+mode breaks it for the read and dump operations \, printing: "1 \,
+3 \, 2" instead.;
+#X text 77 370 One way or another \, if an action is needed right after
+reading or dumping \, you should use and rely on the bangs from the
+outlets \, which are there for this reason and is the best practice
+for [coll] in any case.;
+#X text 77 436 For old patches that used [trigger] instead of the best
+practice \, it is encouraged that they are adapted to use the 3rd/4th
+outlets now and not the "threaded 0" attribute.;
+#X msg 144 122 read coll_big.txt;
+#X msg 144 278 3;
+#X msg 363 276 ===== \, 1;
+#X obj 180 201 jp.coll depth 1 @threaded 0;
+#X connect 0 0 18 0;
+#X connect 1 0 0 0;
+#X connect 2 0 15 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 6 0 8 0;
+#X connect 6 1 18 0;
+#X connect 6 2 7 0;
+#X connect 7 0 17 0;
+#X connect 8 0 16 0;
+#X connect 15 0 6 0;
+#X connect 16 0 5 0;
+#X connect 17 0 5 0;
+#X connect 18 2 3 0;
+#X restore 677 321 pd depth-first;
+#X text 441 265 An important difference is that the threaded version
+breaks the depth first rule \, while unthreaded keeps it (but at the
+cost of causing potential audio drop outs).;
+#X text 442 321 Check the subpatch for more info ===>;
+#X msg 507 145 dump;
+#X obj 714 216 bng 20 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X text 658 219 finished;
+#X msg 380 187 threaded \$1;
+#X obj 380 157 tgl 20 0 empty empty empty 17 7 0 10 -228856 -1 -1 0
+1;
+#X text 377 137 try in both;
+#X text 413 154 modes;
+#X text 422 12 The old unthreaded behaviour is still offered as an
+extra attribute ("@threaded 1" (default) for threaded and "@threaded
+0" for unthreaded behaviour) or message. Check it in both modes below
+and see below how now the unthreaded mode freezes the DSP.;
+#X msg 233 180 read coll_big.txt;
+#X obj 193 197 t b b;
+#X text 18 15 From cyclone 0.3-alpha1 \, [coll] is threaded by default.
+This allows the read operation to run in a separate thread \, preventing
+audio drop outs as in Max! This also means you have to rely on the
+bang from the 3rd outlets to know the operation has been completed.
+;
+#X text 504 92 Note that the dump feature is not threaded!;
+#X text 47 462 This extra argument raised a conflict with the 2nd argument
+that was introduced to [coll] in Max 4.0.8 \, which wasn't present
+in cyclone's [coll] because it was first cloned from the Max version
+4.0!;
+#X text 428 397 Cyclone 0.3 did update all objects to Max 7 \, so [coll]'s
+2nd argument was included \, amongst other things. Now we don't have
+the threaded functionality as an argument \, but as an attribute as
+shown above. Another change \, already mentioned \, is that the threaded
+functionality is now the default.;
+#X text 47 409 Cyclone 0.2 beta1/beta2 included Pd-l2ork's [coll] version
+\, which had an extra float argument (0/1) to define the threaded mode
+(which was "0" - unthreaded - by default). Cyclone 0.2 beta 3 removed
+this threaded functionality., f 60;
+#X obj 18 249 dac~;
+#X obj 29 185 osc~ 440;
+#X obj 29 205 mat-~;
+#X obj 507 180 jp.coll threaded_test 1 @threaded 0;
+#X obj 233 219 jp.coll threaded_test 1;
+#X connect 0 0 28 0;
+#X connect 1 0 5 1;
+#X connect 5 0 6 0;
+#X connect 9 0 37 0;
+#X connect 10 0 9 0;
+#X connect 11 0 19 0;
+#X connect 19 0 37 0;
+#X connect 22 0 38 0;
+#X connect 23 0 22 0;
+#X connect 27 0 38 0;
+#X connect 28 0 27 0;
+#X connect 28 1 5 0;
+#X connect 35 0 36 0;
+#X connect 36 0 34 0;
+#X connect 36 0 34 1;
+#X connect 37 3 20 0;
+#X connect 38 2 1 0;
+#X restore 61 133 pd threaded \; & backwards \; compatibility;
+#N canvas 488 133 807 482 sort 0;
+#X msg 444 167 sort 1 -1;
+#X obj 27 155 cyclone/prepend store;
+#X obj 27 86 loadbang;
+#X msg 402 110 dump;
+#X obj 356 364 list prepend;
+#X obj 356 387 list trim;
+#X obj 471 428 print sort;
+#X msg 471 379 ______________;
+#X text 542 428 print address / data;
+#X msg 422 145 sort -1 -1;
+#X text 517 167 sort descending by address;
+#X text 502 145 sort ascending by address;
+#X msg 458 200 sort -1 0;
+#X text 524 200 sort ascending by 1st element;
+#X msg 468 221 sort 1 0;
+#X text 534 221 sort descending by 1st element;
+#X msg 478 260 sort -1 1;
+#X msg 488 281 sort 1 1;
+#X text 546 260 sort ascending by 2nd element;
+#X text 556 281 sort descending by 2nd element;
+#X text 400 23 The first argument is the sort order flag: -1 is ascending
+/ 1 is descending. The second argument specifies which element in the
+message is used to sort \, starting at 0 (-1 sorts by the address).
+;
+#X text 13 23 You can change the address order by sorting them. The
+'sort' message can sort (in ascending or descending order) the entries
+by the address or an element in the data.;
+#X text 438 109 <= check pd window;
+#X text 90 87 store a collection in an unsorted order;
+#X msg 27 114 two 2 two \, one 1 one \, three 3 three \, four 4 four
+\, 2 two 2 \, 1 one 1 \, 3 three 3 \, 5 five 5 \, 4 four 4;
+#X obj 402 329 jp.coll;
+#X connect 0 0 25 0;
+#X connect 1 0 25 0;
+#X connect 2 0 24 0;
+#X connect 3 0 25 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 7 0 6 0;
+#X connect 9 0 25 0;
+#X connect 12 0 25 0;
+#X connect 14 0 25 0;
+#X connect 16 0 25 0;
+#X connect 17 0 25 0;
+#X connect 24 0 1 0;
+#X connect 25 0 4 0;
+#X connect 25 1 4 1;
+#X connect 25 3 7 0;
+#X restore 97 113 pd sort;
+#X restore 421 442 pd removed.features;
+#X obj 135 232 jp.coll;
+#N canvas 525 69 438 636 named_coll 0;
+#X obj 31 254 loadbang;
+#X obj 200 316 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X obj 245 316 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X msg 200 230 dump;
+#X obj 305 312 bng 18 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X obj 305 336 print dump_done;
+#X obj 200 373 print data/address;
+#X obj 200 343 pack f f;
+#X msg 218 258 clear;
+#X msg 48 324 dump;
+#X obj 31 413 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X obj 76 413 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X obj 136 409 bng 18 250 50 0 empty empty empty 17 7 0 10 -228856
+-1 -1;
+#X obj 136 433 print dump_done;
+#X obj 31 470 print data/address;
+#X obj 31 440 pack f f;
+#X obj 302 406 nbx 3 14 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
+10 -228856 -1 -1 0 256;
+#X text 261 258 <= clear the data;
+#X text 342 428 adds value;
+#X text 58 511 See how clearing the collection in one [coll] instance
+affects others with the same name - same with adding messages.;
+#X msg 31 286 0 0 \, 1 1 \, 2 2 \, 3 3;
+#X msg 302 433 4 \$1;
+#X text 342 441 at address 4;
+#X text 34 161 Below \, the [coll] in the left stores some data that
+can be viewed and edited by the [coll] objects in the right \, since
+they all have the same name ('example1').;
+#X text 38 582 Important: A [coll] object with no name or filename
+argument will have its own sigle collection of data \, not shared amongst
+other [coll] objects that also have no names.;
+#X text 36 562 ============================================================
+;
+#X obj 31 380 jp.coll example1 1;
+#X text 34 29 The same collection of data can be shared and accessed
+or manipulated by different instances of the [coll] object if they
+share the same name (1st symbol argument).;
+#X text 34 75 Note that the first argument is also for loading files
+\, so it also searches for a file with that name. If [coll] doesn't
+find the file \, the filename will still work as the name of the [coll]
+object. You can prevent coll from searching for a file with a non-0
+value as the second argument \, which should be done if you're not
+loading files!;
+#X obj 200 286 jp.coll example1 1;
+#X obj 302 465 jp.coll example1 1;
+#X msg 48 354 open;
+#X msg 160 258 open;
+#X msg 262 445 open;
+#X connect 0 0 20 0;
+#X connect 1 0 7 0;
+#X connect 2 0 7 1;
+#X connect 3 0 29 0;
+#X connect 4 0 5 0;
+#X connect 7 0 6 0;
+#X connect 8 0 29 0;
+#X connect 9 0 26 0;
+#X connect 10 0 15 0;
+#X connect 11 0 15 1;
+#X connect 12 0 13 0;
+#X connect 15 0 14 0;
+#X connect 16 0 21 0;
+#X connect 20 0 26 0;
+#X connect 21 0 30 0;
+#X connect 26 0 10 0;
+#X connect 26 1 11 0;
+#X connect 26 3 12 0;
+#X connect 29 0 1 0;
+#X connect 29 1 2 0;
+#X connect 29 3 4 0;
+#X connect 31 0 26 0;
+#X connect 32 0 29 0;
+#X connect 33 0 30 0;
+#X restore 502 109 pd named_coll;
+#N canvas 569 116 400 285 refer 0;
+#X msg 118 78 dump;
+#X obj 157 207 print address;
+#X obj 144 232 print value;
+#X msg 144 109 refer example1;
+#X msg 169 143 refer coll.txt;
+#X text 34 15 The "refer" message can refer a [coll] object to a data
+collection of another [coll] object with another name or filename.
+;
+#X obj 144 176 jp.coll;
+#X msg 98 177 open;
+#X connect 0 0 6 0;
+#X connect 3 0 6 0;
+#X connect 4 0 6 0;
+#X connect 6 0 2 0;
+#X connect 6 1 1 0;
+#X connect 7 0 6 0;
+#X restore 532 129 pd refer;
+#X text 419 474 NEW Pd-specific features;
+#N canvas 0 50 377 205 new.features 0;
+#X text 15 23 These features are specific to Pd:;
+#N canvas 473 179 425 269 coll.init 0;
+#X text 23 19 When adding abstractions in dynamic patching \, the loadbang
+objects don't get initiated. The "coll.init" message covers this \,
+and should be sent to all [jp.coll] objects inside a dynamically created
+patch.;
+#X obj 28 124 loadbang;
+#X msg 28 144 0 0 \, 1 1 \, 2 2 \, 3 3;
+#X msg 45 174 open;
+#X obj 28 220 jp.coll;
+#X msg 45 197 coll.init;
+#X text 23 79 Since it's effect is to "restart" a [jp.coll] object
+\, you can also use it to completely clean the internal settings.;
+#X connect 1 0 2 0;
+#X connect 2 0 4 0;
+#X connect 3 0 4 0;
+#X connect 5 0 4 0;
+#X restore 65 62 pd coll.init;
+#X restore 421 492 pd new.features;
+#X connect 6 0 27 0;
+#X connect 7 0 31 0;
+#X connect 8 0 9 0;
+#X connect 9 0 42 0;
+#X connect 14 0 10 0;
+#X connect 14 1 11 0;
+#X connect 14 2 12 0;
+#X connect 14 3 13 0;
+#X connect 25 0 42 0;
+#X connect 26 0 42 0;
+#X connect 29 0 42 0;
+#X connect 30 0 42 0;
+#X connect 31 0 42 0;
+#X connect 42 0 14 0;
+#X connect 42 0 19 0;
+#X connect 42 1 6 0;
+#X connect 42 3 28 0;
+#X connect 42 3 34 0;
+#X restore 382 281 pd details;
+#X obj 202 281 jp.coll;
+#X text 490 331 2 - float - non-0 prevents from searching for a file
+(default 0).;
+#X msg 22 281 open;
+#X text 14 261 click to open text window;
+#X text 490 111 list - 1st element is an int address to store remaining
+data to messages - open to check all messages =>;
+#X text 12 71 Already exists in cyclone \, but this version is made
+in vanilla. Most features are compatible \, a couple of important changes
+made the renaming necessary.;
+#X text 12 51 This help file is adapted from [cyclone/coll].;
+#X text 500 354 NEW always use this argument if you're not reading
+a file \, or you'll get error messages.;
+#N canvas 0 50 399 211 NEW 0;
+#X text 11 11 These are the most relevant differences between [coll]
+and [jp.coll]. Read this carefully if you plan to switch between these
+objects in your existing patches:;
+#X text 11 101 It's not possible to:;
+#X text 10 121 - use @embed to save the contents with the patch;
+#X text 10 141 - use threaded support;
+#X text 10 161 - see the "All_Messages" reference for other unsupported
+operations;
+#X text 11 61 - VERY IMPORTANT - loaded files can't have any commas
+in them. Compare coll.txt in the jmmmp and cyclone folders;
+#X restore 245 137 pd NEW;
+#X text 12 111 Some features aren't possible to implement in vanilla.
+Search this patch for "NEW" to see the comments. Here is an overview
+of the most important issues:;
+#X text 11 11 [jp.coll] - store/edit message collections VERY SIMILAR
+to cyclone/coll \, but in vanilla;
+#X obj 296 343 hradio 15 1 0 3 \$0-paypal empty empty 0 -8 0 10 -262144
+-1 -1 1;
+#X obj 296 358 cnv 1 1 1 24x37 24x37-i empty 0 0 0 10 -41475 -1 0;
+#X obj 297 358 cnv 1 1 1 25x37 25x37-i empty 0 0 0 10 -116039 -1 0
+;
+#X obj 298 358 cnv 1 1 1 26x37 26x37-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 300 358 cnv 1 1 1 31x37 31x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 301 358 cnv 1 1 1 32x37 32x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 302 358 cnv 1 1 1 33x37 33x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 303 358 cnv 1 1 1 34x37 34x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 304 358 cnv 1 1 1 35x37 35x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 305 358 cnv 1 1 1 36x37 36x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 306 358 cnv 1 1 1 37x37 37x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 307 358 cnv 1 1 1 38x37 38x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 308 358 cnv 1 1 1 39x37 39x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 309 358 cnv 1 1 1 40x37 40x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 310 358 cnv 1 1 1 41x37 41x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 311 358 cnv 1 1 1 42x37 42x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 312 358 cnv 1 1 1 43x37 43x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 313 358 cnv 1 1 1 44x37 44x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 314 358 cnv 1 1 1 45x37 45x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 315 358 cnv 1 1 1 46x37 46x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 316 358 cnv 1 1 1 47x37 47x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 317 358 cnv 1 1 1 48x37 48x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 318 358 cnv 1 1 1 49x37 49x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 319 358 cnv 1 1 1 50x37 50x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 320 358 cnv 1 1 1 51x37 51x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 321 358 cnv 1 1 1 52x37 52x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 322 358 cnv 1 1 1 53x37 53x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 323 358 cnv 1 1 1 54x37 54x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 324 358 cnv 1 1 1 55x37 55x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 325 358 cnv 1 1 1 56x37 56x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 326 358 cnv 1 1 1 57x37 57x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 327 358 cnv 1 1 1 58x37 58x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 328 358 cnv 1 1 1 59x37 59x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 329 358 cnv 1 1 1 60x37 60x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 330 358 cnv 1 1 1 61x37 61x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 331 358 cnv 1 1 1 62x37 62x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 332 358 cnv 1 1 1 63x37 63x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 333 358 cnv 1 1 1 64x37 64x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 334 358 cnv 1 1 1 65x37 65x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 335 358 cnv 1 1 1 66x37 66x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 336 358 cnv 1 1 1 67x37 67x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 337 358 cnv 1 1 1 71x37 71x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 338 358 cnv 1 1 1 72x37 72x37-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 339 358 cnv 1 1 1 73x37 73x37-i empty 0 0 0 10 -120199 -1 0
+;
+#X obj 340 358 cnv 1 1 1 74x37 74x37-i empty 0 0 0 10 -41475 -1 0;
+#X obj 295 357 cnv 1 1 1 23x36 23x36-i empty 0 0 0 10 -70468 -1 0;
+#X obj 296 357 cnv 1 1 1 24x36 24x36-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 297 357 cnv 1 1 1 25x36 25x36-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 298 357 cnv 1 1 1 26x36 26x36-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 300 357 cnv 1 1 1 31x36 31x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 357 cnv 1 1 1 32x36 32x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 357 cnv 1 1 1 33x36 33x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 357 cnv 1 1 1 34x36 34x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 357 cnv 1 1 1 35x36 35x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 357 cnv 1 1 1 36x36 36x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 357 cnv 1 1 1 37x36 37x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 357 cnv 1 1 1 38x36 38x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 357 cnv 1 1 1 39x36 39x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 357 cnv 1 1 1 40x36 40x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 357 cnv 1 1 1 41x36 41x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 357 cnv 1 1 1 42x36 42x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 357 cnv 1 1 1 43x36 43x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 357 cnv 1 1 1 44x36 44x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 357 cnv 1 1 1 45x36 45x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 357 cnv 1 1 1 46x36 46x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 357 cnv 1 1 1 47x36 47x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 357 cnv 1 1 1 48x36 48x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 357 cnv 1 1 1 49x36 49x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 357 cnv 1 1 1 50x36 50x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 357 cnv 1 1 1 51x36 51x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 357 cnv 1 1 1 52x36 52x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 357 cnv 1 1 1 53x36 53x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 357 cnv 1 1 1 54x36 54x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 357 cnv 1 1 1 55x36 55x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 357 cnv 1 1 1 56x36 56x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 357 cnv 1 1 1 57x36 57x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 357 cnv 1 1 1 58x36 58x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 357 cnv 1 1 1 59x36 59x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 357 cnv 1 1 1 60x36 60x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 357 cnv 1 1 1 61x36 61x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 357 cnv 1 1 1 62x36 62x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 357 cnv 1 1 1 63x36 63x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 357 cnv 1 1 1 64x36 64x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 357 cnv 1 1 1 65x36 65x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 357 cnv 1 1 1 66x36 66x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 357 cnv 1 1 1 67x36 67x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 357 cnv 1 1 1 71x36 71x36-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 357 cnv 1 1 1 72x36 72x36-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 339 357 cnv 1 1 1 73x36 73x36-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 340 357 cnv 1 1 1 74x36 74x36-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 294 356 cnv 1 1 1 22x35 22x35-i empty 0 0 0 10 -82885 -1 0;
+#X obj 295 356 cnv 1 1 1 23x35 23x35-i empty 0 0 0 10 -223821 -1 0
+;
+#X obj 296 356 cnv 1 1 1 24x35 24x35-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 297 356 cnv 1 1 1 25x35 25x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 356 cnv 1 1 1 26x35 26x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 356 cnv 1 1 1 31x35 31x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 356 cnv 1 1 1 32x35 32x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 356 cnv 1 1 1 33x35 33x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 356 cnv 1 1 1 34x35 34x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 356 cnv 1 1 1 35x35 35x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 356 cnv 1 1 1 36x35 36x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 356 cnv 1 1 1 37x35 37x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 356 cnv 1 1 1 38x35 38x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 356 cnv 1 1 1 39x35 39x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 356 cnv 1 1 1 40x35 40x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 356 cnv 1 1 1 41x35 41x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 356 cnv 1 1 1 42x35 42x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 356 cnv 1 1 1 43x35 43x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 356 cnv 1 1 1 44x35 44x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 356 cnv 1 1 1 45x35 45x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 356 cnv 1 1 1 46x35 46x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 356 cnv 1 1 1 47x35 47x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 356 cnv 1 1 1 48x35 48x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 356 cnv 1 1 1 49x35 49x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 356 cnv 1 1 1 50x35 50x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 356 cnv 1 1 1 51x35 51x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 356 cnv 1 1 1 52x35 52x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 356 cnv 1 1 1 53x35 53x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 356 cnv 1 1 1 54x35 54x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 356 cnv 1 1 1 55x35 55x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 356 cnv 1 1 1 56x35 56x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 356 cnv 1 1 1 57x35 57x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 356 cnv 1 1 1 58x35 58x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 356 cnv 1 1 1 59x35 59x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 356 cnv 1 1 1 60x35 60x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 356 cnv 1 1 1 61x35 61x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 356 cnv 1 1 1 62x35 62x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 356 cnv 1 1 1 63x35 63x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 356 cnv 1 1 1 64x35 64x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 356 cnv 1 1 1 65x35 65x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 356 cnv 1 1 1 66x35 66x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 356 cnv 1 1 1 67x35 67x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 356 cnv 1 1 1 71x35 71x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 356 cnv 1 1 1 72x35 72x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 356 cnv 1 1 1 73x35 73x35-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 356 cnv 1 1 1 74x35 74x35-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 341 356 cnv 1 1 1 75x35 75x35-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 293 355 cnv 1 1 1 21x34 21x34-i empty 0 0 0 10 -74565 -1 0;
+#X obj 294 355 cnv 1 1 1 22x34 22x34-i empty 0 0 0 10 -211468 -1 0
+;
+#X obj 295 355 cnv 1 1 1 23x34 23x34-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 296 355 cnv 1 1 1 24x34 24x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 355 cnv 1 1 1 25x34 25x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 355 cnv 1 1 1 26x34 26x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 355 cnv 1 1 1 31x34 31x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 355 cnv 1 1 1 32x34 32x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 355 cnv 1 1 1 33x34 33x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 355 cnv 1 1 1 34x34 34x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 355 cnv 1 1 1 35x34 35x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 355 cnv 1 1 1 36x34 36x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 355 cnv 1 1 1 37x34 37x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 355 cnv 1 1 1 38x34 38x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 355 cnv 1 1 1 39x34 39x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 355 cnv 1 1 1 40x34 40x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 355 cnv 1 1 1 41x34 41x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 355 cnv 1 1 1 42x34 42x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 355 cnv 1 1 1 43x34 43x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 355 cnv 1 1 1 44x34 44x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 355 cnv 1 1 1 45x34 45x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 355 cnv 1 1 1 46x34 46x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 355 cnv 1 1 1 47x34 47x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 355 cnv 1 1 1 48x34 48x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 355 cnv 1 1 1 49x34 49x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 355 cnv 1 1 1 50x34 50x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 355 cnv 1 1 1 51x34 51x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 355 cnv 1 1 1 52x34 52x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 355 cnv 1 1 1 53x34 53x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 355 cnv 1 1 1 54x34 54x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 355 cnv 1 1 1 55x34 55x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 355 cnv 1 1 1 56x34 56x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 355 cnv 1 1 1 57x34 57x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 355 cnv 1 1 1 58x34 58x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 355 cnv 1 1 1 59x34 59x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 355 cnv 1 1 1 60x34 60x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 355 cnv 1 1 1 61x34 61x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 355 cnv 1 1 1 62x34 62x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 355 cnv 1 1 1 63x34 63x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 355 cnv 1 1 1 64x34 64x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 355 cnv 1 1 1 65x34 65x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 355 cnv 1 1 1 66x34 66x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 355 cnv 1 1 1 67x34 67x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 355 cnv 1 1 1 71x34 71x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 355 cnv 1 1 1 72x34 72x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 355 cnv 1 1 1 73x34 73x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 355 cnv 1 1 1 74x34 74x34-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 355 cnv 1 1 1 75x34 75x34-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 293 354 cnv 1 1 1 21x33 21x33-i empty 0 0 0 10 -120263 -1 0
+;
+#X obj 294 354 cnv 1 1 1 22x33 22x33-i empty 0 0 0 10 -236302 -1 0
+;
+#X obj 295 354 cnv 1 1 1 23x33 23x33-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 296 354 cnv 1 1 1 24x33 24x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 354 cnv 1 1 1 25x33 25x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 354 cnv 1 1 1 26x33 26x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 354 cnv 1 1 1 31x33 31x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 354 cnv 1 1 1 32x33 32x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 354 cnv 1 1 1 33x33 33x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 354 cnv 1 1 1 34x33 34x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 354 cnv 1 1 1 35x33 35x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 354 cnv 1 1 1 36x33 36x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 354 cnv 1 1 1 37x33 37x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 354 cnv 1 1 1 38x33 38x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 354 cnv 1 1 1 39x33 39x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 354 cnv 1 1 1 40x33 40x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 354 cnv 1 1 1 41x33 41x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 311 354 cnv 1 1 1 42x33 42x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 312 354 cnv 1 1 1 43x33 43x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 354 cnv 1 1 1 44x33 44x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 354 cnv 1 1 1 45x33 45x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 354 cnv 1 1 1 46x33 46x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 354 cnv 1 1 1 47x33 47x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 354 cnv 1 1 1 48x33 48x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 354 cnv 1 1 1 49x33 49x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 354 cnv 1 1 1 50x33 50x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 354 cnv 1 1 1 51x33 51x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 354 cnv 1 1 1 52x33 52x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 322 354 cnv 1 1 1 53x33 53x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 323 354 cnv 1 1 1 54x33 54x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 354 cnv 1 1 1 55x33 55x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 354 cnv 1 1 1 56x33 56x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 354 cnv 1 1 1 57x33 57x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 354 cnv 1 1 1 58x33 58x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 354 cnv 1 1 1 59x33 59x33-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 329 354 cnv 1 1 1 60x33 60x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 354 cnv 1 1 1 61x33 61x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 354 cnv 1 1 1 62x33 62x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 354 cnv 1 1 1 63x33 63x33-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 333 354 cnv 1 1 1 64x33 64x33-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 334 354 cnv 1 1 1 65x33 65x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 354 cnv 1 1 1 66x33 66x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 354 cnv 1 1 1 67x33 67x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 354 cnv 1 1 1 71x33 71x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 354 cnv 1 1 1 72x33 72x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 354 cnv 1 1 1 73x33 73x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 354 cnv 1 1 1 74x33 74x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 354 cnv 1 1 1 75x33 75x33-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 354 cnv 1 1 1 76x33 76x33-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 343 354 cnv 1 1 1 77x33 77x33-i empty 0 0 0 10 -116103 -1 0
+;
+#X obj 292 353 cnv 1 1 1 20x32 20x32-i empty 0 0 0 10 -49731 -1 0;
+#X obj 293 353 cnv 1 1 1 21x32 21x32-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 294 353 cnv 1 1 1 22x32 22x32-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 295 353 cnv 1 1 1 23x32 23x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 353 cnv 1 1 1 24x32 24x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 353 cnv 1 1 1 25x32 25x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 353 cnv 1 1 1 26x32 26x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 353 cnv 1 1 1 31x32 31x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 353 cnv 1 1 1 32x32 32x32-i empty 0 0 0 10 -236301 -1 0
+;
+#X obj 302 353 cnv 1 1 1 33x32 33x32-i empty 0 0 0 10 -165834 -1 0
+;
+#X obj 303 353 cnv 1 1 1 34x32 34x32-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 304 353 cnv 1 1 1 35x32 35x32-i empty 0 0 0 10 -169994 -1 0
+;
+#X obj 305 353 cnv 1 1 1 36x32 36x32-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 306 353 cnv 1 1 1 37x32 37x32-i empty 0 0 0 10 -252814 -1 0
+;
+#X obj 307 353 cnv 1 1 1 38x32 38x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 353 cnv 1 1 1 39x32 39x32-i empty 0 0 0 10 -257038 -1 0
+;
+#X obj 309 353 cnv 1 1 1 40x32 40x32-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 310 353 cnv 1 1 1 41x32 41x32-i empty 0 0 0 10 -153353 -1 0
+;
+#X obj 311 353 cnv 1 1 1 42x32 42x32-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 312 353 cnv 1 1 1 43x32 43x32-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 313 353 cnv 1 1 1 44x32 44x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 353 cnv 1 1 1 45x32 45x32-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 315 353 cnv 1 1 1 46x32 46x32-i empty 0 0 0 10 -169994 -1 0
+;
+#X obj 316 353 cnv 1 1 1 47x32 47x32-i empty 0 0 0 10 -236301 -1 0
+;
+#X obj 317 353 cnv 1 1 1 48x32 48x32-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 318 353 cnv 1 1 1 49x32 49x32-i empty 0 0 0 10 -178250 -1 0
+;
+#X obj 319 353 cnv 1 1 1 50x32 50x32-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 320 353 cnv 1 1 1 51x32 51x32-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 321 353 cnv 1 1 1 52x32 52x32-i empty 0 0 0 10 -174090 -1 0
+;
+#X obj 322 353 cnv 1 1 1 53x32 53x32-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 323 353 cnv 1 1 1 54x32 54x32-i empty 0 0 0 10 -178314 -1 0
+;
+#X obj 324 353 cnv 1 1 1 55x32 55x32-i empty 0 0 0 10 -174090 -1 0
+;
+#X obj 325 353 cnv 1 1 1 56x32 56x32-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 326 353 cnv 1 1 1 57x32 57x32-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 327 353 cnv 1 1 1 58x32 58x32-i empty 0 0 0 10 -190667 -1 0
+;
+#X obj 328 353 cnv 1 1 1 59x32 59x32-i empty 0 0 0 10 -149257 -1 0
+;
+#X obj 329 353 cnv 1 1 1 60x32 60x32-i empty 0 0 0 10 -194827 -1 0
+;
+#X obj 330 353 cnv 1 1 1 61x32 61x32-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 331 353 cnv 1 1 1 62x32 62x32-i empty 0 0 0 10 -232141 -1 0
+;
+#X obj 332 353 cnv 1 1 1 63x32 63x32-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 333 353 cnv 1 1 1 64x32 64x32-i empty 0 0 0 10 -149257 -1 0
+;
+#X obj 334 353 cnv 1 1 1 65x32 65x32-i empty 0 0 0 10 -186571 -1 0
+;
+#X obj 335 353 cnv 1 1 1 66x32 66x32-i empty 0 0 0 10 -244622 -1 0
+;
+#X obj 336 353 cnv 1 1 1 67x32 67x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 353 cnv 1 1 1 71x32 71x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 353 cnv 1 1 1 72x32 72x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 353 cnv 1 1 1 73x32 73x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 353 cnv 1 1 1 74x32 74x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 353 cnv 1 1 1 75x32 75x32-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 353 cnv 1 1 1 76x32 76x32-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 343 353 cnv 1 1 1 77x32 77x32-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 344 353 cnv 1 1 1 78x32 78x32-i empty 0 0 0 10 -49731 -1 0;
+#X obj 292 352 cnv 1 1 1 20x31 20x31-i empty 0 0 0 10 -153417 -1 0
+;
+#X obj 293 352 cnv 1 1 1 21x31 21x31-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 294 352 cnv 1 1 1 22x31 22x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 352 cnv 1 1 1 23x31 23x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 352 cnv 1 1 1 24x31 24x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 352 cnv 1 1 1 25x31 25x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 352 cnv 1 1 1 26x31 26x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 352 cnv 1 1 1 31x31 31x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 352 cnv 1 1 1 32x31 32x31-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 302 352 cnv 1 1 1 33x31 33x31-i empty 0 0 0 10 -20738 -1 0;
+#X obj 303 352 cnv 1 1 1 34x31 34x31-i empty 0 0 0 10 -45571 -1 0;
+#X obj 304 352 cnv 1 1 1 35x31 35x31-i empty 0 0 0 10 -58052 -1 0;
+#X obj 305 352 cnv 1 1 1 36x31 36x31-i empty 0 0 0 10 -45571 -1 0;
+#X obj 306 352 cnv 1 1 1 37x31 37x31-i empty 0 0 0 10 -153353 -1 0
+;
+#X obj 307 352 cnv 1 1 1 38x31 38x31-i empty 0 0 0 10 -244622 -1 0
+;
+#X obj 308 352 cnv 1 1 1 39x31 39x31-i empty 0 0 0 10 -215564 -1 0
+;
+#X obj 309 352 cnv 1 1 1 40x31 40x31-i empty 0 0 0 10 -53891 -1 0;
+#X obj 310 352 cnv 1 1 1 41x31 41x31-i empty 0 0 0 10 -57988 -1 0;
+#X obj 311 352 cnv 1 1 1 42x31 42x31-i empty 0 0 0 10 -45571 -1 0;
+#X obj 312 352 cnv 1 1 1 43x31 43x31-i empty 0 0 0 10 -87045 -1 0;
+#X obj 313 352 cnv 1 1 1 44x31 44x31-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 314 352 cnv 1 1 1 45x31 45x31-i empty 0 0 0 10 -178250 -1 0
+;
+#X obj 315 352 cnv 1 1 1 46x31 46x31-i empty 0 0 0 10 -28994 -1 0;
+#X obj 316 352 cnv 1 1 1 47x31 47x31-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 317 352 cnv 1 1 1 48x31 48x31-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 318 352 cnv 1 1 1 49x31 49x31-i empty 0 0 0 10 -41475 -1 0;
+#X obj 319 352 cnv 1 1 1 50x31 50x31-i empty 0 0 0 10 -165770 -1 0
+;
+#X obj 320 352 cnv 1 1 1 51x31 51x31-i empty 0 0 0 10 -203147 -1 0
+;
+#X obj 321 352 cnv 1 1 1 52x31 52x31-i empty 0 0 0 10 -41411 -1 0;
+#X obj 322 352 cnv 1 1 1 53x31 53x31-i empty 0 0 0 10 -95366 -1 0;
+#X obj 323 352 cnv 1 1 1 54x31 54x31-i empty 0 0 0 10 -70468 -1 0;
+#X obj 324 352 cnv 1 1 1 55x31 55x31-i empty 0 0 0 10 -33154 -1 0;
+#X obj 325 352 cnv 1 1 1 56x31 56x31-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 326 352 cnv 1 1 1 57x31 57x31-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 327 352 cnv 1 1 1 58x31 58x31-i empty 0 0 0 10 -53891 -1 0;
+#X obj 328 352 cnv 1 1 1 59x31 59x31-i empty 0 0 0 10 -66308 -1 0;
+#X obj 329 352 cnv 1 1 1 60x31 60x31-i empty 0 0 0 10 -136776 -1 0
+;
+#X obj 330 352 cnv 1 1 1 61x31 61x31-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 331 352 cnv 1 1 1 62x31 62x31-i empty 0 0 0 10 -107782 -1 0
+;
+#X obj 332 352 cnv 1 1 1 63x31 63x31-i empty 0 0 0 10 -37315 -1 0;
+#X obj 333 352 cnv 1 1 1 64x31 64x31-i empty 0 0 0 10 -91205 -1 0;
+#X obj 334 352 cnv 1 1 1 65x31 65x31-i empty 0 0 0 10 -111943 -1 0
+;
+#X obj 335 352 cnv 1 1 1 66x31 66x31-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 336 352 cnv 1 1 1 67x31 67x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 352 cnv 1 1 1 71x31 71x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 352 cnv 1 1 1 72x31 72x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 352 cnv 1 1 1 73x31 73x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 352 cnv 1 1 1 74x31 74x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 352 cnv 1 1 1 75x31 75x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 352 cnv 1 1 1 76x31 76x31-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 343 352 cnv 1 1 1 77x31 77x31-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 344 352 cnv 1 1 1 78x31 78x31-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 292 351 cnv 1 1 1 20x30 20x30-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 293 351 cnv 1 1 1 21x30 21x30-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 294 351 cnv 1 1 1 22x30 22x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 351 cnv 1 1 1 23x30 23x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 351 cnv 1 1 1 24x30 24x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 351 cnv 1 1 1 25x30 25x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 351 cnv 1 1 1 26x30 26x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 351 cnv 1 1 1 31x30 31x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 351 cnv 1 1 1 32x30 32x30-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 302 351 cnv 1 1 1 33x30 33x30-i empty 0 0 0 10 -16577 -1 0;
+#X obj 303 351 cnv 1 1 1 34x30 34x30-i empty 0 0 0 10 -145097 -1 0
+;
+#X obj 304 351 cnv 1 1 1 35x30 35x30-i empty 0 0 0 10 -215564 -1 0
+;
+#X obj 305 351 cnv 1 1 1 36x30 36x30-i empty 0 0 0 10 -107782 -1 0
+;
+#X obj 306 351 cnv 1 1 1 37x30 37x30-i empty 0 0 0 10 -49731 -1 0;
+#X obj 307 351 cnv 1 1 1 38x30 38x30-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 308 351 cnv 1 1 1 39x30 39x30-i empty 0 0 0 10 -124359 -1 0
+;
+#X obj 309 351 cnv 1 1 1 40x30 40x30-i empty 0 0 0 10 -49731 -1 0;
+#X obj 310 351 cnv 1 1 1 41x30 41x30-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 311 351 cnv 1 1 1 42x30 42x30-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 312 351 cnv 1 1 1 43x30 43x30-i empty 0 0 0 10 -28994 -1 0;
+#X obj 313 351 cnv 1 1 1 44x30 44x30-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 314 351 cnv 1 1 1 45x30 45x30-i empty 0 0 0 10 -182410 -1 0
+;
+#X obj 315 351 cnv 1 1 1 46x30 46x30-i empty 0 0 0 10 -29058 -1 0;
+#X obj 316 351 cnv 1 1 1 47x30 47x30-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 317 351 cnv 1 1 1 48x30 48x30-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 318 351 cnv 1 1 1 49x30 49x30-i empty 0 0 0 10 -41475 -1 0;
+#X obj 319 351 cnv 1 1 1 50x30 50x30-i empty 0 0 0 10 -165770 -1 0
+;
+#X obj 320 351 cnv 1 1 1 51x30 51x30-i empty 0 0 0 10 -174154 -1 0
+;
+#X obj 321 351 cnv 1 1 1 52x30 52x30-i empty 0 0 0 10 -28994 -1 0;
+#X obj 322 351 cnv 1 1 1 53x30 53x30-i empty 0 0 0 10 -153353 -1 0
+;
+#X obj 323 351 cnv 1 1 1 54x30 54x30-i empty 0 0 0 10 -116039 -1 0
+;
+#X obj 324 351 cnv 1 1 1 55x30 55x30-i empty 0 0 0 10 -33154 -1 0;
+#X obj 325 351 cnv 1 1 1 56x30 56x30-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 326 351 cnv 1 1 1 57x30 57x30-i empty 0 0 0 10 -165769 -1 0
+;
+#X obj 327 351 cnv 1 1 1 58x30 58x30-i empty 0 0 0 10 -20738 -1 0;
+#X obj 328 351 cnv 1 1 1 59x30 59x30-i empty 0 0 0 10 -211404 -1 0
+;
+#X obj 329 351 cnv 1 1 1 60x30 60x30-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 330 351 cnv 1 1 1 61x30 61x30-i empty 0 0 0 10 -174154 -1 0
+;
+#X obj 331 351 cnv 1 1 1 62x30 62x30-i empty 0 0 0 10 -28994 -1 0;
+#X obj 332 351 cnv 1 1 1 63x30 63x30-i empty 0 0 0 10 -174154 -1 0
+;
+#X obj 333 351 cnv 1 1 1 64x30 64x30-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 334 351 cnv 1 1 1 65x30 65x30-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 335 351 cnv 1 1 1 66x30 66x30-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 336 351 cnv 1 1 1 67x30 67x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 351 cnv 1 1 1 71x30 71x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 351 cnv 1 1 1 72x30 72x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 351 cnv 1 1 1 73x30 73x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 351 cnv 1 1 1 74x30 74x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 351 cnv 1 1 1 75x30 75x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 351 cnv 1 1 1 76x30 76x30-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 343 351 cnv 1 1 1 77x30 77x30-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 344 351 cnv 1 1 1 78x30 78x30-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 292 350 cnv 1 1 1 20x29 20x29-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 293 350 cnv 1 1 1 21x29 21x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 350 cnv 1 1 1 22x29 22x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 350 cnv 1 1 1 23x29 23x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 350 cnv 1 1 1 24x29 24x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 350 cnv 1 1 1 25x29 25x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 350 cnv 1 1 1 26x29 26x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 350 cnv 1 1 1 31x29 31x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 350 cnv 1 1 1 32x29 32x29-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 302 350 cnv 1 1 1 33x29 33x29-i empty 0 0 0 10 -20738 -1 0;
+#X obj 303 350 cnv 1 1 1 34x29 34x29-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 304 350 cnv 1 1 1 35x29 35x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 350 cnv 1 1 1 36x29 36x29-i empty 0 0 0 10 -194827 -1 0
+;
+#X obj 306 350 cnv 1 1 1 37x29 37x29-i empty 0 0 0 10 -4161 -1 0;
+#X obj 307 350 cnv 1 1 1 38x29 38x29-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 308 350 cnv 1 1 1 39x29 39x29-i empty 0 0 0 10 -91205 -1 0;
+#X obj 309 350 cnv 1 1 1 40x29 40x29-i empty 0 0 0 10 -66308 -1 0;
+#X obj 310 350 cnv 1 1 1 41x29 41x29-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 311 350 cnv 1 1 1 42x29 42x29-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 312 350 cnv 1 1 1 43x29 43x29-i empty 0 0 0 10 -33154 -1 0;
+#X obj 313 350 cnv 1 1 1 44x29 44x29-i empty 0 0 0 10 -165834 -1 0
+;
+#X obj 314 350 cnv 1 1 1 45x29 45x29-i empty 0 0 0 10 -182410 -1 0
+;
+#X obj 315 350 cnv 1 1 1 46x29 46x29-i empty 0 0 0 10 -29058 -1 0;
+#X obj 316 350 cnv 1 1 1 47x29 47x29-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 317 350 cnv 1 1 1 48x29 48x29-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 318 350 cnv 1 1 1 49x29 49x29-i empty 0 0 0 10 -41411 -1 0;
+#X obj 319 350 cnv 1 1 1 50x29 50x29-i empty 0 0 0 10 -165770 -1 0
+;
+#X obj 320 350 cnv 1 1 1 51x29 51x29-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 321 350 cnv 1 1 1 52x29 52x29-i empty 0 0 0 10 -145096 -1 0
+;
+#X obj 322 350 cnv 1 1 1 53x29 53x29-i empty 0 0 0 10 -58052 -1 0;
+#X obj 323 350 cnv 1 1 1 54x29 54x29-i empty 0 0 0 10 -20738 -1 0;
+#X obj 324 350 cnv 1 1 1 55x29 55x29-i empty 0 0 0 10 -28994 -1 0;
+#X obj 325 350 cnv 1 1 1 56x29 56x29-i empty 0 0 0 10 -244622 -1 0
+;
+#X obj 326 350 cnv 1 1 1 57x29 57x29-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 327 350 cnv 1 1 1 58x29 58x29-i empty 0 0 0 10 -16578 -1 0;
+#X obj 328 350 cnv 1 1 1 59x29 59x29-i empty 0 0 0 10 -240462 -1 0
+;
+#X obj 329 350 cnv 1 1 1 60x29 60x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 350 cnv 1 1 1 61x29 61x29-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 331 350 cnv 1 1 1 62x29 62x29-i empty 0 0 0 10 -16578 -1 0;
+#X obj 332 350 cnv 1 1 1 63x29 63x29-i empty 0 0 0 10 -41411 -1 0;
+#X obj 333 350 cnv 1 1 1 64x29 64x29-i empty 0 0 0 10 -37315 -1 0;
+#X obj 334 350 cnv 1 1 1 65x29 65x29-i empty 0 0 0 10 -8257 -1 0;
+#X obj 335 350 cnv 1 1 1 66x29 66x29-i empty 0 0 0 10 -194891 -1 0
+;
+#X obj 336 350 cnv 1 1 1 67x29 67x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 350 cnv 1 1 1 71x29 71x29-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 338 350 cnv 1 1 1 72x29 72x29-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 339 350 cnv 1 1 1 73x29 73x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 350 cnv 1 1 1 74x29 74x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 350 cnv 1 1 1 75x29 75x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 350 cnv 1 1 1 76x29 76x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 343 350 cnv 1 1 1 77x29 77x29-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 344 350 cnv 1 1 1 78x29 78x29-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 292 349 cnv 1 1 1 20x28 20x28-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 293 349 cnv 1 1 1 21x28 21x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 349 cnv 1 1 1 22x28 22x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 349 cnv 1 1 1 23x28 23x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 349 cnv 1 1 1 24x28 24x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 349 cnv 1 1 1 25x28 25x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 349 cnv 1 1 1 26x28 26x28-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 300 349 cnv 1 1 1 31x28 31x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 349 cnv 1 1 1 32x28 32x28-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 302 349 cnv 1 1 1 33x28 33x28-i empty 0 0 0 10 -16578 -1 0;
+#X obj 303 349 cnv 1 1 1 34x28 34x28-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 304 349 cnv 1 1 1 35x28 35x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 349 cnv 1 1 1 36x28 36x28-i empty 0 0 0 10 -203147 -1 0
+;
+#X obj 306 349 cnv 1 1 1 37x28 37x28-i empty 0 0 0 10 -20738 -1 0;
+#X obj 307 349 cnv 1 1 1 38x28 38x28-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 308 349 cnv 1 1 1 39x28 39x28-i empty 0 0 0 10 -149193 -1 0
+;
+#X obj 309 349 cnv 1 1 1 40x28 40x28-i empty 0 0 0 10 -33154 -1 0;
+#X obj 310 349 cnv 1 1 1 41x28 41x28-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 311 349 cnv 1 1 1 42x28 42x28-i empty 0 0 0 10 -124359 -1 0
+;
+#X obj 312 349 cnv 1 1 1 43x28 43x28-i empty 0 0 0 10 -33154 -1 0;
+#X obj 313 349 cnv 1 1 1 44x28 44x28-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 314 349 cnv 1 1 1 45x28 45x28-i empty 0 0 0 10 -182410 -1 0
+;
+#X obj 315 349 cnv 1 1 1 46x28 46x28-i empty 0 0 0 10 -29058 -1 0;
+#X obj 316 349 cnv 1 1 1 47x28 47x28-i empty 0 0 0 10 -145097 -1 0
+;
+#X obj 317 349 cnv 1 1 1 48x28 48x28-i empty 0 0 0 10 -153353 -1 0
+;
+#X obj 318 349 cnv 1 1 1 49x28 49x28-i empty 0 0 0 10 -28994 -1 0;
+#X obj 319 349 cnv 1 1 1 50x28 50x28-i empty 0 0 0 10 -174154 -1 0
+;
+#X obj 320 349 cnv 1 1 1 51x28 51x28-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 321 349 cnv 1 1 1 52x28 52x28-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 322 349 cnv 1 1 1 53x28 53x28-i empty 0 0 0 10 -182411 -1 0
+;
+#X obj 323 349 cnv 1 1 1 54x28 54x28-i empty 0 0 0 10 -78789 -1 0;
+#X obj 324 349 cnv 1 1 1 55x28 55x28-i empty 0 0 0 10 -58052 -1 0;
+#X obj 325 349 cnv 1 1 1 56x28 56x28-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 326 349 cnv 1 1 1 57x28 57x28-i empty 0 0 0 10 -132616 -1 0
+;
+#X obj 327 349 cnv 1 1 1 58x28 58x28-i empty 0 0 0 10 -12417 -1 0;
+#X obj 328 349 cnv 1 1 1 59x28 59x28-i empty 0 0 0 10 -190731 -1 0
+;
+#X obj 329 349 cnv 1 1 1 60x28 60x28-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 330 349 cnv 1 1 1 61x28 61x28-i empty 0 0 0 10 -190731 -1 0
+;
+#X obj 331 349 cnv 1 1 1 62x28 62x28-i empty 0 0 0 10 -33155 -1 0;
+#X obj 332 349 cnv 1 1 1 63x28 63x28-i empty 0 0 0 10 -157513 -1 0
+;
+#X obj 333 349 cnv 1 1 1 64x28 64x28-i empty 0 0 0 10 -149193 -1 0
+;
+#X obj 334 349 cnv 1 1 1 65x28 65x28-i empty 0 0 0 10 -49731 -1 0;
+#X obj 335 349 cnv 1 1 1 66x28 66x28-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 336 349 cnv 1 1 1 67x28 67x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 349 cnv 1 1 1 71x28 71x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 349 cnv 1 1 1 72x28 72x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 349 cnv 1 1 1 73x28 73x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 349 cnv 1 1 1 74x28 74x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 349 cnv 1 1 1 75x28 75x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 349 cnv 1 1 1 76x28 76x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 343 349 cnv 1 1 1 77x28 77x28-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 344 349 cnv 1 1 1 78x28 78x28-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 292 348 cnv 1 1 1 20x27 20x27-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 293 348 cnv 1 1 1 21x27 21x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 294 348 cnv 1 1 1 22x27 22x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 348 cnv 1 1 1 23x27 23x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 348 cnv 1 1 1 24x27 24x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 348 cnv 1 1 1 25x27 25x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 348 cnv 1 1 1 26x27 26x27-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 300 348 cnv 1 1 1 31x27 31x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 348 cnv 1 1 1 32x27 32x27-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 302 348 cnv 1 1 1 33x27 33x27-i empty 0 0 0 10 -20674 -1 0;
+#X obj 303 348 cnv 1 1 1 34x27 34x27-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 304 348 cnv 1 1 1 35x27 35x27-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 305 348 cnv 1 1 1 36x27 36x27-i empty 0 0 0 10 -169930 -1 0
+;
+#X obj 306 348 cnv 1 1 1 37x27 37x27-i empty 0 0 0 10 -16577 -1 0;
+#X obj 307 348 cnv 1 1 1 38x27 38x27-i empty 0 0 0 10 -178250 -1 0
+;
+#X obj 308 348 cnv 1 1 1 39x27 39x27-i empty 0 0 0 10 -236301 -1 0
+;
+#X obj 309 348 cnv 1 1 1 40x27 40x27-i empty 0 0 0 10 -91205 -1 0;
+#X obj 310 348 cnv 1 1 1 41x27 41x27-i empty 0 0 0 10 -41411 -1 0;
+#X obj 311 348 cnv 1 1 1 42x27 42x27-i empty 0 0 0 10 -45635 -1 0;
+#X obj 312 348 cnv 1 1 1 43x27 43x27-i empty 0 0 0 10 -136776 -1 0
+;
+#X obj 313 348 cnv 1 1 1 44x27 44x27-i empty 0 0 0 10 -252878 -1 0
+;
+#X obj 314 348 cnv 1 1 1 45x27 45x27-i empty 0 0 0 10 -186571 -1 0
+;
+#X obj 315 348 cnv 1 1 1 46x27 46x27-i empty 0 0 0 10 -45571 -1 0;
+#X obj 316 348 cnv 1 1 1 47x27 47x27-i empty 0 0 0 10 -82949 -1 0;
+#X obj 317 348 cnv 1 1 1 48x27 48x27-i empty 0 0 0 10 -53827 -1 0;
+#X obj 318 348 cnv 1 1 1 49x27 49x27-i empty 0 0 0 10 -82885 -1 0;
+#X obj 319 348 cnv 1 1 1 50x27 50x27-i empty 0 0 0 10 -219724 -1 0
+;
+#X obj 320 348 cnv 1 1 1 51x27 51x27-i empty 0 0 0 10 -240398 -1 0
+;
+#X obj 321 348 cnv 1 1 1 52x27 52x27-i empty 0 0 0 10 -62148 -1 0;
+#X obj 322 348 cnv 1 1 1 53x27 53x27-i empty 0 0 0 10 -41475 -1 0;
+#X obj 323 348 cnv 1 1 1 54x27 54x27-i empty 0 0 0 10 -37315 -1 0;
+#X obj 324 348 cnv 1 1 1 55x27 55x27-i empty 0 0 0 10 -161673 -1 0
+;
+#X obj 325 348 cnv 1 1 1 56x27 56x27-i empty 0 0 0 10 -215564 -1 0
+;
+#X obj 326 348 cnv 1 1 1 57x27 57x27-i empty 0 0 0 10 -66308 -1 0;
+#X obj 327 348 cnv 1 1 1 58x27 58x27-i empty 0 0 0 10 -4097 -1 0;
+#X obj 328 348 cnv 1 1 1 59x27 59x27-i empty 0 0 0 10 -70468 -1 0;
+#X obj 329 348 cnv 1 1 1 60x27 60x27-i empty 0 0 0 10 -136776 -1 0
+;
+#X obj 330 348 cnv 1 1 1 61x27 61x27-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 331 348 cnv 1 1 1 62x27 62x27-i empty 0 0 0 10 -140936 -1 0
+;
+#X obj 332 348 cnv 1 1 1 63x27 63x27-i empty 0 0 0 10 -49731 -1 0;
+#X obj 333 348 cnv 1 1 1 64x27 64x27-i empty 0 0 0 10 -62148 -1 0;
+#X obj 334 348 cnv 1 1 1 65x27 65x27-i empty 0 0 0 10 -124359 -1 0
+;
+#X obj 335 348 cnv 1 1 1 66x27 66x27-i empty 0 0 0 10 -240462 -1 0
+;
+#X obj 336 348 cnv 1 1 1 67x27 67x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 348 cnv 1 1 1 71x27 71x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 348 cnv 1 1 1 72x27 72x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 348 cnv 1 1 1 73x27 73x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 348 cnv 1 1 1 74x27 74x27-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 341 348 cnv 1 1 1 75x27 75x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 348 cnv 1 1 1 76x27 76x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 343 348 cnv 1 1 1 77x27 77x27-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 292 347 cnv 1 1 1 20x26 20x26-i empty 0 0 0 10 -257109 -1 0
+;
+#X obj 293 347 cnv 1 1 1 21x26 21x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 294 347 cnv 1 1 1 22x26 22x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 347 cnv 1 1 1 23x26 23x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 347 cnv 1 1 1 24x26 24x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 347 cnv 1 1 1 25x26 25x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 347 cnv 1 1 1 26x26 26x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 347 cnv 1 1 1 31x26 31x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 347 cnv 1 1 1 32x26 32x26-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 302 347 cnv 1 1 1 33x26 33x26-i empty 0 0 0 10 -20738 -1 0;
+#X obj 303 347 cnv 1 1 1 34x26 34x26-i empty 0 0 0 10 -120199 -1 0
+;
+#X obj 304 347 cnv 1 1 1 35x26 35x26-i empty 0 0 0 10 -128520 -1 0
+;
+#X obj 305 347 cnv 1 1 1 36x26 36x26-i empty 0 0 0 10 -33154 -1 0;
+#X obj 306 347 cnv 1 1 1 37x26 37x26-i empty 0 0 0 10 -70468 -1 0;
+#X obj 307 347 cnv 1 1 1 38x26 38x26-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 308 347 cnv 1 1 1 39x26 39x26-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 309 347 cnv 1 1 1 40x26 40x26-i empty 0 0 0 10 -236237 -1 0
+;
+#X obj 310 347 cnv 1 1 1 41x26 41x26-i empty 0 0 0 10 -203148 -1 0
+;
+#X obj 311 347 cnv 1 1 1 42x26 42x26-i empty 0 0 0 10 -211404 -1 0
+;
+#X obj 312 347 cnv 1 1 1 43x26 43x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 313 347 cnv 1 1 1 44x26 44x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 347 cnv 1 1 1 45x26 45x26-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 315 347 cnv 1 1 1 46x26 46x26-i empty 0 0 0 10 -211404 -1 0
+;
+#X obj 316 347 cnv 1 1 1 47x26 47x26-i empty 0 0 0 10 -223821 -1 0
+;
+#X obj 317 347 cnv 1 1 1 48x26 48x26-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 318 347 cnv 1 1 1 49x26 49x26-i empty 0 0 0 10 -227981 -1 0
+;
+#X obj 319 347 cnv 1 1 1 50x26 50x26-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 320 347 cnv 1 1 1 51x26 51x26-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 321 347 cnv 1 1 1 52x26 52x26-i empty 0 0 0 10 -219724 -1 0
+;
+#X obj 322 347 cnv 1 1 1 53x26 53x26-i empty 0 0 0 10 -198987 -1 0
+;
+#X obj 323 347 cnv 1 1 1 54x26 54x26-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 324 347 cnv 1 1 1 55x26 55x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 325 347 cnv 1 1 1 56x26 56x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 326 347 cnv 1 1 1 57x26 57x26-i empty 0 0 0 10 -128520 -1 0
+;
+#X obj 327 347 cnv 1 1 1 58x26 58x26-i empty 0 0 0 10 -12417 -1 0;
+#X obj 328 347 cnv 1 1 1 59x26 59x26-i empty 0 0 0 10 -194827 -1 0
+;
+#X obj 329 347 cnv 1 1 1 60x26 60x26-i empty 0 0 0 10 -223885 -1 0
+;
+#X obj 330 347 cnv 1 1 1 61x26 61x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 347 cnv 1 1 1 62x26 62x26-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 332 347 cnv 1 1 1 63x26 63x26-i empty 0 0 0 10 -207244 -1 0
+;
+#X obj 333 347 cnv 1 1 1 64x26 64x26-i empty 0 0 0 10 -207308 -1 0
+;
+#X obj 334 347 cnv 1 1 1 65x26 65x26-i empty 0 0 0 10 -240462 -1 0
+;
+#X obj 335 347 cnv 1 1 1 66x26 66x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 347 cnv 1 1 1 67x26 67x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 347 cnv 1 1 1 71x26 71x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 347 cnv 1 1 1 72x26 72x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 347 cnv 1 1 1 73x26 73x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 347 cnv 1 1 1 74x26 74x26-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 341 347 cnv 1 1 1 75x26 75x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 347 cnv 1 1 1 76x26 76x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 343 347 cnv 1 1 1 77x26 77x26-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 293 346 cnv 1 1 1 21x25 21x25-i empty 0 0 0 10 -257040 -1 0
+;
+#X obj 294 346 cnv 1 1 1 22x25 22x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 346 cnv 1 1 1 23x25 23x25-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 296 346 cnv 1 1 1 24x25 24x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 346 cnv 1 1 1 25x25 25x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 346 cnv 1 1 1 26x25 26x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 346 cnv 1 1 1 31x25 31x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 346 cnv 1 1 1 32x25 32x25-i empty 0 0 0 10 -215564 -1 0
+;
+#X obj 302 346 cnv 1 1 1 33x25 33x25-i empty 0 0 0 10 -62148 -1 0;
+#X obj 303 346 cnv 1 1 1 34x25 34x25-i empty 0 0 0 10 -49731 -1 0;
+#X obj 304 346 cnv 1 1 1 35x25 35x25-i empty 0 0 0 10 -70468 -1 0;
+#X obj 305 346 cnv 1 1 1 36x25 36x25-i empty 0 0 0 10 -132616 -1 0
+;
+#X obj 306 346 cnv 1 1 1 37x25 37x25-i empty 0 0 0 10 -240462 -1 0
+;
+#X obj 307 346 cnv 1 1 1 38x25 38x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 346 cnv 1 1 1 39x25 39x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 346 cnv 1 1 1 40x25 40x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 346 cnv 1 1 1 41x25 41x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 346 cnv 1 1 1 42x25 42x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 346 cnv 1 1 1 43x25 43x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 346 cnv 1 1 1 44x25 44x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 346 cnv 1 1 1 45x25 45x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 346 cnv 1 1 1 46x25 46x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 346 cnv 1 1 1 47x25 47x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 346 cnv 1 1 1 48x25 48x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 346 cnv 1 1 1 49x25 49x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 346 cnv 1 1 1 50x25 50x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 346 cnv 1 1 1 51x25 51x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 346 cnv 1 1 1 52x25 52x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 346 cnv 1 1 1 53x25 53x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 346 cnv 1 1 1 54x25 54x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 346 cnv 1 1 1 55x25 55x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 346 cnv 1 1 1 56x25 56x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 346 cnv 1 1 1 57x25 57x25-i empty 0 0 0 10 -244558 -1 0
+;
+#X obj 327 346 cnv 1 1 1 58x25 58x25-i empty 0 0 0 10 -211404 -1 0
+;
+#X obj 328 346 cnv 1 1 1 59x25 59x25-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 329 346 cnv 1 1 1 60x25 60x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 346 cnv 1 1 1 61x25 61x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 346 cnv 1 1 1 62x25 62x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 346 cnv 1 1 1 63x25 63x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 346 cnv 1 1 1 64x25 64x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 346 cnv 1 1 1 65x25 65x25-i empty 0 0 0 10 -257038 -1 0
+;
+#X obj 335 346 cnv 1 1 1 66x25 66x25-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 336 346 cnv 1 1 1 67x25 67x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 346 cnv 1 1 1 71x25 71x25-i empty 0 0 0 10 -257039 -1 0
+;
+#X obj 338 346 cnv 1 1 1 72x25 72x25-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 339 346 cnv 1 1 1 73x25 73x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 346 cnv 1 1 1 74x25 74x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 346 cnv 1 1 1 75x25 75x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 346 cnv 1 1 1 76x25 76x25-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 343 346 cnv 1 1 1 77x25 77x25-i empty 0 0 0 10 -248719 -1 0
+;
+#X obj 293 345 cnv 1 1 1 21x24 21x24-i empty 0 0 0 10 -199056 -1 0
+;
+#X obj 294 345 cnv 1 1 1 22x24 22x24-i empty 0 0 0 10 -257107 -1 0
+;
+#X obj 295 345 cnv 1 1 1 23x24 23x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 296 345 cnv 1 1 1 24x24 24x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 297 345 cnv 1 1 1 25x24 25x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 345 cnv 1 1 1 26x24 26x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 345 cnv 1 1 1 31x24 31x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 345 cnv 1 1 1 32x24 32x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 345 cnv 1 1 1 33x24 33x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 345 cnv 1 1 1 34x24 34x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 345 cnv 1 1 1 35x24 35x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 345 cnv 1 1 1 36x24 36x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 345 cnv 1 1 1 37x24 37x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 345 cnv 1 1 1 38x24 38x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 345 cnv 1 1 1 39x24 39x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 345 cnv 1 1 1 40x24 40x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 345 cnv 1 1 1 41x24 41x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 345 cnv 1 1 1 42x24 42x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 345 cnv 1 1 1 43x24 43x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 345 cnv 1 1 1 44x24 44x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 345 cnv 1 1 1 45x24 45x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 345 cnv 1 1 1 46x24 46x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 345 cnv 1 1 1 47x24 47x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 345 cnv 1 1 1 48x24 48x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 345 cnv 1 1 1 49x24 49x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 345 cnv 1 1 1 50x24 50x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 345 cnv 1 1 1 51x24 51x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 345 cnv 1 1 1 52x24 52x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 345 cnv 1 1 1 53x24 53x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 345 cnv 1 1 1 54x24 54x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 345 cnv 1 1 1 55x24 55x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 345 cnv 1 1 1 56x24 56x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 345 cnv 1 1 1 57x24 57x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 345 cnv 1 1 1 58x24 58x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 345 cnv 1 1 1 59x24 59x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 345 cnv 1 1 1 60x24 60x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 345 cnv 1 1 1 61x24 61x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 345 cnv 1 1 1 62x24 62x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 345 cnv 1 1 1 63x24 63x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 345 cnv 1 1 1 64x24 64x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 345 cnv 1 1 1 65x24 65x24-i empty 0 0 0 10 -252814 -1 0
+;
+#X obj 335 345 cnv 1 1 1 66x24 66x24-i empty 0 0 0 10 -256974 -1 0
+;
+#X obj 336 345 cnv 1 1 1 67x24 67x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 345 cnv 1 1 1 71x24 71x24-i empty 0 0 0 10 -257038 -1 0
+;
+#X obj 338 345 cnv 1 1 1 72x24 72x24-i empty 0 0 0 10 -248718 -1 0
+;
+#X obj 339 345 cnv 1 1 1 73x24 73x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 340 345 cnv 1 1 1 74x24 74x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 341 345 cnv 1 1 1 75x24 75x24-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 342 345 cnv 1 1 1 76x24 76x24-i empty 0 0 0 10 -257107 -1 0
+;
+#X obj 343 345 cnv 1 1 1 77x24 77x24-i empty 0 0 0 10 -199056 -1 0
+;
+#X obj 294 344 cnv 1 1 1 22x23 22x23-i empty 0 0 0 10 -199121 -1 0
+;
+#X obj 295 344 cnv 1 1 1 23x23 23x23-i empty 0 0 0 10 -261269 -1 0
+;
+#X obj 296 344 cnv 1 1 1 24x23 24x23-i empty 0 0 0 10 -257106 -1 0
+;
+#X obj 297 344 cnv 1 1 1 25x23 25x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 298 344 cnv 1 1 1 26x23 26x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 300 344 cnv 1 1 1 31x23 31x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 344 cnv 1 1 1 32x23 32x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 344 cnv 1 1 1 33x23 33x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 344 cnv 1 1 1 34x23 34x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 344 cnv 1 1 1 35x23 35x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 344 cnv 1 1 1 36x23 36x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 344 cnv 1 1 1 37x23 37x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 344 cnv 1 1 1 38x23 38x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 344 cnv 1 1 1 39x23 39x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 344 cnv 1 1 1 40x23 40x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 344 cnv 1 1 1 41x23 41x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 344 cnv 1 1 1 42x23 42x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 344 cnv 1 1 1 43x23 43x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 344 cnv 1 1 1 44x23 44x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 344 cnv 1 1 1 45x23 45x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 344 cnv 1 1 1 46x23 46x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 344 cnv 1 1 1 47x23 47x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 344 cnv 1 1 1 48x23 48x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 344 cnv 1 1 1 49x23 49x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 344 cnv 1 1 1 50x23 50x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 344 cnv 1 1 1 51x23 51x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 344 cnv 1 1 1 52x23 52x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 344 cnv 1 1 1 53x23 53x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 344 cnv 1 1 1 54x23 54x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 344 cnv 1 1 1 55x23 55x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 344 cnv 1 1 1 56x23 56x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 344 cnv 1 1 1 57x23 57x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 344 cnv 1 1 1 58x23 58x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 344 cnv 1 1 1 59x23 59x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 344 cnv 1 1 1 60x23 60x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 344 cnv 1 1 1 61x23 61x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 344 cnv 1 1 1 62x23 62x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 344 cnv 1 1 1 63x23 63x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 344 cnv 1 1 1 64x23 64x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 344 cnv 1 1 1 65x23 65x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 344 cnv 1 1 1 66x23 66x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 344 cnv 1 1 1 67x23 67x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 344 cnv 1 1 1 71x23 71x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 344 cnv 1 1 1 72x23 72x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 339 344 cnv 1 1 1 73x23 73x23-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 295 343 cnv 1 1 1 23x22 23x22-i empty 0 0 0 10 -219791 -1 0
+;
+#X obj 296 343 cnv 1 1 1 24x22 24x22-i empty 0 0 0 10 -257242 -1 0
+;
+#X obj 297 343 cnv 1 1 1 25x22 25x22-i empty 0 0 0 10 -257241 -1 0
+;
+#X obj 298 343 cnv 1 1 1 26x22 26x22-i empty 0 0 0 10 -257108 -1 0
+;
+#X obj 300 343 cnv 1 1 1 31x22 31x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 301 343 cnv 1 1 1 32x22 32x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 302 343 cnv 1 1 1 33x22 33x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 303 343 cnv 1 1 1 34x22 34x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 304 343 cnv 1 1 1 35x22 35x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 305 343 cnv 1 1 1 36x22 36x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 306 343 cnv 1 1 1 37x22 37x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 307 343 cnv 1 1 1 38x22 38x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 308 343 cnv 1 1 1 39x22 39x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 309 343 cnv 1 1 1 40x22 40x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 310 343 cnv 1 1 1 41x22 41x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 311 343 cnv 1 1 1 42x22 42x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 312 343 cnv 1 1 1 43x22 43x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 313 343 cnv 1 1 1 44x22 44x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 314 343 cnv 1 1 1 45x22 45x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 315 343 cnv 1 1 1 46x22 46x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 316 343 cnv 1 1 1 47x22 47x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 317 343 cnv 1 1 1 48x22 48x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 318 343 cnv 1 1 1 49x22 49x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 319 343 cnv 1 1 1 50x22 50x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 320 343 cnv 1 1 1 51x22 51x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 321 343 cnv 1 1 1 52x22 52x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 322 343 cnv 1 1 1 53x22 53x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 323 343 cnv 1 1 1 54x22 54x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 324 343 cnv 1 1 1 55x22 55x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 325 343 cnv 1 1 1 56x22 56x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 326 343 cnv 1 1 1 57x22 57x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 327 343 cnv 1 1 1 58x22 58x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 328 343 cnv 1 1 1 59x22 59x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 329 343 cnv 1 1 1 60x22 60x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 330 343 cnv 1 1 1 61x22 61x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 331 343 cnv 1 1 1 62x22 62x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 332 343 cnv 1 1 1 63x22 63x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 333 343 cnv 1 1 1 64x22 64x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 334 343 cnv 1 1 1 65x22 65x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 335 343 cnv 1 1 1 66x22 66x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 336 343 cnv 1 1 1 67x22 67x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 337 343 cnv 1 1 1 71x22 71x22-i empty 0 0 0 10 -261135 -1 0
+;
+#X obj 338 343 cnv 1 1 1 72x22 72x22-i empty 0 0 0 10 -257173 -1 0
+;
+#X obj 339 343 cnv 1 1 1 73x22 73x22-i empty 0 0 0 10 -261271 -1 0
+;
+#X obj 295 342 cnv 1 1 1 23x21 23x21-i empty 0 0 0 10 -12417 -1 0;
+#X obj 296 342 cnv 1 1 1 24x21 24x21-i empty 0 0 0 10 -219793 -1 0
+;
+#X obj 297 342 cnv 1 1 1 25x21 25x21-i empty 0 0 0 10 -236371 -1 0
+;
+#X obj 298 342 cnv 1 1 1 26x21 26x21-i empty 0 0 0 10 -257241 -1 0
+;
+#X obj 300 342 cnv 1 1 1 31x21 31x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 301 342 cnv 1 1 1 32x21 32x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 302 342 cnv 1 1 1 33x21 33x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 303 342 cnv 1 1 1 34x21 34x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 304 342 cnv 1 1 1 35x21 35x21-i empty 0 0 0 10 -257310 -1 0
+;
+#X obj 305 342 cnv 1 1 1 36x21 36x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 306 342 cnv 1 1 1 37x21 37x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 307 342 cnv 1 1 1 38x21 38x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 308 342 cnv 1 1 1 39x21 39x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 309 342 cnv 1 1 1 40x21 40x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 310 342 cnv 1 1 1 41x21 41x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 311 342 cnv 1 1 1 42x21 42x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 312 342 cnv 1 1 1 43x21 43x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 313 342 cnv 1 1 1 44x21 44x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 314 342 cnv 1 1 1 45x21 45x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 315 342 cnv 1 1 1 46x21 46x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 316 342 cnv 1 1 1 47x21 47x21-i empty 0 0 0 10 -257310 -1 0
+;
+#X obj 317 342 cnv 1 1 1 48x21 48x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 318 342 cnv 1 1 1 49x21 49x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 319 342 cnv 1 1 1 50x21 50x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 320 342 cnv 1 1 1 51x21 51x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 321 342 cnv 1 1 1 52x21 52x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 322 342 cnv 1 1 1 53x21 53x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 323 342 cnv 1 1 1 54x21 54x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 324 342 cnv 1 1 1 55x21 55x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 325 342 cnv 1 1 1 56x21 56x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 326 342 cnv 1 1 1 57x21 57x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 327 342 cnv 1 1 1 58x21 58x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 328 342 cnv 1 1 1 59x21 59x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 329 342 cnv 1 1 1 60x21 60x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 330 342 cnv 1 1 1 61x21 61x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 331 342 cnv 1 1 1 62x21 62x21-i empty 0 0 0 10 -257374 -1 0
+;
+#X obj 332 342 cnv 1 1 1 63x21 63x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 333 342 cnv 1 1 1 64x21 64x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 334 342 cnv 1 1 1 65x21 65x21-i empty 0 0 0 10 -257375 -1 0
+;
+#X obj 335 342 cnv 1 1 1 66x21 66x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 336 342 cnv 1 1 1 67x21 67x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 337 342 cnv 1 1 1 71x21 71x21-i empty 0 0 0 10 -261471 -1 0
+;
+#X obj 338 342 cnv 1 1 1 72x21 72x21-i empty 0 0 0 10 -257308 -1 0
+;
+#X obj 339 342 cnv 1 1 1 73x21 73x21-i empty 0 0 0 10 -236372 -1 0
+;
+#X obj 342 356 cnv 1 1 1 76x35 76x35-i empty 0 0 0 10 -78725 -1 0;
+#X obj 342 355 cnv 1 1 1 76x34 76x34-i empty 0 0 0 10 -219724 -1 0
+;
+#X obj 340 344 cnv 1 1 1 74x23 74x23-i empty 0 0 0 10 -257106 -1 0
+;
+#X obj 341 344 cnv 1 1 1 75x23 75x23-i empty 0 0 0 10 -261269 -1 0
+;
+#X obj 340 343 cnv 1 1 1 74x22 74x22-i empty 0 0 0 10 -257240 -1 0
+;
+#X obj 340 342 cnv 1 1 1 74x21 74x21-i empty 0 0 0 10 -219794 -1 0
+;
+#X obj 343 355 cnv 1 1 1 77x34 77x34-i empty 0 0 0 10 -70468 -1 0;
+#X text 11 357 Specific features can be commissioned from the author.
+;
+#X text 11 346 Donations can be made through Paypal \, click on;
+#X connect 6 0 30 0;
+#X connect 12 0 30 0;
+#X connect 17 0 30 0;
+#X connect 18 0 30 0;
+#X connect 30 0 7 0;
+#X connect 30 1 8 0;
+#X connect 32 0 30 0;
